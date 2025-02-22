@@ -73,3 +73,10 @@ yarn-error.log
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+
+# 환경 설정 파일
+.env
+.env.development
+.env.staging
+.env.production
