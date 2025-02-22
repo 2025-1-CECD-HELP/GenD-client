@@ -8,9 +8,10 @@
  */
 
 export type TRouteParams = {
-  LANDING: undefined;
-  HOME: undefined;
+  LANDING: {};
+  HOME: {};
   SEARCH: {
     searchQuery?: string;
   };
+  LOGIN: {};
 };

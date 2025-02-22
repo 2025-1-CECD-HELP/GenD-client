@@ -13,4 +13,5 @@ export const ROUTE_NAMES = {
   LANDING: 'LANDING',
   HOME: 'HOME',
   SEARCH: 'SEARCH',
+  LOGIN: 'LOGIN',
 } as const;
