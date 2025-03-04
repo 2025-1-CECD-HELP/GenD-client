@@ -7,6 +7,7 @@ const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
  */
 const config = {
   resolver: {
+    resolverMainFields: ['sbmodern', 'react-native', 'browser', 'main'],
     sourceExts: ['js', 'jsx', 'json', 'ts', 'tsx'],
     alias: {
       '@': './src',
