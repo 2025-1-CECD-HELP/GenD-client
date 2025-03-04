@@ -12,7 +12,7 @@ export const LandingScreen = () => {
       <Text>LandingScreen</Text>
       <Button
         title="Home"
-        onPress={() => navigation.replace(ROUTE_NAMES.HOME)}
+        onPress={() => navigation.replace(ROUTE_NAMES.HOME, {})}
       />
     </View>
   );
