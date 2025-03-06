@@ -21,9 +21,5 @@ export const AuthWrapper: React.FC<AuthWrapperProps> = ({
     }
   }, [isAuthNeed, isSignedIn, router]);
 
-  if (isAuthNeed && !isSignedIn) {
-    return null;
-  }
-
   return <Component />;
 };
