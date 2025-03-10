@@ -9,8 +9,8 @@
     "start": "react-native start",
     "test": "jest",
     "debug": "npx react-devtools",
-    "storybook-generate": "sb-rn-get-stories",
-    "storybook": "storybook dev -p 7007"
+    "clean": "react-native clean",
+    "resetCache": "react-native start --reset-cache"
   },
   "dependencies": {
     "@emotion/native": "^11.11.0",
