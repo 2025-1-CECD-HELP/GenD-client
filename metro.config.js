@@ -2,13 +2,13 @@ const path = require('path');
 const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
 const withStorybook = require('@storybook/react-native/metro/withStorybook');
 
-/**
+/**----------------------------------------------------------------------
  * Metro 설정을 위한 Default 설정들만 따로 모듈화 합니다.
  * @author 홍규진
  */
 const defaultConfig = getDefaultConfig(__dirname);
 
-/**
+/** ----------------------------------------------------------------------
  * 프로젝트 설정을 위한 설정들만 따로 모듈화 합니다.
  * @author 홍규진
  */
@@ -28,7 +28,7 @@ const projectConfig = {
 
 const finalConfig = mergeConfig(defaultConfig, projectConfig);
 
-/**
+/**----------------------------------------------------------------------
  * Storybook 설정을 위한 설정들만 따로 모듈화 합니다.
  * @author 홍규진
  */
