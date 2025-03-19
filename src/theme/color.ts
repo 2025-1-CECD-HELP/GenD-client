@@ -3,28 +3,9 @@
  * 컬러 코드는 16진수로 정의합니다.
  * 컬러 코드는 테마 컬러 상수 정의에 사용됩니다.
  */
-type ColorCode = string;
+import {Theme} from '@emotion/react';
 
-interface TThemeColors {
-  main: ColorCode;
-  sub: ColorCode;
-  blue: ColorCode;
-  yellow: ColorCode;
-  pink: ColorCode;
-  red: ColorCode;
-  white: ColorCode;
-  gray1: ColorCode;
-  gray2: ColorCode;
-  gray3: ColorCode;
-  gray4: ColorCode;
-  gray5: ColorCode;
-  gray6: ColorCode;
-  black: ColorCode;
-}
-
-export interface Theme {
-  colors: TThemeColors;
-}
+export type ThemeType = 'light' | 'dark';
 
 /**
  * 테마 컬러 상수 정의
@@ -33,38 +14,53 @@ export interface Theme {
  */
 export const lightTheme: Theme = {
   colors: {
-    main: '#CDE021',
-    sub: '#E6F3A5',
+    white: '#FFFFFF',
+    black: '#000000',
+    background: '#FFFFFF',
+    backgroundBase: '#FAFAFA',
+    backgroundElevated: '#F2F2F2',
+    popup: '#FFFFFF',
+    divider: '#E0E0E0',
+    textPrimary: '#1A1A1A',
+    textSecondary: '#666666',
+    textDisabled: '#BFBFBF',
+    shadow: '#000000 10%',
+    backgroundSelected: '#E2E2F1',
     blue: '#5354E8',
-    yellow: '#FFBE27',
+    blueSecondary: '#C5C5F2',
+    lime: '#C0E021',
     pink: '#FF52A8',
     red: '#DE3131',
-    white: '#FFFFFF',
-    gray1: '#F2F2F2',
-    gray2: '#E5E5E5',
-    gray3: '#CCCCCC',
-    gray4: '#B3B3B3',
-    gray5: '#808080',
-    gray6: '#333333',
-    black: '#000000',
+    backgroundGradient: '(174deg, #5354E8 5%, #603DBF 100%)',
   },
 };
 
 export const darkTheme: Theme = {
   colors: {
-    main: '#A0C814',
-    sub: '#D0E38D',
-    blue: '#4345C8',
-    yellow: '#DFAF20',
-    pink: '#D94291',
-    red: '#B82828',
-    white: '#E5E5E5',
-    gray1: '#333333',
-    gray2: '#4D4D4D',
-    gray3: '#666666',
-    gray4: '#808080',
-    gray5: '#999999',
-    gray6: '#B3B3B3',
+    white: '#FFFFFF',
     black: '#000000',
+    background: '#252526',
+    backgroundBase: '#292929',
+    backgroundElevated: '#333333',
+    popup: '#333333',
+    divider: '#555555',
+    textPrimary: '#F9F9F9',
+    textSecondary: '#CCCCCC',
+    textDisabled: '#666666',
+    shadow: '#000000 10%',
+    backgroundSelected: '#363645',
+    blue: '#5354E8',
+    blueSecondary: '#3C3C87',
+    lime: '#C0E021',
+    pink: '#FF52A8',
+    red: '#DE3131',
+    backgroundGradient: '(174deg, #5354E8 5%, #603DBF 100%)',
   },
 };
+
+export const theme = {
+  light: lightTheme,
+  dark: darkTheme,
+};
+
+export default theme;
