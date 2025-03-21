@@ -15,11 +15,13 @@ const defaultConfig = getDefaultConfig(__dirname);
 const projectConfig = {
   transformer: {
     unstable_allowRequireContext: true, // require.context 지원 활성화 (Storybook에서 필요)
+    babelTransformerPath: require.resolve('react-native-svg-transformer'),
   },
+
   resolver: {
     resolverMainFields: ['sbmodern', 'react-native', 'browser', 'main'], // Storybook 우선 로드
-    sourceExts: [...defaultConfig.resolver.sourceExts, 'cjs', 'mjs'], // 추가 확장자 지원
-    assetExts: [...defaultConfig.resolver.assetExts], // 기본 자산 확장자 유지
+    sourceExts: [...defaultConfig.resolver.sourceExts, 'cjs', 'mjs', 'svg'], // 추가 확장자 지원
+    assetExts: defaultConfig.resolver.assetExts.filter(ext => ext !== 'svg'), // svg 확장자 제외
     alias: {
       '@': path.resolve(__dirname, './src'), // @ 경로 별칭 추가 (src 폴더)
     },

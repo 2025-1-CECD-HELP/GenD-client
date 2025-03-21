@@ -10,8 +10,9 @@
 export type TRouteParams = {
   LANDING: {};
   HOME: {};
-  SEARCH: {
-    searchQuery?: string;
-  };
+  FILE: {};
+  CALENDAR: {};
+  MYPAGE: {};
   LOGIN: {};
+  MEETING: {};
 };
