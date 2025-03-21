@@ -14,6 +14,7 @@ import {
   MypageIcon,
   LogoIcon,
 } from '@assets/images/svg/bottom-navigator/index';
+import {useTheme} from '@emotion/react';
 /**
  * 바텀 탭 네비게이터입니다.
  * 입력받은 라우트 이름을 통해 탭 버튼을 표시합니다.
@@ -74,8 +75,9 @@ interface TabIconProps {
 }
 
 const TabIcon: React.FC<TabIconProps> = ({routeName, isActive}) => {
+  const theme = useTheme();
   // 활성/비활성 상태에 따른 색상 설정
-  const fillColor = isActive ? '#007AFF' : '#8E8E93';
+  const fillColor = isActive ? theme.colors.blue : theme.colors.textDisabled;
   // 라우트 이름에 따라 적절한 아이콘 반환
   switch (routeName) {
     case 'HOME':

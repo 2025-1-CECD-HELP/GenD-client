@@ -32,6 +32,7 @@ export const CenterButtonContainer = styled.View`
   background-color: ${props => props.theme.colors.background};
   border-radius: 60px;
   justify-content: center;
+  top: -25px;
   align-items: center;
   align-self: center;
 `;
