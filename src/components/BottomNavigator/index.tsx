@@ -7,11 +7,13 @@ import {
   NavItem,
 } from './index.style';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
-import HomeIcon from '@assets/images/svg/bottom-navigator/home.svg';
-import FileIcon from '@assets/images/svg/bottom-navigator/file.svg';
-import CalendarIcon from '@assets/images/svg/bottom-navigator/calendar.svg';
-import MypageIcon from '@assets/images/svg/bottom-navigator/my-page.svg';
-import LogoIcon from '@assets/images/svg/bottom-navigator/logo.svg';
+import {
+  HomeIcon,
+  FileIcon,
+  CalendarIcon,
+  MypageIcon,
+  LogoIcon,
+} from '@assets/images/svg/bottom-navigator/index';
 /**
  * 바텀 탭 네비게이터입니다.
  * 입력받은 라우트 이름을 통해 탭 버튼을 표시합니다.
