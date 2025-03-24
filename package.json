@@ -45,6 +45,7 @@
     "@react-native/typescript-config": "0.78.0",
     "@storybook/addon-ondevice-actions": "^8.5.5",
     "@storybook/addon-ondevice-controls": "^8.5.5",
+    "@storybook/addon-themes": "^8.6.8",
     "@storybook/react-native": "^8.5.5",
     "@tsconfig/react-native": "^3.0.5",
     "@types/jest": "^29.5.13",
