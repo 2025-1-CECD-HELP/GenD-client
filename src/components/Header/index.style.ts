@@ -39,13 +39,6 @@ export const GDLogoContainer = styled.TouchableOpacity`
   justify-content: center;
 `;
 
-// GD 로고 텍스트
-export const GDLogoText = styled.Text`
-  font-size: 16px;
-  font-weight: bold;
-  color: #ffffff;
-`;
-
 // 중첩 아이콘 컨테이너
 export const StackedIconsContainer = styled.View`
   position: relative;
