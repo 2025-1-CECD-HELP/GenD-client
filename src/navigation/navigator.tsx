@@ -11,6 +11,7 @@ import {
   MypageScreen,
   MeetingScreen,
 } from '@/screens';
+import {Header} from '@/components/Header';
 const Stack = createNativeStackNavigator<TRouteParams>();
 const Tab = createBottomTabNavigator<TRouteParams>();
 
@@ -42,7 +43,7 @@ function TabNavigator() {
   return (
     <Tab.Navigator
       tabBar={props => <BottomNavigator {...props} />}
-      screenOptions={{headerShown: true}}>
+      screenOptions={{headerShown: true, header: () => <Header />}}>
       <Tab.Screen name="HOME" component={HomeScreen} />
       <Tab.Screen name="FILE" component={FileScreen} />
       <Tab.Screen

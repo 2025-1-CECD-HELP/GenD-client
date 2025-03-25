@@ -2222,6 +2222,13 @@
     react-native-modal-datetime-picker "^18.0.0"
     tinycolor2 "^1.4.1"
 
+"@storybook/addon-themes@^8.6.8":
+  version "8.6.8"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-themes/-/addon-themes-8.6.8.tgz#b800314a57219b98398f068f29725f99a9c6af68"
+  integrity sha512-zc4Hr8bQPDMNV+7IbtpZhnbSIWxzV1Ragv0eRDHIuAJkmxYc5QS+J+FSHQa5UYTWjEO6UxUk91x0YV7wpQQSZA==
+  dependencies:
+    ts-dedent "^2.0.0"
+
 "@storybook/components@8.6.3":
   version "8.6.3"
   resolved "https://registry.yarnpkg.com/@storybook/components/-/components-8.6.3.tgz#155c33adfd908cd756c2a0d52a65fd7e0fee0a24"
@@ -3656,18 +3663,6 @@ csstype@^3.0.2:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.3.tgz#d80ff294d114fb0e6ac500fbf85b60137d7eff81"
   integrity sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==
-
-d3-path@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/d3-path/-/d3-path-3.1.0.tgz#22df939032fb5a71ae8b1800d61ddb7851c42526"
-  integrity sha512-p3KP5HCf/bvjBSSKuXid6Zqijx7wIfNW+J/maPs+iwR35at5JCbLUT0LzF1cnjbCHWhqzQTIN2Jpe8pRebIEFQ==
-
-d3-shape@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/d3-shape/-/d3-shape-3.2.0.tgz#a1a839cbd9ba45f28674c69d7f855bcf91dfc6a5"
-  integrity sha512-SaLBuwGm3MOViRq2ABk3eLoxwZELpH6zhl3FbAoJ7Vm1gofKx6El1Ib5z23NUEhF9AsGl7y+dzLe5Cw2AArGTA==
-  dependencies:
-    d3-path "^3.1.0"
 
 data-view-buffer@^1.0.2:
   version "1.0.2"
@@ -6782,14 +6777,6 @@ react-is@^19.0.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-19.0.0.tgz#d6669fd389ff022a9684f708cf6fa4962d1fea7a"
   integrity sha512-H91OHcwjZsbq3ClIDHMzBShc1rotbfACdWENsmEf0IFvZ3FgGPtdHMcsv45bQ1hAbgdfiA8SnxTKfDS+x/8m2g==
 
-react-native-curved-bottom-bar@^3.5.0:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/react-native-curved-bottom-bar/-/react-native-curved-bottom-bar-3.5.0.tgz#7ddba4a6e2cf546829b0677a773d28946881b0e9"
-  integrity sha512-9nVyy7Gw+Amox9GpK8T3MlQnLNUEmYe8PhLHMDzNVxzCzb/hBtSRLjOKIGroW+9TEZRDtJJEdxF7LsFAW8hWeg==
-  dependencies:
-    d3-shape "^3.2.0"
-    react-native-size-scaling "^0.5.1"
-
 react-native-dotenv@^3.4.11:
   version "3.4.11"
   resolved "https://registry.yarnpkg.com/react-native-dotenv/-/react-native-dotenv-3.4.11.tgz#2e6c4eabd55d5f1bf109b3dd9141dadf9c55cdd4"
@@ -6853,11 +6840,6 @@ react-native-screens@^4.9.0:
   dependencies:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
-
-react-native-size-scaling@^0.5.1:
-  version "0.5.4"
-  resolved "https://registry.yarnpkg.com/react-native-size-scaling/-/react-native-size-scaling-0.5.4.tgz#51207b9c4fa7bf8770401ca06d3911e9c79a1e5d"
-  integrity sha512-GtoE7qcw4ftOigtq6hRTV34nosGw9z6WXNq2l06Uj+yFfvrz6teGjD/E22Jo4raegdTIQmPcMU4/nRRhRLZpAA==
 
 react-native-svg-transformer@^1.5.0:
   version "1.5.0"
