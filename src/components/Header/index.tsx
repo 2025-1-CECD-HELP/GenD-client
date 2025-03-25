@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   HeaderContainer,
+  LeftContainer,
   LogoContainer,
   RightContainer,
   IconButton,
@@ -9,15 +10,22 @@ import {
   IconOne,
   IconTwo,
   IconThree,
+  DarkLightLogoContainer,
 } from './index.style';
 
-import {AppLogo, AlertIcon} from '@assets/images/svg/header';
+import {
+  AppLogo,
+  AlertIcon,
+  DarkLogo,
+  LightLogo,
+} from '@assets/images/svg/header';
 import {useHeader} from './useHeader';
 
 interface IHeaderProps {
   onNotificationPress?: () => void;
   onWorkSpacePress?: () => void;
   onLogoPress?: () => void;
+  onDarkLightLogoPress?: () => void;
   profileIcons?: React.ReactNode[]; // 프로필에 표시할 아이콘 배열
 }
 
@@ -31,6 +39,7 @@ export const Header: React.FC<IHeaderProps> = ({
   onNotificationPress,
   onWorkSpacePress,
   onLogoPress,
+  onDarkLightLogoPress,
   profileIcons = [],
 }) => {
   const {
@@ -38,10 +47,13 @@ export const Header: React.FC<IHeaderProps> = ({
     handleNotificationPress,
     handleWorkSpacePress,
     handleLogoPress,
+    handleDarkLightLogoPress,
+    isDarkMode,
   } = useHeader({
     onNotificationPress,
     onWorkSpacePress,
     onLogoPress,
+    onDarkLightLogoPress,
   });
 
   const defaultIcon = (
@@ -52,10 +64,14 @@ export const Header: React.FC<IHeaderProps> = ({
 
   return (
     <HeaderContainer>
-      <LogoContainer onPress={handleLogoPress}>
-        <AppLogo width={58} height={23} />
-      </LogoContainer>
-
+      <LeftContainer>
+        <DarkLightLogoContainer onPress={handleDarkLightLogoPress}>
+          {isDarkMode ? <LightLogo /> : <DarkLogo />}
+        </DarkLightLogoContainer>
+        <LogoContainer onPress={handleLogoPress}>
+          <AppLogo fill={colors.textPrimary} width={58} height={23} />
+        </LogoContainer>
+      </LeftContainer>
       <RightContainer>
         <IconButton>{/* 흑백 테마 전환 아이콘 */}</IconButton>
         <GDLogoContainer onPress={handleWorkSpacePress}>
@@ -72,7 +88,9 @@ export const Header: React.FC<IHeaderProps> = ({
 
         <IconButton onPress={handleNotificationPress}>
           <AlertIcon
+            fill={colors.textPrimary}
             stroke={colors.textPrimary}
+            strokeOpacity={1}
             strokeWidth={1.6335}
             width={21}
             height={21}

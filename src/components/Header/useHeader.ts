@@ -11,14 +11,16 @@ interface UseHeaderProps {
   onNotificationPress?: () => void;
   onWorkSpacePress?: () => void;
   onLogoPress?: () => void;
+  onDarkLightLogoPress?: () => void;
 }
 
 export const useHeader = ({
   onNotificationPress,
   onWorkSpacePress,
   onLogoPress,
+  onDarkLightLogoPress,
 }: UseHeaderProps) => {
-  const {colors} = useTheme();
+  const {colors, toggleTheme, isDarkMode} = useTheme();
 
   // 여기에 추가적인 상태나 로직을 구현할 수 있습니다
 
@@ -30,6 +32,15 @@ export const useHeader = ({
       console.log('알림 클릭 이벤트가 없습니다.');
     }
   }, [onNotificationPress]);
+
+  // 다크 라이트 로고 클릭 이벤트 처리
+  const handleDarkLightLogoPress = useCallback(() => {
+    if (onDarkLightLogoPress) {
+      onDarkLightLogoPress();
+    } else {
+      toggleTheme();
+    }
+  }, [onDarkLightLogoPress, toggleTheme]);
 
   // 워크스페이스 관련 로직 처리
   const handleWorkSpacePress = useCallback(() => {
@@ -51,9 +62,11 @@ export const useHeader = ({
 
   return {
     colors,
+    isDarkMode,
     handleNotificationPress,
     handleWorkSpacePress,
     handleLogoPress,
+    handleDarkLightLogoPress,
     // 추가적인 상태나 함수들을 여기서 반환
   };
 };

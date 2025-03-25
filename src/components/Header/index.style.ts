@@ -12,8 +12,20 @@ export const HeaderContainer = styled.View`
   background-color: ${({theme}) => theme.colors.background};
 `;
 
+// 왼쪽 컨테이너
+export const LeftContainer = styled.View`
+  flex-direction: row;
+  gap: 12px;
+`;
+
 // 로고 컨테이너
 export const LogoContainer = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+`;
+
+// 다크 라이트 로고 컨테이너
+export const DarkLightLogoContainer = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
 `;
