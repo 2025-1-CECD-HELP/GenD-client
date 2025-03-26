@@ -39,8 +39,13 @@ export const ModalProvider = ({children}: {children: React.ReactNode}) => {
   return (
     <ModalContext.Provider
       value={{isOpen, setIsOpen, modalContent, setModalContent}}>
+      <Modal
+        visible={isOpen}
+        transparent={true}
+        key={modalContent ? 'opened' : 'closed'}>
+        {modalContent}
+      </Modal>
       {children}
-      <Modal visible={isOpen}>{modalContent}</Modal>
     </ModalContext.Provider>
   );
 };
