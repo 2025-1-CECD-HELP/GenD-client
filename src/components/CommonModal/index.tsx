@@ -44,16 +44,18 @@ export const CommonModal: React.FC<ICommonModalProps> = ({
   onCancel,
   isCenter,
 }) => {
-  const {setIsOpen} = useModal();
+  const {setModalContent, setIsOpen} = useModal();
 
   // 모달 닫기 핸들러
   const handleClose = () => {
+    setModalContent(null);
     setIsOpen(false);
     if (onCancel) onCancel();
   };
 
   // 확인 버튼 클릭 핸들러
   const handleConfirm = () => {
+    setModalContent(null);
     setIsOpen(false);
     if (onConfirm) onConfirm();
   };
