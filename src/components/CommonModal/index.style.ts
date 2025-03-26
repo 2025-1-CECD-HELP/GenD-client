@@ -13,7 +13,7 @@ export const ModalContent = styled.View<{isCenter?: boolean}>`
   padding: 24px;
   justify-content: ${({isCenter}) => (isCenter ? 'center' : 'flex-start')};
   align-items: ${({isCenter}) => (isCenter ? 'center' : 'flex-start')};
-  background-color: ${({theme}) => theme.colors.popup};
+  background-color: ${({theme}) => theme.colors.background};
   border-radius: 12px;
 `;
 
