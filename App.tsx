@@ -11,11 +11,11 @@ function App(): React.JSX.Element {
     <SafeAreaProvider>
       <QueryClientProvider>
         <AuthProvider>
-          <ModalProvider>
-            <ThemeProvider>
+          <ThemeProvider>
+            <ModalProvider>
               <AppNavigator />
-            </ThemeProvider>
-          </ModalProvider>
+            </ModalProvider>
+          </ThemeProvider>
         </AuthProvider>
       </QueryClientProvider>
     </SafeAreaProvider>
