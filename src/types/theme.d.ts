@@ -1,4 +1,5 @@
 import '@emotion/react';
+import {themeFonts} from '@/theme';
 
 /**
  * 테마 타입 정의
@@ -27,5 +28,6 @@ declare module '@emotion/react' {
       red: string;
       backgroundGradient: string;
     };
+    themeFonts: typeof themeFonts;
   }
 }

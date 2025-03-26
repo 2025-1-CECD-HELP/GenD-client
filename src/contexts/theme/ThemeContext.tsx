@@ -3,7 +3,7 @@ import {
   ThemeProvider as EmotionThemeProvider,
   useTheme as useEmotionTheme,
 } from '@emotion/react';
-import {darkTheme, lightTheme} from '@/theme';
+import {darkTheme, lightTheme, themeFonts} from '@/theme';
 import {useColorScheme} from 'react-native';
 import {Theme} from '@emotion/react/dist/declarations/src';
 
@@ -36,6 +36,12 @@ export const ThemeProvider = ({children}: {children: React.ReactNode}) => {
   // 현재 테마의 colors 객체
   const currentTheme = isDarkMode ? darkTheme : lightTheme;
 
+  // font, color theme
+  const mergedTheme = {
+    ...currentTheme,
+    themeFonts,
+  };
+
   return (
     <ThemeContext.Provider
       value={{
@@ -43,7 +49,7 @@ export const ThemeProvider = ({children}: {children: React.ReactNode}) => {
         toggleTheme,
         colors: currentTheme.colors,
       }}>
-      <EmotionThemeProvider theme={currentTheme}>
+      <EmotionThemeProvider theme={mergedTheme}>
         {children}
       </EmotionThemeProvider>
     </ThemeContext.Provider>
