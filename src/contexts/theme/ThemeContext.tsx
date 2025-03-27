@@ -12,6 +12,10 @@ import {Theme} from '@emotion/react/dist/declarations/src';
  * 다크모드 및 라이트모드 테마 제공 (단, colors 를 통일하여 사용할 수 있도록 해야합니다.)
  * useTheme 훅을 통해 테마 정보를 전역적으로 변경할 수 있습니다.
  * @author 홍규진
+ *
+ * themeFonts을 theme에 추가하였습니다.
+ * 정의된 텍스트 스타일을 colors 처럼 불러와 사용할 수 있도록 합니다.
+ * @author 이정선
  */
 interface ThemeContextProps {
   isDarkMode: boolean;

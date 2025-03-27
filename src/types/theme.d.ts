@@ -5,6 +5,9 @@ import {themeFonts} from '@/theme';
  * 테마 타입 정의
  * 추후에 색상을 추가할 때 이 타입을 참고하여 추가해야 합니다.
  * @author 홍규진
+ *
+ * 테마 타입에 폰트를 추가하였습니다.
+ * @author 이정선
  */
 declare module '@emotion/react' {
   export interface Theme {
