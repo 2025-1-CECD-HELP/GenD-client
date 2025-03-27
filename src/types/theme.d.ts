@@ -31,6 +31,6 @@ declare module '@emotion/react' {
       red: string;
       backgroundGradient: string;
     };
-    themeFonts: typeof themeFonts;
+   fonts: typeof themeFonts;
   }
 }
