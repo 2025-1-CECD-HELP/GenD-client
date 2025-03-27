@@ -1,4 +1,5 @@
 import {useModal} from '@contexts/modal/ModalContext';
+import {Button} from '../Button';
 import {
   CommonModalContainer,
   ModalContent,
@@ -22,6 +23,9 @@ import LottieView from 'lottie-react-native';
  * - input: 입력 모달
  * - isCenter: 중앙 정렬 여부
  * @author 홍규진
+ *
+ * 모달의 버튼 부분을 공통 Button 컴포넌트로 대체하였습니다.
+ * @author 이정선
  */
 
 type ModalType = 'default' | 'check' | 'confirm' | 'input';
@@ -60,6 +64,9 @@ export const CommonModal: React.FC<ICommonModalProps> = ({
     if (onConfirm) onConfirm();
   };
 
+  // 버튼의 개수
+  const buttonCount = type === 'default' || type === 'input' ? 2 : 1;
+
   return (
     <CommonModalContainer>
       <ModalContent isCenter={isCenter}>
@@ -81,11 +88,25 @@ export const CommonModal: React.FC<ICommonModalProps> = ({
           <Content>{content}</Content>
         )}
 
-        <ButtonContainer>
+        <ButtonContainer buttonCount={buttonCount}>
           {(type === 'default' || type === 'input') && (
-            <StyledButton onPress={handleClose} title="취소" />
+            <StyledButton>
+              <Button
+                onPress={handleClose}
+                text="취소"
+                shape="square"
+                variant="disabled"
+              />
+            </StyledButton>
           )}
-          <StyledButton onPress={handleConfirm} title="확인" />
+          <StyledButton isSingle={buttonCount === 1}>
+            <Button
+              onPress={handleConfirm}
+              text="확인"
+              shape="square"
+              variant="filled"
+            />
+          </StyledButton>
         </ButtonContainer>
       </ModalContent>
     </CommonModalContainer>
