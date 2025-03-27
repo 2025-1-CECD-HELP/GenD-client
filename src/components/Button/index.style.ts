@@ -1,4 +1,4 @@
-import styled, {css} from '@emotion/native';
+import styled from '@emotion/native';
 
 export const ButtonContainer = styled.TouchableOpacity<{
   variant: 'filled' | 'outline' | 'disabled';
@@ -27,5 +27,5 @@ export const ButtonText = styled.Text<{
     if (variant === 'outline') return theme.colors.blue;
     if (variant === 'disabled') return theme.colors.textDisabled;
   }};
-  ${({theme}) => css(theme.fonts.title5)};
+  ${({theme}) => theme.fonts.title5};
 `;

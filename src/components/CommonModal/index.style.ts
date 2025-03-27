@@ -1,4 +1,4 @@
-import styled, {css} from '@emotion/native';
+import styled from '@emotion/native';
 
 export const CommonModalContainer = styled.View`
   flex: 1;
