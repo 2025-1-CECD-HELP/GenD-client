@@ -22,6 +22,6 @@ function App(): React.JSX.Element {
   );
 }
 
-// export default App;
+export default App;
 
-export {default} from './.storybook';
+// export {default} from './.storybook';
