@@ -3,15 +3,15 @@ import {
   ThemeProvider as EmotionThemeProvider,
   useTheme as useEmotionTheme,
 } from '@emotion/react';
-import {darkTheme, lightTheme} from '@/theme';
+import {darkTheme, lightTheme, themeFonts} from '@/theme';
 import {useColorScheme} from 'react-native';
 import {Theme} from '@emotion/react/dist/declarations/src';
 
 /**
  * 테마 컨텍스트 타입 정의
- * 다크모드 및 라이트모드 테마 제공 (단, colors 를 통일하여 사용할 수 있도록 해야합니다.)
+ * 다크모드/라이트모드 및 폰트 테마 제공 (단, colors 를 통일하여 사용할 수 있도록 해야합니다.)
  * useTheme 훅을 통해 테마 정보를 전역적으로 변경할 수 있습니다.
- * @author 홍규진
+ * @author 홍규진, 이정선
  */
 interface ThemeContextProps {
   isDarkMode: boolean;
@@ -36,6 +36,12 @@ export const ThemeProvider = ({children}: {children: React.ReactNode}) => {
   // 현재 테마의 colors 객체
   const currentTheme = isDarkMode ? darkTheme : lightTheme;
 
+  // font, color theme
+  const mergedTheme = {
+    ...currentTheme,
+    fonts: themeFonts,
+  };
+
   return (
     <ThemeContext.Provider
       value={{
@@ -43,7 +49,7 @@ export const ThemeProvider = ({children}: {children: React.ReactNode}) => {
         toggleTheme,
         colors: currentTheme.colors,
       }}>
-      <EmotionThemeProvider theme={currentTheme}>
+      <EmotionThemeProvider theme={mergedTheme}>
         {children}
       </EmotionThemeProvider>
     </ThemeContext.Provider>

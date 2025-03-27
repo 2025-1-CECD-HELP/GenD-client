@@ -1,5 +1,4 @@
 import styled from '@emotion/native';
-import {Button} from 'react-native';
 
 export const CommonModalContainer = styled.View`
   flex: 1;
@@ -26,14 +25,13 @@ export const CheckIconContainer = styled.View`
 
 export const Title = styled.Text`
   margin-top: 20px;
-  font-size: 18px;
-  font-weight: bold;
+  ${({theme}) => theme.fonts.title3};
   color: ${({theme}) => theme.colors.textPrimary};
 `;
 
 export const Content = styled.Text`
   margin-top: 8px;
-  font-size: 14px;
+  ${({theme}) => theme.fonts.text2};
   color: ${({theme}) => theme.colors.textSecondary};
 `;
 
@@ -48,17 +46,20 @@ export const StyledTextInput = styled.TextInput`
   padding: 8px;
   border-width: 1px;
   width: 100%;
+  ${({theme}) => theme.fonts.text2};
   border-color: ${({theme}) => theme.colors.divider};
   border-radius: 8px;
 `;
 
-export const ButtonContainer = styled.View`
+export const ButtonContainer = styled.View<{buttonType: 'single' | 'double'}>`
   margin-top: 16px;
   flex-direction: row;
   width: 100%;
-  justify-content: space-between;
+  justify-content: ${({buttonType}) =>
+    buttonType === 'single' ? 'center' : 'space-between'};
 `;
 
-export const StyledButton = styled(Button)<{variant?: 'primary' | 'secondary'}>`
-  flex: ${({variant}) => (variant === 'secondary' ? '0.45' : '0.55')};
+export const StyledButton = styled.View<{buttonType?: 'single' | 'double'}>`
+  flex: ${({buttonType}) => (buttonType === 'single' ? '0.7' : '0.4')};
+  align-items: center;
 `;
