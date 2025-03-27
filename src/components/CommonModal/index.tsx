@@ -16,16 +16,14 @@ import LottieView from 'lottie-react-native';
 /**
  * 가장 일반적인 경우에 사용하는 모달 컴포넌트입니다.
  * 모달 컴포넌트는 모달 컨텍스트 내부에서 사용되어야 합니다.
+ * 모달 내부의 버튼은 공통 Button 컴포넌트로 구현하였습니다.
  * 모달 타입은 다음과 같습니다.
  * - default: 기본 모달
  * - check: 체크 모달
  * - confirm: 확인 모달
  * - input: 입력 모달
  * - isCenter: 중앙 정렬 여부
- * @author 홍규진
- *
- * 모달의 버튼 부분을 공통 Button 컴포넌트로 대체하였습니다.
- * @author 이정선
+ * @author 홍규진, 이정선
  */
 
 type ModalType = 'default' | 'check' | 'confirm' | 'input';
@@ -64,8 +62,9 @@ export const CommonModal: React.FC<ICommonModalProps> = ({
     if (onConfirm) onConfirm();
   };
 
-  // 버튼의 개수
-  const buttonCount = type === 'default' || type === 'input' ? 2 : 1;
+  // 버튼 타입(double, single)
+  const buttonType =
+    type === 'default' || type === 'input' ? 'double' : 'single';
 
   return (
     <CommonModalContainer>
@@ -88,7 +87,7 @@ export const CommonModal: React.FC<ICommonModalProps> = ({
           <Content>{content}</Content>
         )}
 
-        <ButtonContainer buttonCount={buttonCount}>
+        <ButtonContainer buttonType={buttonType}>
           {(type === 'default' || type === 'input') && (
             <StyledButton>
               <Button
@@ -99,7 +98,7 @@ export const CommonModal: React.FC<ICommonModalProps> = ({
               />
             </StyledButton>
           )}
-          <StyledButton isSingle={buttonCount === 1}>
+          <StyledButton buttonType={buttonType}>
             <Button
               onPress={handleConfirm}
               text="확인"

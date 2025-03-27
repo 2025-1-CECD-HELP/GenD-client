@@ -27,5 +27,5 @@ export const ButtonText = styled.Text<{
     if (variant === 'outline') return theme.colors.blue;
     if (variant === 'disabled') return theme.colors.textDisabled;
   }};
-  ${({theme}) => css(theme.themeFonts.title5)};
+  ${({theme}) => css(theme.fonts.title5)};
 `;
