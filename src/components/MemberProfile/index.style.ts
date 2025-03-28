@@ -1,7 +1,5 @@
 import styled from '@emotion/native';
-import {MemberPosition} from '@/types/member';
-
-type ActiveMemberPosition = Omit<MemberPosition, 'none'>;
+import {ActiveMemberPosition} from './index.type';
 
 export const Container = styled.View`
   background-color: ${({theme}) => theme.colors.backgroundBase};

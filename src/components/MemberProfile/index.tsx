@@ -11,7 +11,7 @@ import {
 } from './index.style';
 import {SettingIcon, CancelIcon} from '@/assets/images/svg/common';
 import defaultProfileImage from '@/assets/images/png/defaultProfile.png';
-import type {MemberPosition} from '@/types/member';
+import {MemberPosition} from './index.type';
 
 /**
  * 멤버 페이지 혹은 멤버 추가 모달에 보여지는 멤버 프로필 컴포넌트입니다.
