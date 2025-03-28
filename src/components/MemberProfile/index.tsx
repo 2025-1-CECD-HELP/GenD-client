@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {useTheme} from '@emotion/react';
 import {
   Container,
@@ -6,11 +6,12 @@ import {
   ContentContainer,
   MemberName,
   ProfileImage,
-  AuthTag,
-  AuthText,
+  PositionTag,
+  PositionText,
 } from './index.style';
 import {SettingIcon, CancelIcon} from '@/assets/images/svg/common';
 import defaultProfileImage from '@/assets/images/png/defaultProfile.png';
+import type {MemberPosition} from '@/types/member';
 
 /**
  * 멤버 페이지 혹은 멤버 추가 모달에 보여지는 멤버 프로필 컴포넌트입니다.
@@ -24,7 +25,7 @@ import defaultProfileImage from '@/assets/images/png/defaultProfile.png';
 interface MemberProfileProps {
   name: string;
   imageUrl?: string;
-  auth: 'member' | 'manager' | 'none';
+  position: MemberPosition;
   onSettingPress?: () => void; // Setting 아이콘 클릭 시 실행
   onCancelPress?: () => void; // Cancel 아이콘 클릭 시 실행
   isCurrentUserManager: boolean; // 현재 로그인된 유저가 해당 워크스페이스의 관리자인지 여부
@@ -33,14 +34,20 @@ interface MemberProfileProps {
 export const MemberProfile: React.FC<MemberProfileProps> = ({
   name,
   imageUrl,
-  auth,
+  position,
   onSettingPress,
   onCancelPress,
   isCurrentUserManager,
 }) => {
   const displayImageUrl = imageUrl ? imageUrl : defaultProfileImage;
-  const authText =
-    auth === 'member' ? '멤버' : auth === 'manager' ? '관리자' : '';
+
+  const positionTextMap: Record<MemberPosition, string> = {
+    member: '멤버',
+    manager: '관리자',
+    none: '',
+  };
+  const positionText = positionTextMap[position];
+
   const theme = useTheme();
   return (
     <Container>
@@ -48,14 +55,14 @@ export const MemberProfile: React.FC<MemberProfileProps> = ({
         <ProfileImage resizeMode="cover" source={displayImageUrl} />
         <ContentContainer>
           <MemberName>{name}</MemberName>
-          {auth !== 'none' && (
-            <AuthTag auth={auth}>
-              <AuthText auth={auth}>{authText}</AuthText>
-            </AuthTag>
+          {position !== 'none' && (
+            <PositionTag position={position}>
+              <PositionText position={position}>{positionText}</PositionText>
+            </PositionTag>
           )}
         </ContentContainer>
       </ProfileContainer>
-      {isCurrentUserManager && auth !== 'none' && (
+      {isCurrentUserManager && position !== 'none' && (
         <SettingIcon
           onPress={onSettingPress}
           fill={theme.colors.textSecondary}
@@ -63,7 +70,7 @@ export const MemberProfile: React.FC<MemberProfileProps> = ({
           height={18}
         />
       )}
-      {auth === 'none' && (
+      {position === 'none' && (
         <CancelIcon
           onPress={onCancelPress}
           fill={theme.colors.textSecondary}

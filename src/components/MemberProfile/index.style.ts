@@ -1,4 +1,5 @@
 import styled from '@emotion/native';
+import {ActiveMemberPosition} from '@/types/member';
 
 export const Container = styled.View`
   background-color: ${({theme}) => theme.colors.backgroundBase};
@@ -36,15 +37,15 @@ export const MemberName = styled.Text`
   color: ${({theme}) => theme.colors.textPrimary};
 `;
 
-export const AuthTag = styled.View<{auth: 'manager' | 'member'}>`
+export const PositionTag = styled.View<{position: ActiveMemberPosition}>`
   border-radius: 50px;
-  background-color: ${({theme, auth}) =>
-    auth === 'manager' ? theme.colors.blue : theme.colors.blueSecondary};
+  background-color: ${({theme, position}) =>
+    position === 'manager' ? theme.colors.blue : theme.colors.blueSecondary};
   padding: 2px 7px;
 `;
 
-export const AuthText = styled.Text<{auth: 'manager' | 'member'}>`
-  color: ${({theme, auth}) =>
-    auth === 'manager' ? theme.colors.white : theme.colors.textPrimary};
+export const PositionText = styled.Text<{position: ActiveMemberPosition}>`
+  color: ${({theme, position}) =>
+    position === 'manager' ? theme.colors.white : theme.colors.textPrimary};
   ${({theme}) => theme.fonts.text5};
 `;
