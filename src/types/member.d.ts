@@ -6,4 +6,3 @@
  */
 
 export type MemberPosition = 'member' | 'manager' | 'none';
-export type ActiveMemberPosition = Omit<MemberPosition, 'none'>;
