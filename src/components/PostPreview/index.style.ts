@@ -1,25 +1,14 @@
 import styled from '@emotion/native';
-import {Platform} from 'react-native';
 
-export const Container = styled.View(({theme}) => ({
-  width: '100%',
-  padding: 20,
-  borderRadius: 12,
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: 10,
-  backgroundColor: theme.colors.backgroundBase,
-  ...(Platform.OS === 'ios'
-    ? {
-        shadowColor: theme.colors.shadow,
-        shadowOpacity: 1,
-        shadowRadius: 5,
-        shadowOffset: {width: 0, height: 0},
-      }
-    : {
-        elevation: 5,
-      }),
-}));
+export const Container = styled.View`
+  width: 100%;
+  padding: 20px;
+  border-radius: 12px;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  background-color: ${({theme}) => theme.colors.backgroundBase};
+`;
 
 export const ImagePreview = styled.Image`
   width: 95px;

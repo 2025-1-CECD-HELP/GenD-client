@@ -9,6 +9,7 @@ import {
 } from './index.style';
 import {useTheme} from '@emotion/react';
 import {PinIcon} from '@/assets/images/svg/home';
+import {Shadow} from 'react-native-shadow-2';
 
 /**
  * 워크스페이스 메인 홈화면의 게시글 프리뷰 컴포넌트 입니다.
@@ -33,23 +34,31 @@ export const PostPreview = ({
 }: PostPreviewProps) => {
   const theme = useTheme();
   return (
-    <Container>
-      {imageUrl && <ImagePreview source={{uri: imageUrl}} resizeMode="cover" />}
-      <ContentContainer>
-        <PostTitle>{title}</PostTitle>
-        <PostContent numberOfLines={3} ellipsizeMode="tail">
-          {description}
-        </PostContent>
-        <Writer>{writer}</Writer>
-        {isPin && (
-          <PinIcon
-            fill={theme.colors.blue}
-            width={13}
-            height={13}
-            style={{position: 'absolute', bottom: 0, right: 0}}
-          />
+    <Shadow
+      distance={5}
+      style={{borderRadius: 12}}
+      offset={[0, 0]}
+      startColor={theme.colors.shadow}>
+      <Container>
+        {imageUrl && (
+          <ImagePreview source={{uri: imageUrl}} resizeMode="cover" />
         )}
-      </ContentContainer>
-    </Container>
+        <ContentContainer>
+          <PostTitle>{title}</PostTitle>
+          <PostContent numberOfLines={3} ellipsizeMode="tail">
+            {description}
+          </PostContent>
+          <Writer>{writer}</Writer>
+          {isPin && (
+            <PinIcon
+              fill={theme.colors.blue}
+              width={13}
+              height={13}
+              style={{position: 'absolute', bottom: 0, right: 0}}
+            />
+          )}
+        </ContentContainer>
+      </Container>
+    </Shadow>
   );
 };
