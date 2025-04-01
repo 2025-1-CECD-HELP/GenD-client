@@ -28,8 +28,7 @@
     "react-native-dotenv": "^3.4.11",
     "react-native-encrypted-storage": "^4.0.3",
     "react-native-safe-area-context": "^5.2.0",
-    "react-native-screens": "^4.9.0",
-    "react-native-shadow-2": "^7.1.1"
+    "react-native-screens": "^4.9.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
