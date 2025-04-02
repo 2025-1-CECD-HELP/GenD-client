@@ -5,11 +5,10 @@ import React, {
   useRef,
   useState,
   ReactNode,
-  useMemo,
 } from 'react';
 import BottomSheet, {
   BottomSheetBackdrop,
-  BottomSheetView,
+  BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
 import {useTheme} from '../theme/ThemeContext';
 import BottomSheetContainer from '@/components/BottomSheetContainer';
@@ -20,8 +19,10 @@ import BottomSheetContainer from '@/components/BottomSheetContainer';
  * BottomSheet는 BottomSheetContainer를 사용하여 바텀 시트의 컨텐츠를 감싸줍니다.
  * BottomSheetContainer는 바텀 시트의 스타일을 적용한 래퍼입니다.(단순히 스타일을 적용하는 역할만 수행합니다.)
  * BottomSheet는 @gorhom/bottom-sheet 라이브러리를 사용하여 구현되었습니다.
+ * 동적인 사이즈 조정과 드래그로 닫기 기능을 지원합니다.
  * @author 홍규진
  */
+
 type BottomSheetContextType = {
   openBottomSheet: (content: ReactNode) => void;
   closeBottomSheet: () => void;
@@ -32,22 +33,19 @@ const BottomSheetContext = createContext<BottomSheetContextType | null>(null);
 export const BottomSheetProvider = ({children}: {children: ReactNode}) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [content, setContent] = useState<ReactNode>(null);
-  const snapPoints = useMemo(() => ['25%', '50%', '90%'], []);
   const theme = useTheme();
 
   const openBottomSheet = (bottomSheetComponent: ReactNode) => {
-    bottomSheetRef.current?.expand();
-    bottomSheetRef.current?.snapToIndex(1);
-    console.log(bottomSheetComponent);
+    setTimeout(() => {
+      bottomSheetRef.current?.expand();
+      bottomSheetRef.current?.snapToIndex(0);
+    }, 200);
     setContent(bottomSheetComponent);
+    console.log(bottomSheetComponent);
   };
 
   const closeBottomSheet = () => {
     bottomSheetRef.current?.close();
-  };
-
-  const handleSheetChanges = (index: number) => {
-    console.log(`index : ${index}`);
   };
 
   const renderBackdrop = (props: any) => (
@@ -62,21 +60,22 @@ export const BottomSheetProvider = ({children}: {children: ReactNode}) => {
   return (
     <BottomSheetContext.Provider value={{openBottomSheet, closeBottomSheet}}>
       {children}
+
       <BottomSheet
         ref={bottomSheetRef}
-        index={-1}
-        snapPoints={snapPoints}
         enablePanDownToClose={true}
-        onChange={handleSheetChanges}
+        enableDynamicSizing={true}
+        maxDynamicContentSize={600}
+        index={-1}
         // eslint-disable-next-line react-native/no-inline-styles
         backgroundStyle={{
           backgroundColor: theme.colors.background,
           borderRadius: 32,
         }}
         backdropComponent={renderBackdrop}>
-        <BottomSheetView>
+        <BottomSheetScrollView>
           <BottomSheetContainer>{content}</BottomSheetContainer>
-        </BottomSheetView>
+        </BottomSheetScrollView>
       </BottomSheet>
     </BottomSheetContext.Provider>
   );
