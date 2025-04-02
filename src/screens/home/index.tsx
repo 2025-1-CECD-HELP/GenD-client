@@ -3,6 +3,7 @@ import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
 import {ROUTE_NAMES} from '@constants/routes';
 import {useModal} from '@/contexts/modal/ModalContext';
 import CommonModal from '@/components/CommonModal';
+import {useBottomSheet} from '@contexts/bottomSheet/BottomSheetContext';
 /**
  * 홈 페이지입니다.
  * @author 홍규진
@@ -10,6 +11,7 @@ import CommonModal from '@/components/CommonModal';
 export const HomeScreen = () => {
   const navigation = useTypeSafeNavigation();
   const {isOpen, setIsOpen, setModalContent} = useModal();
+  const {openBottomSheet} = useBottomSheet();
 
   function handlePressOpenModal() {
     setIsOpen(true);
@@ -23,6 +25,19 @@ export const HomeScreen = () => {
       />,
     );
   }
+
+  function handlePressOpenBottomSheet() {
+    openBottomSheet(
+      <>
+        <Button title="Where Are you BottomSheet" />
+        <Button title="Where Are you BottomSheet" />
+        <Button title="Where Are you BottomSheet" />
+        <Button title="Where Are you BottomSheet" />
+        <Button title="Where Are you BottomSheet" />
+        <Button title="Where Are you BottomSheet" />
+      </>,
+    );
+  }
   return (
     <View>
       <Text>HomeScreen</Text>
@@ -31,6 +46,7 @@ export const HomeScreen = () => {
         onPress={() => navigation.replace(ROUTE_NAMES.LANDING, {})}
       />
       <Button title="OPEN MODAL" onPress={handlePressOpenModal} />
+      <Button title="OPEN BOTTOM SHEET" onPress={handlePressOpenBottomSheet} />
     </View>
   );
 };
