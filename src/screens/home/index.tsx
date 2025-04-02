@@ -27,7 +27,16 @@ export const HomeScreen = () => {
   }
 
   function handlePressOpenBottomSheet() {
-    openBottomSheet(<Text>BottomSheet</Text>);
+    openBottomSheet(
+      <>
+        <Button title="Where Are you BottomSheet" />
+        <Button title="Where Are you BottomSheet" />
+        <Button title="Where Are you BottomSheet" />
+        <Button title="Where Are you BottomSheet" />
+        <Button title="Where Are you BottomSheet" />
+        <Button title="Where Are you BottomSheet" />
+      </>,
+    );
   }
   return (
     <View>
