@@ -16,7 +16,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-const dummyHandlers = {
+const handlerExamples = {
   onPressFile: (file: FileData) => {
     console.log('파일 열기:', file.title);
   },
@@ -29,12 +29,12 @@ const dummyHandlers = {
 export const mp3ViewdByMember: Story = {
   args: {
     file: {
-      title: '녹음 파일',
+      title: 'mp3 파일',
       extension: 'mp3',
-      url: 'https://example.com/audio.mp3',
+      url: 'example.mp3',
     },
     position: 'member',
-    ...dummyHandlers,
+    ...handlerExamples,
   },
 };
 // mp3 형식 파일의 프리뷰
@@ -43,10 +43,10 @@ export const mp3ViewdByManager: Story = {
     file: {
       title: 'mp3 파일',
       extension: 'mp3',
-      url: 'https://example.com/audio.mp3',
+      url: 'example.mp3',
     },
     position: 'manager',
-    ...dummyHandlers,
+    ...handlerExamples,
   },
 };
 
@@ -56,10 +56,10 @@ export const docViewedByMember: Story = {
     file: {
       title: 'docx 파일',
       extension: 'docx',
-      url: 'https://example.com/audio.mp3',
+      url: 'example.docx',
     },
     position: 'member',
-    ...dummyHandlers,
+    ...handlerExamples,
   },
 };
 
@@ -69,9 +69,9 @@ export const docViewedByManager: Story = {
     file: {
       title: 'docx 파일',
       extension: 'docx',
-      url: 'https://example.com/audio.mp3',
+      url: 'example.docx',
     },
     position: 'manager',
-    ...dummyHandlers,
+    ...handlerExamples,
   },
 };
