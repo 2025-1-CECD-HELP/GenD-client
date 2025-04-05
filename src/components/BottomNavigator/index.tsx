@@ -12,8 +12,8 @@ import {
   FileIcon,
   CalendarIcon,
   MypageIcon,
-  LogoIcon,
 } from '@assets/images/svg/bottom-navigator/index';
+import {LogoIcon} from '@assets/images/svg/common';
 import {useTheme} from '@emotion/react';
 /**
  * 바텀 탭 네비게이터입니다.
