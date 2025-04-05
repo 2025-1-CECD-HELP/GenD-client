@@ -5,7 +5,7 @@ import {
   InputField,
   IconContainer,
 } from './index.style';
-import ArrowIcon from '@assets/images/svg/chatting-input/arrow.svg';
+import {ArrowIcon} from '@assets/images/svg/chatting-input';
 import {useInput} from '@hooks/useInput';
 /**
  * 채팅 입력 컴포넌트입니다.
