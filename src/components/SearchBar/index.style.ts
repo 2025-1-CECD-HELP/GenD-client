@@ -20,11 +20,6 @@ export const SearchContainer = styled.View`
   border-color: ${props => props.theme.colors.divider};
 `;
 
-export const SearchIcon = styled.Text`
-  font-size: 18px;
-  margin-right: 8px;
-`;
-
 export const SearchInput = styled.TextInput`
   flex: 1;
   height: 48px;
@@ -47,11 +42,6 @@ export const SearchButton = styled.TouchableOpacity<{disabled: boolean}>`
   justify-content: center;
   align-items: center;
   margin-left: 8px;
-`;
-
-export const ButtonText = styled.Text`
-  color: ${props => props.theme.colors.textPrimary};
-  font-weight: bold;
 `;
 
 export const IconContainer = styled.TouchableOpacity`
