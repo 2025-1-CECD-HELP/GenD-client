@@ -23,7 +23,7 @@ export const InputField = styled.TextInput`
   flex: 1;
   ${({theme}) => theme.fonts.text2};
   padding-left: 20px;
-  color: ${({theme}) => theme.colors.textDisabled};
+  padding-bottom: 8px;
 `;
 
 export const IconContainer = styled.TouchableOpacity`

@@ -7,6 +7,7 @@ import {
 } from './index.style';
 import {ArrowIcon} from '@assets/images/svg/chatting-input';
 import {useInput} from '@hooks/useInput';
+import {useThemeColors} from '@/contexts/theme/ThemeContext';
 /**
  * 채팅 입력 컴포넌트입니다.
  * 이는 placeholder를 받을 수 있습니다.
@@ -32,6 +33,7 @@ const ChattingInput: React.FC<ChattingInputProps> = ({
     isDebouncing,
   });
 
+  const {textDisabled} = useThemeColors();
   return (
     <Container>
       <InputContainer>
@@ -40,6 +42,7 @@ const ChattingInput: React.FC<ChattingInputProps> = ({
           value={text}
           onChangeText={setText}
           onSubmitEditing={handleSubmit}
+          placeholderTextColor={textDisabled}
         />
       </InputContainer>
       <IconContainer onPress={handleSubmit}>
