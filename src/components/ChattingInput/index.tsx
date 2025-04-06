@@ -28,7 +28,7 @@ const ChattingInput: React.FC<ChattingInputProps> = ({
   placeholder = 'AI 비서에게 질문하세요',
   isDebouncing = false,
 }) => {
-  const {text, setText, handleSubmit} = useInput({
+  const {text, handleChangeText, handleSubmit} = useInput({
     onSubmit,
     isDebouncing,
   });
@@ -40,7 +40,7 @@ const ChattingInput: React.FC<ChattingInputProps> = ({
         <InputField
           placeholder={placeholder}
           value={text}
-          onChangeText={setText}
+          onChangeText={handleChangeText}
           onSubmitEditing={handleSubmit}
           placeholderTextColor={textDisabled}
         />
