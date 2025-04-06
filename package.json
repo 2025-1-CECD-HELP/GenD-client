@@ -21,6 +21,7 @@
     "@tanstack/react-query": "^5.67.1",
     "@tanstack/react-query-devtools": "^5.67.1",
     "axios": "^1.7.9",
+    "es-toolkit": "^1.34.1",
     "lottie-ios": "4.5.0",
     "lottie-react-native": "^7.2.2",
     "react": "19.0.0",
