@@ -25,6 +25,8 @@ interface SearchProps {
   onSearchSubmit?: (query: string) => void;
   placeholder?: string;
   isDebouncing?: boolean;
+  onExportPress?: () => void;
+  onPlusPress?: () => void;
 }
 
 export const SearchBar: React.FC<SearchProps> = ({
@@ -33,6 +35,12 @@ export const SearchBar: React.FC<SearchProps> = ({
   },
   placeholder = '파일명으로 검색하세요',
   isDebouncing = false,
+  onExportPress = () => {
+    console.log('내보내기 함수를 주입해주세요!');
+  },
+  onPlusPress = () => {
+    console.log('추가 함수를 주입해주세요!');
+  },
 }) => {
   const {text, handleChangeText, handleSubmit} = useInput({
     isDebouncing,
@@ -65,10 +73,10 @@ export const SearchBar: React.FC<SearchProps> = ({
           </SearchButton>
         )}
       </SearchContainer>
-      <IconContainer>
+      <IconContainer onPress={onExportPress}>
         <ExportIcon />
       </IconContainer>
-      <IconContainer>
+      <IconContainer onPress={onPlusPress}>
         <PlusIcon />
       </IconContainer>
     </Container>

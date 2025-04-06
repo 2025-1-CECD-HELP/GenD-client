@@ -54,7 +54,7 @@ export const ButtonText = styled.Text`
   font-weight: bold;
 `;
 
-export const IconContainer = styled.View`
+export const IconContainer = styled.TouchableOpacity`
   width: 40px;
   height: 40px;
   justify-content: center;
