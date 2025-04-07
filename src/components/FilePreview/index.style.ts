@@ -5,6 +5,7 @@ export const Container = styled.View`
   border: 1px solid ${({theme}) => theme.colors.divider};
   background-color: ${({theme}) => theme.colors.background};
   overflow: hidden;
+  width: 100%;
 `;
 
 export const Divider = styled.View`

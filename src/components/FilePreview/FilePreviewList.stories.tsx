@@ -24,6 +24,11 @@ const mockFiles: FileData[] = [
     extension: 'docx',
     url: 'example.docx',
   },
+  {
+    title: '회의록',
+    extension: 'docx',
+    url: 'example.docx',
+  },
 ];
 
 export const MemberView: Story = {

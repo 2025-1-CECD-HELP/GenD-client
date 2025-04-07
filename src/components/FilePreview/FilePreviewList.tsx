@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, SafeAreaView, FlatList} from 'react-native';
 import {FilePreview} from './index';
 import {FileData} from './index';
@@ -29,7 +29,7 @@ export const FilePreviewList = ({
   onPressMoreIcon,
 }: FilePreviewListProps) => {
   const numColumns = 2;
-
+  const [containerWidth, setContainerWidth] = useState(0);
   return (
     <SafeAreaView>
       <View>
@@ -42,7 +42,10 @@ export const FilePreviewList = ({
           }}
           style={{overflow: 'visible'}}
           renderItem={({item}) => (
-            <View style={{flex: 1}}>
+            <View
+              style={{
+                width: containerWidth ? (containerWidth - 16) / 2 : '48%',
+              }}>
               <FilePreview
                 file={item}
                 position={position}
