@@ -47,6 +47,7 @@ export const SearchButton = styled.TouchableOpacity<{disabled: boolean}>`
 export const IconContainer = styled.TouchableOpacity`
   width: 40px;
   height: 40px;
+  padding: 16px;
   justify-content: center;
   align-items: center;
   border-radius: 20px;

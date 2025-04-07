@@ -47,7 +47,7 @@ export const SearchBar: React.FC<SearchProps> = ({
     handleChangeText('');
   };
 
-  const {textDisabled} = useThemeColors();
+  const {textDisabled, background} = useThemeColors();
 
   return (
     <Container>
@@ -72,13 +72,13 @@ export const SearchBar: React.FC<SearchProps> = ({
       {/* onExportPress 함수가 있을 때만, 랜더링 합니다 */}
       {onExportPress ? (
         <IconContainer onPress={onExportPress}>
-          <ExportIcon />
+          <ExportIcon fill={background} />
         </IconContainer>
       ) : null}
       {/* onPlusPress 함수가 있을 때만, 랜더링 합니다 */}
       {onPlusPress ? (
         <IconContainer onPress={onPlusPress}>
-          <PlusIcon />
+          <PlusIcon fill={background} />
         </IconContainer>
       ) : null}
     </Container>
