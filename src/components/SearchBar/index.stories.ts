@@ -17,15 +17,37 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Basic: Story = {
-  args: {},
+  args: {
+    onSearchSubmit: () => {
+      console.log('검색 함수 주입 및 디바운싱 디폴트 적용');
+    },
+    isDebouncing: true,
+  },
 };
 
-export const WithDebouncing: Story = {
+export const OnlyForPlusButton: Story = {
   args: {
     onSearchSubmit: () => {
       console.log('검색 함수 주입 및 클릭');
     },
-    placeholder: '검색 힌트',
-    isDebouncing: true,
+    placeholder: 'plus 버튼만 있는 검색창',
+    onPlusPress: () => {
+      console.log('PlusPress 버튼 지정');
+    },
+  },
+};
+
+export const ExportAndPlusButton: Story = {
+  args: {
+    onSearchSubmit: () => {
+      console.log('검색 함수 주입 및 클릭');
+    },
+    placeholder: '다 넣은 검색창',
+    onPlusPress: () => {
+      console.log('PlusPress 버튼 지정');
+    },
+    onExportPress: () => {
+      console.log('ExportPress 버튼 지정');
+    },
   },
 };

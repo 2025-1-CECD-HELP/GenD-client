@@ -22,25 +22,21 @@ import {useThemeColors} from '@/contexts/theme/ThemeContext';
  */
 
 interface SearchProps {
-  onSearchSubmit?: (query: string) => void;
   placeholder?: string;
   isDebouncing?: boolean;
+  onSearchSubmit: (query: string) => void;
   onExportPress?: () => void;
   onPlusPress?: () => void;
 }
 
 export const SearchBar: React.FC<SearchProps> = ({
+  placeholder = '파일명으로 검색하세요',
+  isDebouncing = false,
   onSearchSubmit = () => {
     console.log('검색 함수를 주입해주세요!');
   },
-  placeholder = '파일명으로 검색하세요',
-  isDebouncing = false,
-  onExportPress = () => {
-    console.log('내보내기 함수를 주입해주세요!');
-  },
-  onPlusPress = () => {
-    console.log('추가 함수를 주입해주세요!');
-  },
+  onExportPress,
+  onPlusPress,
 }) => {
   const {text, handleChangeText, handleSubmit} = useInput({
     isDebouncing,
@@ -73,12 +69,18 @@ export const SearchBar: React.FC<SearchProps> = ({
           </SearchButton>
         )}
       </SearchContainer>
-      <IconContainer onPress={onExportPress}>
-        <ExportIcon />
-      </IconContainer>
-      <IconContainer onPress={onPlusPress}>
-        <PlusIcon />
-      </IconContainer>
+      {/* onExportPress 함수가 있을 때만, 랜더링 합니다 */}
+      {onExportPress ? (
+        <IconContainer onPress={onExportPress}>
+          <ExportIcon />
+        </IconContainer>
+      ) : null}
+      {/* onPlusPress 함수가 있을 때만, 랜더링 합니다 */}
+      {onPlusPress ? (
+        <IconContainer onPress={onPlusPress}>
+          <PlusIcon />
+        </IconContainer>
+      ) : null}
     </Container>
   );
 };
