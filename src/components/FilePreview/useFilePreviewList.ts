@@ -1,5 +1,5 @@
 import {useCallback} from 'react';
-import {useResponsiveGrid} from './useResponsiveGrid';
+import {useResponsiveGrid} from '../../hooks/useResponsiveGrid';
 import {FileData} from '@/components/FilePreview/index.type';
 /**
  * 해당 훅은 FilePreviewList 컴포넌트의 로직을 분리하여 관리합니다.

@@ -6,7 +6,7 @@ import {
   columnWrapperStyle,
   FilePreviewWrapper,
 } from './FilePreviewList.style';
-import {useFilePreviewList} from '@/hooks/useFilePreviewList';
+import {useFilePreviewList} from '@/components/FilePreview/useFilePreviewList';
 
 /**
  * 자료 관리 페이지에 사용될 파일 프리뷰 리스트 컴포넌트입니다.

@@ -7,7 +7,7 @@ import {
   PresentationTemplate,
 } from '@/assets/images/svg/template';
 import {columnWrapperStyle, FilePreviewWrapper} from './TemplateList.style';
-import {useTemplateList} from '@/hooks/useTemplateList';
+import {useTemplateList} from '@/components/Template/useTemplateList';
 
 /**
  * 여러 개의 템플릿을 2열 그리드의 형태로 보여주는 TemplateList 컴포넌트입니다.
