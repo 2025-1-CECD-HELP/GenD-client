@@ -1,6 +1,6 @@
 import styled from '@emotion/native';
 import {ViewStyle} from 'react-native';
-import {FileData} from '.';
+import {FileData} from './index.type';
 import {FlatList} from 'react-native';
 
 export const FilePreviewWrapper = styled.View<{width: number}>`

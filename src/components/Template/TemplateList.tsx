@@ -7,6 +7,7 @@ import {
   PresentationTemplate,
 } from '@/assets/images/svg/template';
 import {columnWrapperStyle, FilePreviewWrapper} from './TemplateList.style';
+import {useResponsiveGrid} from '@/hooks/useResponsiveGrid';
 
 /**
  * 여러 개의 템플릿을 2열 그리드의 형태로 보여주는 TemplateList 컴포넌트입니다.
@@ -36,14 +37,18 @@ const templates: TemplateType[] = [
 
 export const TemplateList = () => {
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
-  const [containerWidth, setContainerWidth] = useState(0);
+
+  const {itemWidth, onLayout, numColumns} = useResponsiveGrid({
+    numColumns: 2,
+    gap: 16,
+  });
   return (
     <FlatList
       data={templates}
       columnWrapperStyle={columnWrapperStyle}
-      onLayout={e => setContainerWidth(e.nativeEvent.layout.width)}
+      onLayout={onLayout}
       renderItem={({item}) => (
-        <FilePreviewWrapper width={(containerWidth - 16) / 2}>
+        <FilePreviewWrapper width={itemWidth}>
           <Template
             key={item.title}
             template={item}
@@ -54,7 +59,7 @@ export const TemplateList = () => {
         </FilePreviewWrapper>
       )}
       keyExtractor={(item, index) => index.toString()}
-      numColumns={2}
+      numColumns={numColumns}
     />
   );
 };

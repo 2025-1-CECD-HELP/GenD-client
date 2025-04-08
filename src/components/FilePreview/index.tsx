@@ -6,6 +6,7 @@ import {
   Title,
   Divider,
 } from './index.style';
+import {FileData} from './index.type';
 import {
   AudioFormat,
   DocFormat,
@@ -21,12 +22,6 @@ import {useThemeColors} from '@/contexts/theme/ThemeContext';
  * - 클릭 시 파일 열기 및 액션 실행
  * @author 이정선
  */
-
-export type FileData = {
-  title: string;
-  extension: 'mp3' | 'docx'; // 파일 확장자 (지원 형식 제한)
-  url: string; // 파일 url
-};
 
 export type FilePreviewProps = {
   file: FileData;

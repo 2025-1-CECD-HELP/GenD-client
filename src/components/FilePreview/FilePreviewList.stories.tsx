@@ -1,7 +1,7 @@
 import type {Meta, StoryObj} from '@storybook/react';
 import {FilePreviewList} from './FilePreviewList';
 import {View} from 'react-native';
-import type {FileData} from '.';
+import type {FileData} from './index.type';
 
 const meta = {
   title: 'components/FilePreviewList',
