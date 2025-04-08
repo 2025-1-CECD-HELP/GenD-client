@@ -8,7 +8,7 @@ import {
   SearchInput,
   IconContainer,
 } from './index.style';
-import {ExportIcon, SearchIcon} from '@/assets/images/svg/search-bar';
+import {SearchIcon} from '@/assets/images/svg/search-bar';
 import {PlusIcon} from '@/assets/images/svg/common';
 import {useThemeColors} from '@/contexts/theme/ThemeContext';
 
@@ -25,7 +25,6 @@ interface SearchProps {
   placeholder?: string;
   isDebouncing?: boolean;
   onSearchSubmit: (query: string) => void;
-  onExportPress?: () => void;
   onPlusPress?: () => void;
 }
 
@@ -35,7 +34,6 @@ export const SearchBar: React.FC<SearchProps> = ({
   onSearchSubmit = () => {
     console.log('검색 함수를 주입해주세요!');
   },
-  onExportPress,
   onPlusPress,
 }) => {
   const {text, handleChangeText, handleSubmit} = useInput({
@@ -69,12 +67,6 @@ export const SearchBar: React.FC<SearchProps> = ({
           </SearchButton>
         )}
       </SearchContainer>
-      {/* onExportPress 함수가 있을 때만, 랜더링 합니다 */}
-      {onExportPress ? (
-        <IconContainer onPress={onExportPress}>
-          <ExportIcon fill={background} />
-        </IconContainer>
-      ) : null}
       {/* onPlusPress 함수가 있을 때만, 랜더링 합니다 */}
       {onPlusPress ? (
         <IconContainer onPress={onPlusPress}>

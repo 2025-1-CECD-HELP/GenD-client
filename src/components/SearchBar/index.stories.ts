@@ -37,7 +37,7 @@ export const OnlyForPlusButton: Story = {
   },
 };
 
-export const ExportAndPlusButton: Story = {
+export const WithPlusButton: Story = {
   args: {
     onSearchSubmit: () => {
       console.log('검색 함수 주입 및 클릭');
@@ -45,9 +45,6 @@ export const ExportAndPlusButton: Story = {
     placeholder: '다 넣은 검색창',
     onPlusPress: () => {
       console.log('PlusPress 버튼 지정');
-    },
-    onExportPress: () => {
-      console.log('ExportPress 버튼 지정');
     },
   },
 };
