@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {FlatList} from 'react-native';
 import {Template} from '.';
 import {TemplateType} from './index.type';
@@ -7,7 +7,7 @@ import {
   PresentationTemplate,
 } from '@/assets/images/svg/template';
 import {columnWrapperStyle, FilePreviewWrapper} from './TemplateList.style';
-import {useResponsiveGrid} from '@/hooks/useResponsiveGrid';
+import {useTemplateList} from '@/hooks/useTemplateList';
 
 /**
  * 여러 개의 템플릿을 2열 그리드의 형태로 보여주는 TemplateList 컴포넌트입니다.
@@ -36,25 +36,20 @@ const templates: TemplateType[] = [
 ];
 
 export const TemplateList = () => {
-  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
-
-  const {itemWidth, onLayout, numColumns} = useResponsiveGrid({
-    numColumns: 2,
-    gap: 16,
-  });
+  const {itemWidth, onLayout, numColumns, gap, selectedTemplate, handleSelect} =
+    useTemplateList(templates);
   return (
     <FlatList
       data={templates}
-      columnWrapperStyle={columnWrapperStyle}
+      columnWrapperStyle={columnWrapperStyle(gap)}
       onLayout={onLayout}
       renderItem={({item}) => (
         <FilePreviewWrapper width={itemWidth}>
           <Template
-            key={item.title}
             template={item}
             isSelected={selectedTemplate === item.title}
-            onPressTemplate={() => setSelectedTemplate(item.title)}
-            onPreePreview={() => console.log('프리뷰 보여주기')}
+            onPressTemplate={() => handleSelect(item.title)}
+            onPreePreview={() => console.log('프리뷰 보기')}
           />
         </FilePreviewWrapper>
       )}

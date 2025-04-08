@@ -6,7 +6,7 @@ import {
   columnWrapperStyle,
   FilePreviewWrapper,
 } from './FilePreviewList.style';
-import {useResponsiveGrid} from '@/hooks/useResponsiveGrid';
+import {useFilePreviewList} from '@/hooks/useFilePreviewList';
 
 /**
  * 자료 관리 페이지에 사용될 파일 프리뷰 리스트 컴포넌트입니다.
@@ -33,15 +33,24 @@ export const FilePreviewList = ({
   onPressDownload,
   onPressMoreIcon,
 }: FilePreviewListProps) => {
-  const {itemWidth, onLayout, numColumns} = useResponsiveGrid({
-    numColumns: 2,
-    gap: 16,
-  });
+  const {
+    itemWidth,
+    onLayout,
+    numColumns,
+    gap,
+    handlePressAction,
+    handlePressFile,
+  } = useFilePreviewList(
+    position,
+    onPressFile,
+    onPressDownload,
+    onPressMoreIcon,
+  );
 
   return (
     <FilePreviewContainer
       data={files}
-      columnWrapperStyle={columnWrapperStyle}
+      columnWrapperStyle={columnWrapperStyle(gap)}
       onLayout={onLayout}
       renderItem={({item}) =>
         itemWidth > 0 ? (
@@ -49,12 +58,8 @@ export const FilePreviewList = ({
             <FilePreview
               file={item}
               position={position}
-              onPressFile={() => onPressFile(item)}
-              onPressAction={
-                position === 'member'
-                  ? () => onPressDownload(item)
-                  : () => onPressMoreIcon(item)
-              }
+              onPressFile={() => handlePressFile(item)}
+              onPressAction={() => handlePressAction(item)}
             />
           </FilePreviewWrapper>
         ) : null
