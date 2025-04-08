@@ -1,7 +1,12 @@
 import React from 'react';
-import {View, SafeAreaView, FlatList} from 'react-native';
 import {FilePreview} from './index';
-import {FileData} from './index';
+import {FileData} from './index.type';
+import {
+  FilePreviewContainer,
+  columnWrapperStyle,
+  FilePreviewWrapper,
+} from './FilePreviewList.style';
+import {useFilePreviewList} from '@/components/FilePreview/useFilePreviewList';
 
 /**
  * 자료 관리 페이지에 사용될 파일 프리뷰 리스트 컴포넌트입니다.
@@ -28,37 +33,39 @@ export const FilePreviewList = ({
   onPressDownload,
   onPressMoreIcon,
 }: FilePreviewListProps) => {
-  const numColumns = 2;
+  const {
+    itemWidth,
+    onLayout,
+    numColumns,
+    gap,
+    handlePressAction,
+    handlePressFile,
+  } = useFilePreviewList(
+    position,
+    onPressFile,
+    onPressDownload,
+    onPressMoreIcon,
+  );
 
   return (
-    <SafeAreaView>
-      <View>
-        <FlatList
-          data={files}
-          columnWrapperStyle={{
-            justifyContent: 'space-between',
-            marginBottom: 16,
-            gap: 16,
-          }}
-          style={{overflow: 'visible'}}
-          renderItem={({item}) => (
-            <View style={{flex: 1}}>
-              <FilePreview
-                file={item}
-                position={position}
-                onPressFile={() => onPressFile(item)}
-                onPressAction={
-                  position === 'member'
-                    ? () => onPressDownload(item)
-                    : () => onPressMoreIcon(item)
-                }
-              />
-            </View>
-          )}
-          keyExtractor={(item, index) => index.toString()}
-          numColumns={numColumns}
-        />
-      </View>
-    </SafeAreaView>
+    <FilePreviewContainer
+      data={files}
+      columnWrapperStyle={columnWrapperStyle(gap)}
+      onLayout={onLayout}
+      renderItem={({item}) =>
+        itemWidth > 0 ? (
+          <FilePreviewWrapper width={itemWidth}>
+            <FilePreview
+              file={item}
+              position={position}
+              onPressFile={() => handlePressFile(item)}
+              onPressAction={() => handlePressAction(item)}
+            />
+          </FilePreviewWrapper>
+        ) : null
+      }
+      keyExtractor={(item, index) => index.toString()}
+      numColumns={numColumns}
+    />
   );
 };

@@ -6,6 +6,7 @@ import {
   Title,
   Divider,
 } from './index.style';
+import {FileData} from './index.type';
 import {
   AudioFormat,
   DocFormat,
@@ -13,8 +14,7 @@ import {
   DownLoadIcon,
 } from '@/assets/images/svg/file';
 import {Shadow} from 'react-native-shadow-2';
-import {useTheme} from '@emotion/react';
-
+import {useThemeColors} from '@/contexts/theme/ThemeContext';
 /**
  * 자료 관리 페이지에 사용될 파일 프리뷰 컴포넌트 입니다.
  * - 파일 확장자에 따라 아이콘이 달라집니다.
@@ -22,12 +22,6 @@ import {useTheme} from '@emotion/react';
  * - 클릭 시 파일 열기 및 액션 실행
  * @author 이정선
  */
-
-export type FileData = {
-  title: string;
-  extension: 'mp3' | 'docx'; // 파일 확장자 (지원 형식 제한)
-  url: string; // 파일 url
-};
 
 export type FilePreviewProps = {
   file: FileData;
@@ -42,7 +36,7 @@ export const FilePreview = ({
   onPressFile,
   onPressAction,
 }: FilePreviewProps) => {
-  const theme = useTheme();
+  const {textDisabled, shadow} = useThemeColors();
   const FormatIcon = file.extension === 'mp3' ? AudioFormat : DocFormat;
   const MenuIcon = position === 'member' ? DownLoadIcon : MoreIcon;
 
@@ -51,7 +45,7 @@ export const FilePreview = ({
       distance={5}
       style={{borderRadius: 13, width: '100%'}}
       offset={[0, 0]}
-      startColor={theme.colors.shadow}>
+      startColor={shadow}>
       <Container>
         <FormatPreview activeOpacity={0.8} onPress={() => onPressFile(file)}>
           <FormatIcon width={48} height={48} />
@@ -61,7 +55,7 @@ export const FilePreview = ({
           <Title>{file.title}</Title>
           <MenuIcon
             onPress={() => onPressAction(file)}
-            fill={theme.colors.textDisabled}
+            fill={textDisabled}
             width={20}
             height={20}
           />

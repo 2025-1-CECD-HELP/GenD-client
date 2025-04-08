@@ -1,5 +1,5 @@
 import React from 'react';
-import {useTheme} from '@emotion/react';
+import {useThemeColors} from '@/contexts/theme/ThemeContext';
 import {
   Container,
   ProfileContainer,
@@ -47,8 +47,7 @@ export const MemberProfile: React.FC<MemberProfileProps> = ({
     none: '',
   };
   const positionText = positionTextMap[position];
-
-  const theme = useTheme();
+  const {textSecondary} = useThemeColors();
   return (
     <Container>
       <ProfileContainer>
@@ -65,7 +64,7 @@ export const MemberProfile: React.FC<MemberProfileProps> = ({
       {isCurrentUserManager && position !== 'none' && (
         <SettingIcon
           onPress={onSettingPress}
-          fill={theme.colors.textSecondary}
+          fill={textSecondary}
           width={18}
           height={18}
         />
@@ -73,7 +72,7 @@ export const MemberProfile: React.FC<MemberProfileProps> = ({
       {position === 'none' && (
         <CancelIcon
           onPress={onCancelPress}
-          fill={theme.colors.textSecondary}
+          fill={textSecondary}
           width={18}
           height={18}
         />

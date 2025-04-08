@@ -1,7 +1,7 @@
 import type {Meta, StoryObj} from '@storybook/react';
 import {FilePreviewList} from './FilePreviewList';
 import {View} from 'react-native';
-import type {FileData} from '.';
+import type {FileData} from './index.type';
 
 const meta = {
   title: 'components/FilePreviewList',
@@ -18,6 +18,11 @@ const mockFiles: FileData[] = [
     title: '녹음파일',
     extension: 'mp3',
     url: 'example.mp3',
+  },
+  {
+    title: '회의록',
+    extension: 'docx',
+    url: 'example.docx',
   },
   {
     title: '회의록',
