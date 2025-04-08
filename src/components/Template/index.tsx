@@ -1,15 +1,14 @@
 import React from 'react';
-import {SvgProps} from 'react-native-svg';
+import {TemplateType} from './index.type';
 import {
   Container,
   ContentContainer,
-  Icon,
   Title,
   Description,
   Button,
   ButtonText,
 } from './index.style';
-import {useTheme} from '@emotion/react';
+import {useThemeColors} from '@/contexts/theme/ThemeContext';
 
 /**
  * 회의 시작 시 템플릭 선택 페이지에 사용될 템플릿 컴포넌트 입니다.
@@ -19,29 +18,26 @@ import {useTheme} from '@emotion/react';
  */
 
 export type TemplateProps = {
-  title: string;
-  description: string;
-  Icon: React.FC<SvgProps>;
+  template: TemplateType;
   isSelected: boolean;
   onPressTemplate: () => void; // 템플릿을 선택했을 때
   onPreePreview: () => void; // 템플릿의 미리보기 버튼을 선택했을 때
 };
 
 export const Template = ({
-  title,
-  description,
-  Icon,
+  template,
   isSelected,
   onPressTemplate,
   onPreePreview,
 }: TemplateProps) => {
-  const theme = useTheme();
+  const {title, description, Icon} = template;
+  const {textPrimary} = useThemeColors();
   return (
     <Container
       onPress={onPressTemplate}
       activeOpacity={0.8}
       isSelected={isSelected}>
-      <Icon fill={theme.colors.textPrimary} />
+      <Icon fill={textPrimary} width={30} height={30} />
       <ContentContainer>
         <Title>{title} 템플릿</Title>
         <Description>{description}</Description>

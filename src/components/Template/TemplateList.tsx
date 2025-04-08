@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
-import {FlatList, View} from 'react-native';
+import {FlatList} from 'react-native';
 import {Template} from '.';
+import {TemplateType} from './index.type';
 import {
   DefaultTemplate,
   PresentationTemplate,
 } from '@/assets/images/svg/template';
+import {columnWrapperStyle, FilePreviewWrapper} from './TemplateList.style';
 
 /**
  * 여러 개의 템플릿을 2열 그리드의 형태로 보여주는 TemplateList 컴포넌트입니다.
@@ -14,21 +16,21 @@ import {
  */
 
 // 임의의 템플릿 목록
-const templates = [
+const templates: TemplateType[] = [
   {
     title: '기본형',
     description: '기본형 템플릿에 대한 설명이 포함됩니다.',
-    icon: DefaultTemplate,
+    Icon: DefaultTemplate,
   },
   {
     title: '발표형',
     description: '발표형 템플릿에 대한 설명이 포함됩니다.',
-    icon: PresentationTemplate,
+    Icon: PresentationTemplate,
   },
   {
     title: '예시',
     description: '예시입니다.',
-    icon: PresentationTemplate,
+    Icon: PresentationTemplate,
   },
 ];
 
@@ -38,24 +40,18 @@ export const TemplateList = () => {
   return (
     <FlatList
       data={templates}
-      columnWrapperStyle={{
-        justifyContent: 'space-between',
-        marginBottom: 16,
-        gap: 16,
-      }}
+      columnWrapperStyle={columnWrapperStyle}
       onLayout={e => setContainerWidth(e.nativeEvent.layout.width)}
       renderItem={({item}) => (
-        <View style={{width: (containerWidth - 16) / 2}}>
+        <FilePreviewWrapper width={(containerWidth - 16) / 2}>
           <Template
             key={item.title}
-            title={item.title}
-            description={item.description}
-            Icon={item.icon}
+            template={item}
             isSelected={selectedTemplate === item.title}
             onPressTemplate={() => setSelectedTemplate(item.title)}
             onPreePreview={() => console.log('프리뷰 보여주기')}
           />
-        </View>
+        </FilePreviewWrapper>
       )}
       keyExtractor={(item, index) => index.toString()}
       numColumns={2}

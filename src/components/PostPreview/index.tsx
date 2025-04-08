@@ -7,7 +7,7 @@ import {
   PostContent,
   Writer,
 } from './index.style';
-import {useTheme} from '@emotion/react';
+import {useThemeColors} from '@/contexts/theme/ThemeContext';
 import {PinIcon} from '@/assets/images/svg/home';
 import {Shadow} from 'react-native-shadow-2';
 
@@ -33,13 +33,13 @@ export const PostPreview = ({
   writer,
   isPin,
 }: PostPreviewProps) => {
-  const theme = useTheme();
+  const {shadow, blue} = useThemeColors();
   return (
     <Shadow
       distance={5}
       style={{borderRadius: 12}}
       offset={[0, 0]}
-      startColor={theme.colors.shadow}>
+      startColor={shadow}>
       <Container>
         {imageUrl && (
           <ImagePreview source={{uri: imageUrl}} resizeMode="cover" />
@@ -52,7 +52,7 @@ export const PostPreview = ({
           <Writer>{writer}</Writer>
           {isPin && (
             <PinIcon
-              fill={theme.colors.blue}
+              fill={blue}
               width={13}
               height={13}
               style={{position: 'absolute', bottom: 0, right: 0}}

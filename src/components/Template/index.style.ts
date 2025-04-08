@@ -14,10 +14,7 @@ export const Container = styled.TouchableOpacity<{isSelected: boolean}>`
   padding: 20px;
   gap: 8px;
 `;
-export const Icon = styled.Image`
-  width: 30px;
-  height: 30px;
-`;
+
 export const ContentContainer = styled.View`
   display: flex;
   flex-direction: column;
