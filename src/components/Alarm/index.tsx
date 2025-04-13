@@ -23,7 +23,7 @@ dayjs.locale('ko');
  * @author 이정선
  */
 
-export type AlertProps = {
+export type AlarmProps = {
   title: string;
   createdAt: Date;
   content: string;
@@ -31,13 +31,13 @@ export type AlertProps = {
   isNew: boolean;
 };
 
-export const Alert = ({
+export const Alarm = ({
   title,
   createdAt,
   content,
   workspaceProfileUrl,
   isNew,
-}: AlertProps) => {
+}: AlarmProps) => {
   return (
     <Container isNew={isNew}>
       <ImageContainer>

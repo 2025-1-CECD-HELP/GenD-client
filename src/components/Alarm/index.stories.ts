@@ -1,10 +1,10 @@
 import type {Meta, StoryObj} from '@storybook/react';
-import {Alert} from './index';
+import {Alarm} from './index';
 
 const meta = {
-  title: 'components/Alert',
-  component: Alert,
-} satisfies Meta<typeof Alert>;
+  title: 'components/Alarm',
+  component: Alarm,
+} satisfies Meta<typeof Alarm>;
 
 export default meta;
 
@@ -17,7 +17,7 @@ const getRandomPastDate = (daysAgoMax: number = 7) => {
   return new Date(pastTime);
 };
 
-export const NewAlert: Story = {
+export const NewAlarm: Story = {
   args: {
     title: 'GenD WorkSpace 공지사항 등록',
     content:
@@ -29,7 +29,7 @@ export const NewAlert: Story = {
   },
 };
 
-export const CheckedAlert: Story = {
+export const CheckedAlarm: Story = {
   args: {
     title: 'GenD WorkSpace 공지사항 등록',
     content:
