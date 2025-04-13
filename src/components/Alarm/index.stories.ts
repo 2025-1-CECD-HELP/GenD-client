@@ -10,6 +10,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
+// 최근 7일 이내에서 랜덤하게 과거 시간 만들기
 const getRandomPastDate = (daysAgoMax: number = 7) => {
   const now = new Date();
   const pastTime =
