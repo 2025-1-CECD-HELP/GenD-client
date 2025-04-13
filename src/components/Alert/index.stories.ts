@@ -1,0 +1,42 @@
+import type {Meta, StoryObj} from '@storybook/react';
+import {Alert} from './index';
+
+const meta = {
+  title: 'components/Alert',
+  component: Alert,
+} satisfies Meta<typeof Alert>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+const getRandomPastDate = (daysAgoMax: number = 7) => {
+  const now = new Date();
+  const pastTime =
+    now.getTime() - Math.random() * daysAgoMax * 24 * 60 * 60 * 1000;
+  return new Date(pastTime);
+};
+
+export const NewAlert: Story = {
+  args: {
+    title: 'GenD WorkSpace 공지사항 등록',
+    content:
+      'GenD WorkSpace에 새로운 공지사항이 등록되었습니다! 지금 바로 확인하세요.',
+    createdAt: getRandomPastDate(),
+    workspaceProfileUrl:
+      'https://images.news18.com/ibnlive/uploads/2021/07/1625806432_featured-image-2021-07-09t102239.872.jpg',
+    isNew: true,
+  },
+};
+
+export const CheckedAlert: Story = {
+  args: {
+    title: 'GenD WorkSpace 공지사항 등록',
+    content:
+      'GenD WorkSpace에 새로운 공지사항이 등록되었습니다! 지금 바로 확인하세요.',
+    createdAt: getRandomPastDate(),
+    workspaceProfileUrl:
+      'https://images.news18.com/ibnlive/uploads/2021/07/1625806432_featured-image-2021-07-09t102239.872.jpg',
+    isNew: false,
+  },
+};
