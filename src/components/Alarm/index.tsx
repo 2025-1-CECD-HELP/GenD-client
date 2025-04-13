@@ -43,12 +43,9 @@ export const Alarm = ({
       <ImageContainer>
         <WorkspaceProfile source={{uri: workspaceProfileUrl}} />
       </ImageContainer>
-
       <ContentContainer>
         <Title>{title}</Title>
-        <Content numberOfLines={undefined} ellipsizeMode={undefined}>
-          {content}
-        </Content>
+        <Content>{content}</Content>
       </ContentContainer>
       <Time>{dayjs(createdAt).fromNow()}</Time>
     </Container>
