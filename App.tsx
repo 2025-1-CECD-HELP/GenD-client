@@ -7,6 +7,12 @@ import {ThemeProvider} from '@/contexts/theme/ThemeContext';
 import {ModalProvider} from '@/contexts/modal/ModalContext';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import BottomSheetProvider from '@contexts/bottomSheet/BottomSheetContext';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/ko';
+
+dayjs.extend(relativeTime);
+dayjs.locale('ko');
 
 function App(): React.JSX.Element {
   return (

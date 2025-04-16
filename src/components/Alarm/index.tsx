@@ -9,11 +9,6 @@ import {
   Time,
 } from './index.style';
 import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import 'dayjs/locale/ko';
-
-dayjs.extend(relativeTime);
-dayjs.locale('ko');
 
 /**
  * 개인 알림 페이지에 사용될 알림 컴포넌트입니다.
