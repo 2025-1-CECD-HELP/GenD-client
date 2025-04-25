@@ -22,8 +22,8 @@ export type MenuProps = {
 export const DropDownMenu = ({menus}: MenuProps) => (
   <Container>
     {menus.map((menu, index) => (
-      <React.Fragment key={index}>
-        <MenuContainer onPress={menu.onPress}>
+      <>
+        <MenuContainer activeOpacity={0.9} onPress={menu.onPress}>
           <MenuText
             color={
               menu.isDelete ? 'red' : menu.isDownload ? 'blue' : 'textPrimary'
@@ -32,7 +32,7 @@ export const DropDownMenu = ({menus}: MenuProps) => (
           </MenuText>
         </MenuContainer>
         {index !== menus.length - 1 && <Divider />}
-      </React.Fragment>
+      </>
     ))}
   </Container>
 );
