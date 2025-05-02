@@ -1,5 +1,6 @@
 import React from 'react';
 import {Container, MenuContainer, MenuText, Divider} from './index.style';
+import {Menu} from './index.type';
 
 /**
  * 공통 드롭다운 메뉴 컴포넌트 입니다.
@@ -11,12 +12,7 @@ import {Container, MenuContainer, MenuText, Divider} from './index.style';
  */
 
 export type MenuProps = {
-  menus: {
-    label: string;
-    isDelete?: boolean;
-    isDownload?: boolean;
-    onPress: () => void;
-  }[];
+  menus: Menu[];
 };
 
 export const DropDownMenu = ({menus}: MenuProps) => (
