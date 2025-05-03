@@ -32,6 +32,7 @@ import {
 import {formatDateTime} from '../../utils/formatDate';
 import {ALARM_OPTIONS, CATEGORIES} from '../../constants/calendar';
 import {useThemeColors} from '@/contexts/theme/ThemeContext';
+import {Text} from 'react-native';
 
 interface AddScheduleSheetProps {
   onSubmit: () => void;
@@ -49,7 +50,7 @@ export const AddScheduleSheet: React.FC<AddScheduleSheetProps> = ({
     null,
   );
 
-  const {textDisabled} = useThemeColors();
+  const {textDisabled, blue, textPrimary} = useThemeColors();
 
   const {
     category,
@@ -70,14 +71,12 @@ export const AddScheduleSheet: React.FC<AddScheduleSheetProps> = ({
   } = useSchedule(selectedDate);
 
   const handleStartDatePickerChange = (event: any, selectedDate?: Date) => {
-    setShowStartPicker(false);
     if (selectedDate) {
       handleStartDateChange(selectedDate);
     }
   };
 
   const handleEndDatePickerChange = (event: any, selectedDate?: Date) => {
-    setShowEndPicker(false);
     if (selectedDate) {
       handleEndDateChange(selectedDate);
     }
@@ -137,12 +136,20 @@ export const AddScheduleSheet: React.FC<AddScheduleSheetProps> = ({
           <DateTimeButton onPress={() => setShowStartPicker(prev => !prev)}>
             <DateTimeText>{formatDateTime(startDate)}</DateTimeText>
           </DateTimeButton>
+          {showStartPicker && (
+            <Text
+              onPress={() => setShowStartPicker(false)}
+              style={{color: blue}}>
+              확인
+            </Text>
+          )}
         </SpaceBetweenRow>
         {showStartPicker && (
           <DateTimePicker
             value={startDate}
+            textColor={textPrimary}
             mode="datetime"
-            display="default"
+            display="spinner"
             onChange={handleStartDatePickerChange}
           />
         )}
@@ -152,12 +159,18 @@ export const AddScheduleSheet: React.FC<AddScheduleSheetProps> = ({
           <DateTimeButton onPress={() => setShowEndPicker(prev => !prev)}>
             <DateTimeText>{formatDateTime(endDate)}</DateTimeText>
           </DateTimeButton>
+          {showEndPicker && (
+            <Text onPress={() => setShowEndPicker(false)} style={{color: blue}}>
+              확인
+            </Text>
+          )}
         </SpaceBetweenRow>
         {showEndPicker && (
           <DateTimePicker
             value={endDate}
+            textColor={textPrimary}
             mode="datetime"
-            display="default"
+            display="spinner"
             onChange={handleEndDatePickerChange}
           />
         )}

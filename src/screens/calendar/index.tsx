@@ -15,7 +15,6 @@ import {
 import {AddScheduleButton} from './components/AddScheduleButton';
 import {formatDateTime} from './utils/formatDate';
 import {CATEGORY_COLORS, DUMMY_SCHEDULES} from './constants/calendar';
-import {useTheme} from '@/contexts/theme/ThemeContext';
 
 /**
  * 캘린더 페이지입니다.
@@ -26,12 +25,13 @@ import {useTheme} from '@/contexts/theme/ThemeContext';
  */
 
 export const CalendarScreen = () => {
-  const theme = useTheme();
   const {
     selectedDate,
     setSelectedDate,
     handleOpenAddSchedule,
     // currentMarkedDates,
+    calendarTheme,
+    calendarKey,
   } = useCalendar();
 
   // const {filteredSchedules} = useSchedule(selectedDate);
@@ -65,35 +65,6 @@ export const CalendarScreen = () => {
         s => s.startDate.toISOString().split('T')[0] === selectedDate,
       ),
     [selectedDate],
-  );
-
-  const calendarKey = useMemo(
-    () => JSON.stringify(theme.colors),
-    [theme.colors],
-  );
-  
-  const calendarTheme = useMemo(
-    () => ({
-      arrowColor: theme.colors.blue,
-      backgroundColor: theme.colors.background,
-      calendarBackground: theme.colors.background,
-      todayBackgroundColor: theme.colors.background,
-      reservationsBackgroundColor: theme.colors.background,
-      selectedDayBackgroundColor: theme.colors.blue,
-      selectedDayTextColor: theme.colors.white,
-      textMonthFontSize: 22,
-      textDayFontSize: 16,
-      textDayHeaderFontSize: 14,
-      dayTextColor: theme.colors.textPrimary,
-      textDisabledColor: theme.colors.textDisabled,
-      dotColor: theme.colors.textPrimary,
-      selectedDotColor: theme.colors.white,
-      monthTextColor: theme.colors.textPrimary,
-      textSectionTitleColor: theme.colors.textPrimary,
-      todayTextColor: theme.colors.textPrimary,
-      disabledArrowColor: theme.colors.textDisabled,
-    }),
-    [theme],
   );
 
   return (

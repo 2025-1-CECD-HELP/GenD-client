@@ -17,3 +17,24 @@ export interface MarkedDates {
     dotColor?: string;
   };
 }
+
+export interface CalendarTheme {
+  arrowColor: string;
+  backgroundColor: string;
+  calendarBackground: string;
+  todayBackgroundColor: string;
+  reservationsBackgroundColor: string;
+  selectedDayBackgroundColor: string;
+  selectedDayTextColor: string;
+  textMonthFontSize: number;
+  textDayFontSize: number;
+  textDayHeaderFontSize: number;
+  dayTextColor: string;
+  textDisabledColor: string;
+  dotColor: string;
+  selectedDotColor: string;
+  monthTextColor: string;
+  textSectionTitleColor: string;
+  todayTextColor: string;
+  disabledArrowColor: string;
+}
