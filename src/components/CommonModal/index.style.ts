@@ -24,7 +24,6 @@ export const CheckIconContainer = styled.View`
 `;
 
 export const Title = styled.Text`
-  margin-top: 20px;
   ${({theme}) => theme.fonts.title3};
   color: ${({theme}) => theme.colors.textPrimary};
 `;
@@ -49,6 +48,7 @@ export const StyledTextInput = styled.TextInput`
   ${({theme}) => theme.fonts.text2};
   border-color: ${({theme}) => theme.colors.divider};
   border-radius: 8px;
+  color: ${({theme}) => theme.colors.textSecondary};
 `;
 
 export const ButtonContainer = styled.View<{buttonType: 'single' | 'double'}>`

@@ -10,6 +10,7 @@ import {
   CheckIconContainer,
   StyledButton,
 } from './index.style';
+import {useThemeColors} from '@/contexts/theme/ThemeContext';
 
 import LottieView from 'lottie-react-native';
 
@@ -47,7 +48,7 @@ export const CommonModal: React.FC<ICommonModalProps> = ({
   isCenter,
 }) => {
   const {setModalContent, setIsOpen} = useModal();
-
+  const {textDisabled} = useThemeColors();
   // 모달 닫기 핸들러
   const handleClose = () => {
     setModalContent(null);
@@ -82,7 +83,10 @@ export const CommonModal: React.FC<ICommonModalProps> = ({
         <Title>{title}</Title>
 
         {type === 'input' ? (
-          <StyledTextInput placeholder="input content" />
+          <StyledTextInput
+            placeholder="input content"
+            placeholderTextColor={textDisabled}
+          />
         ) : (
           <Content>{content}</Content>
         )}
