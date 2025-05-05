@@ -12,6 +12,7 @@ import {
 } from './index.style';
 
 import LottieView from 'lottie-react-native';
+import React from 'react';
 
 /**
  * 가장 일반적인 경우에 사용하는 모달 컴포넌트입니다.
@@ -36,6 +37,7 @@ interface ICommonModalProps {
   onConfirm?: () => void;
   onCancel?: () => void;
   isCenter?: boolean;
+  children?: React.ReactNode;
 }
 
 export const CommonModal: React.FC<ICommonModalProps> = ({
@@ -45,6 +47,7 @@ export const CommonModal: React.FC<ICommonModalProps> = ({
   onConfirm,
   onCancel,
   isCenter,
+  children,
 }) => {
   const {setModalContent, setIsOpen} = useModal();
 
@@ -81,7 +84,10 @@ export const CommonModal: React.FC<ICommonModalProps> = ({
         )}
         <Title>{title}</Title>
 
-        {type === 'input' ? (
+        {/* children이 있으면 children, 아니면 기존 content 렌더 */}
+        {children ? (
+          children
+        ) : type === 'input' ? (
           <StyledTextInput placeholder="input content" />
         ) : (
           <Content>{content}</Content>
