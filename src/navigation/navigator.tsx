@@ -10,6 +10,7 @@ import {
   MypageScreen,
   MeetingScreen,
   WriteScreen,
+  PostDetailScreen,
 } from '@/screens';
 import {Header} from '@/components/Header';
 const Stack = createNativeStackNavigator<TRouteParams>();
@@ -31,6 +32,11 @@ export default function AppNavigator() {
         <Stack.Screen
           name="WRITE"
           component={WriteScreen}
+          options={{headerShown: true, header: () => <Header />}}
+        />
+        <Stack.Screen
+          name="POST_DETAIL"
+          component={PostDetailScreen}
           options={{headerShown: true, header: () => <Header />}}
         />
       </Stack.Navigator>

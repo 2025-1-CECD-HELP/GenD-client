@@ -5,4 +5,5 @@ export type PostPreviewType = {
   imageUrl?: string;
   isPin: boolean;
   category: string;
+  id: number;
 };
