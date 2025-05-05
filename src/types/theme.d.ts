@@ -26,8 +26,7 @@ declare module '@emotion/react' {
       lime: string;
       pink: string;
       red: string;
-      yellow: string;
-      backgroundGradient: string;
+      backgroundGradient: string[];
     };
     fonts: typeof themeFonts;
   }
