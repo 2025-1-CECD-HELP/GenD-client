@@ -4,6 +4,7 @@
  * 컬러 코드는 테마 컬러 상수 정의에 사용됩니다.
  */
 import {Theme} from '@emotion/react';
+import {themeFonts} from './font';
 
 export type ThemeType = 'light' | 'dark';
 
@@ -29,10 +30,12 @@ export const lightTheme: Theme = {
     blue: '#5354E8',
     blueSecondary: '#C5C5F2',
     lime: '#C0E021',
+    yellow: '#FFBE27',
     pink: '#FF52A8',
     red: '#DE3131',
     backgroundGradient: ['#5354E8', '#603DBF'],
   },
+  fonts: themeFonts,
 };
 
 export const darkTheme: Theme = {
@@ -52,10 +55,12 @@ export const darkTheme: Theme = {
     blue: '#5354E8',
     blueSecondary: '#3C3C87',
     lime: '#C0E021',
+    yellow: '#FFBE27',
     pink: '#FF52A8',
     red: '#DE3131',
     backgroundGradient: ['#5354E8', '#603DBF'],
   },
+  fonts: themeFonts,
 };
 
 export const theme = {
