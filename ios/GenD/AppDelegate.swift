@@ -1,11 +1,15 @@
 import UIKit
 import React
+import FirebaseCore
 import React_RCTAppDelegate
 import ReactAppDependencyProvider
 
 @main
 class AppDelegate: RCTAppDelegate {
   override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+    // Firebase 초기화를 가장 먼저 수행
+    FirebaseApp.configure()
+    
     self.moduleName = "GenD"
     self.dependencyProvider = RCTAppDependencyProvider()
 
