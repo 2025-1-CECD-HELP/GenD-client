@@ -10,8 +10,9 @@ export const Container = styled.View<{minHeight: number}>`
   min-height: ${({minHeight}) => minHeight};
 `;
 
-export const PostList = styled.ScrollView`
+export const PostList = styled.ScrollView<{maxHeight: number}>`
   padding: 10px;
+  max-height: ${({maxHeight}) => maxHeight};
 `;
 
 export const PostCategoryList = styled.View`

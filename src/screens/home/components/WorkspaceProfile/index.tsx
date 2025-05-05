@@ -8,10 +8,13 @@ import {
   ProfileImage,
 } from './index.style';
 import {LayoutChangeEvent} from 'react-native';
-import {MemberIcon, MoreIcon} from '@/assets/images/svg/home';
-import {useThemeColors} from '@/contexts/theme/ThemeContext';
+import {MemberIcon, MoreIcon} from '@assets/images/svg/home';
+import {useThemeColors} from '@contexts/theme/ThemeContext';
 
 /**
+ * 홈 화면 상단의 워크스페이스 프로필 컴포넌트입니다.
+ * 워크스페이스의 이름, 설명, 이미지를 표시하며,
+ * 홈 화면 스크롤 제어를 위해 onLayout을 props로 받아 컴포넌트 높이를 측정합니다.
  * @author 이정선
  */
 
