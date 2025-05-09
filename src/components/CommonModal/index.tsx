@@ -1,5 +1,6 @@
 import {useModal} from '@contexts/modal/ModalContext';
 import {Button} from '../Button';
+import {Dimensions} from 'react-native';
 import {
   CommonModalContainer,
   ModalContent,
@@ -29,6 +30,8 @@ import React from 'react';
  */
 
 type ModalType = 'default' | 'check' | 'confirm' | 'input';
+
+const {width, height} = Dimensions.get('window');
 
 // CommonModal Props 정의
 interface ICommonModalProps {
@@ -71,7 +74,7 @@ export const CommonModal: React.FC<ICommonModalProps> = ({
     type === 'default' || type === 'input' ? 'double' : 'single';
 
   return (
-    <CommonModalContainer>
+    <CommonModalContainer width={width} height={height}>
       <ModalContent isCenter={isCenter}>
         {type === 'check' && (
           <CheckIconContainer>
@@ -79,7 +82,12 @@ export const CommonModal: React.FC<ICommonModalProps> = ({
               source={require('@assets/animations/check.json')}
               autoPlay
               loop={false}
-              style={{width: 90, height: 90}}
+              style={{
+                width: 90,
+                height: 90,
+                alignSelf: 'center',
+                justifyContent: 'center',
+              }}
             />
           </CheckIconContainer>
         )}
