@@ -23,6 +23,13 @@ target 'GenD' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  # Firebase 관련 모듈 설정 (절대 바꾸지 마세요.. 6시간 삽질 했습니다..)
+  # https://stackoverflow.com/questions/72289521/swift-pods-cannot-yet-be-integrated-as-static-libraries-firebasecoreinternal-lib)
+  pod 'Firebase', :modular_headers => true
+  pod 'FirebaseCoreInternal', :modular_headers => true
+  pod 'GoogleUtilities', :modular_headers => true
+  pod 'FirebaseCore', :modular_headers => true
+
   post_install do |installer|
     # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
     react_native_post_install(

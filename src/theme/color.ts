@@ -32,8 +32,8 @@ export const lightTheme: Theme = {
     lime: '#C0E021',
     yellow: '#FFBE27',
     pink: '#FF52A8',
-    red: '#FC3C0D',
-    backgroundGradient: '(174deg, #5354E8 5%, #603DBF 100%)',
+    red: '#DE3131',
+    backgroundGradient: ['#5354E8', '#603DBF'],
   },
   fonts: themeFonts,
 };
@@ -58,7 +58,7 @@ export const darkTheme: Theme = {
     yellow: '#FFBE27',
     pink: '#FF52A8',
     red: '#DE3131',
-    backgroundGradient: '(174deg, #5354E8 5%, #603DBF 100%)',
+    backgroundGradient: ['#5354E8', '#603DBF'],
   },
   fonts: themeFonts,
 };
