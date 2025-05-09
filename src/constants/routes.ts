@@ -14,4 +14,6 @@ export const ROUTE_NAMES = {
   HOME: 'HOME',
   SEARCH: 'SEARCH',
   LOGIN: 'LOGIN',
+  WRITE: 'WRITE',
+  POST_DETAIL: 'POST_DETAIL',
 } as const;

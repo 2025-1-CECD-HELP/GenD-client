@@ -1,52 +1,51 @@
-import {View, Text, Button} from 'react-native';
-import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
-import {ROUTE_NAMES} from '@constants/routes';
-import {useModal} from '@/contexts/modal/ModalContext';
-import CommonModal from '@/components/CommonModal';
-import {useBottomSheet} from '@contexts/bottomSheet/BottomSheetContext';
+import React from 'react';
+import {Dimensions} from 'react-native';
+
+import {ScrollContainer} from './index.style';
+import {WorkspaceProfile, PostContainer} from './components';
+import {DUMMY_WORKSPACE_INFO} from './constants/home';
+import {useNestedScroll} from './hooks/useNestedScroll';
 /**
- * 홈 페이지입니다.
- * @author 홍규진
+ * 워크스페이스 홈 페이지입니다.
+ * 상단의 워크스페이스 프로필(WorkspaceProfile)과 하단의 게시글 목록(PostContainer)을 구성합니다.
+ * 외부 스크롤(WorkspaceProfile)이 끝나면 내부 스크롤(PostList)로 전환되는 이중 스크롤 구조입니다.
+ * - WorkspaceProfile의 높이를 계산하여 스크롤 전환 기준을 설정합니다.
+ * @author 이정선
  */
+
 export const HomeScreen = () => {
-  const navigation = useTypeSafeNavigation();
-  const {isOpen, setIsOpen, setModalContent} = useModal();
-  const {openBottomSheet} = useBottomSheet();
+  const {
+    outerScrollEnabled,
+    innerScrollEnabled,
+    handleOuterScroll,
+    handleInnerScroll,
+    handleProfileLayout,
+    profileHeight,
+  } = useNestedScroll();
+  const screenHeight = Dimensions.get('window').height;
 
-  function handlePressOpenModal() {
-    setIsOpen(true);
-    setModalContent(
-      <CommonModal
-        type="check"
-        title="Title"
-        content="Content"
-        isCenter={true}
-        key={isOpen ? 'open' : 'close'}
-      />,
-    );
-  }
-
-  function handlePressOpenBottomSheet() {
-    openBottomSheet(
-      <>
-        <Button title="Where Are you BottomSheet" />
-        <Button title="Where Are you BottomSheet" />
-        <Button title="Where Are you BottomSheet" />
-        <Button title="Where Are you BottomSheet" />
-        <Button title="Where Are you BottomSheet" />
-        <Button title="Where Are you BottomSheet" />
-      </>,
-    );
-  }
   return (
-    <View>
-      <Text>HomeScreen</Text>
-      <Button
-        title="LANDING"
-        onPress={() => navigation.replace(ROUTE_NAMES.LANDING, {})}
+    <ScrollContainer
+      scrollEnabled={outerScrollEnabled}
+      onScroll={handleOuterScroll}
+      scrollEventThrottle={16}
+      keyboardShouldPersistTaps="handled"
+      contentContainerStyle={{
+        minHeight: screenHeight,
+      }}>
+      <WorkspaceProfile
+        onLayout={handleProfileLayout}
+        name={DUMMY_WORKSPACE_INFO.workspaceName}
+        description={DUMMY_WORKSPACE_INFO.workspaceDescription}
+        imageUrl={DUMMY_WORKSPACE_INFO.imageUrl}
       />
-      <Button title="OPEN MODAL" onPress={handlePressOpenModal} />
-      <Button title="OPEN BOTTOM SHEET" onPress={handlePressOpenBottomSheet} />
-    </View>
+
+      <PostContainer
+        profileHeight={profileHeight}
+        workspaceRole={DUMMY_WORKSPACE_INFO.workspaceRole}
+        innerScrollEnabled={innerScrollEnabled}
+        onInnerScroll={handleInnerScroll}
+      />
+    </ScrollContainer>
   );
 };

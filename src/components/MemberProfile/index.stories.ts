@@ -15,7 +15,7 @@ type Story = StoryObj<typeof meta>;
 export const MemberViewedByManager: Story = {
   args: {
     name: '이정선',
-    position: 'member',
+    position: 'eMember',
     isCurrentUserManager: true,
     onSettingPress: action('onSettingPress'),
   },
@@ -25,7 +25,7 @@ export const MemberViewedByManager: Story = {
 export const ManagerViewedByManager: Story = {
   args: {
     name: '홍규진',
-    position: 'manager',
+    position: 'eAdmin',
     isCurrentUserManager: true,
     onSettingPress: action('onSettingPress'),
   },
@@ -35,7 +35,7 @@ export const ManagerViewedByManager: Story = {
 export const ManagerViewedByMember: Story = {
   args: {
     name: '엄태우',
-    position: 'manager',
+    position: 'eAdmin',
     isCurrentUserManager: false,
   },
 };
@@ -44,7 +44,7 @@ export const ManagerViewedByMember: Story = {
 export const MemberViewedByMember: Story = {
   args: {
     name: '엄태우',
-    position: 'member',
+    position: 'eMember',
     isCurrentUserManager: false,
   },
 };

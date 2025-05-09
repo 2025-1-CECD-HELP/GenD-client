@@ -5,6 +5,8 @@ export const Container = styled.View`
   height: auto;
   background-color: ${({theme}) => theme.colors.popup};
   border-radius: 4px;
+  z-index: 10000;
+  position: absolute;
 `;
 
 export const MenuContainer = styled.TouchableOpacity`

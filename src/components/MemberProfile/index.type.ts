@@ -5,5 +5,5 @@
  * @author 이정선
  */
 
-export type MemberPosition = 'member' | 'manager' | 'none';
+export type MemberPosition = 'eMember' | 'eAdmin' | 'none';
 export type ActiveMemberPosition = Omit<MemberPosition, 'none'>;

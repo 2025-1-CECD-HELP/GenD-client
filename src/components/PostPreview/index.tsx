@@ -10,6 +10,7 @@ import {
 import {useThemeColors} from '@/contexts/theme/ThemeContext';
 import {PinIcon} from '@/assets/images/svg/home';
 import {Shadow} from 'react-native-shadow-2';
+import {PostPreviewType} from './index.type';
 
 /**
  * 워크스페이스 메인 홈화면의 게시글 프리뷰 컴포넌트 입니다.
@@ -17,23 +18,12 @@ import {Shadow} from 'react-native-shadow-2';
  * 모든 기기에 동일하게 shadow를 나타내게 하기 위해 react-native-shadow-2 라이브러리를 사용하여 구현합니다.
  * @author 이정선
  */
-
-export type PostPreviewProps = {
-  title: string;
-  description: string;
-  imageUrl?: string;
-  writer: string;
-  isPin: boolean;
-};
-
-export const PostPreview = ({
-  title,
-  description,
-  imageUrl,
-  writer,
-  isPin,
-}: PostPreviewProps) => {
+interface PostPreviewProps {
+  post: PostPreviewType;
+}
+export const PostPreview = ({post}: PostPreviewProps) => {
   const {shadow, blue} = useThemeColors();
+  const {title, description, imageUrl, writer, isPin} = post;
   return (
     <Shadow
       distance={5}
