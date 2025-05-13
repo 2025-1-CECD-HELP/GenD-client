@@ -22,13 +22,19 @@ target 'GenD' do
 
   # React Native 기본 설정
   use_react_native!(
-    :path => config[:reactNativePath],
-    # An absolute path to your application root.
-    :app_path => "#{Pod::Config.instance.installation_root}/.."
+    :path => config[:reactNativePath],    
+    # 어플리케이션 루트 경로
+    :app_path => "#{Pod::Config.instance.installation_root}/..",
   )
 
   # Firebase 관련 모듈 설정 (절대 바꾸지 마세요.. 6시간 삽질 했습니다..)
   # https://stackoverflow.com/questions/72289521/swift-pods-cannot-yet-be-integrated-as-static-libraries-firebasecoreinternal-lib)
+  pod 'Firebase', '~> 11.12.0', :modular_headers => true
+  pod 'FirebaseCoreInternal', '~> 11.12.0', :modular_headers => true
+  pod 'GoogleUtilities', '~> 8.0', :modular_headers => true
+  pod 'FirebaseCore', '~> 11.12.0', :modular_headers => true
+  pod 'Firebase/Messaging', '~> 11.12.0', :modular_headers => true
+
   # =============================================
   # Post Install 설정
   # =============================================
