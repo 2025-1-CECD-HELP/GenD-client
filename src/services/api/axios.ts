@@ -14,6 +14,9 @@ import {
 } from '@/utils/auth';
 import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
 import {ROUTE_NAMES} from '@/constants/routes';
+
+import {APP_SERVER_URL} from '@env';
+
 /**
  * Axios를 통해 불필요한 재전송을 방지합니다.
  * InternalAxiosRequestConfig를 extneds 하는 방식을 택합니다.
@@ -35,7 +38,7 @@ type TAuthResponse = {
 };
 
 export const instance: AxiosInstance = axios.create({
-  baseURL: process.env.APP_SERVER_URL,
+  baseURL: APP_SERVER_URL,
   headers: {
     Authorization: `Bearer ${getAccessToken()}`,
   },

@@ -5,6 +5,7 @@ module.exports = {
       'module-resolver',
       {
         root: ['./src'],
+        extensions: ['.ios.js', '.android.js', '.js', '.ts', '.tsx', '.json'],
         alias: {
           '@': './src',
           '@assets': './src/assets',
@@ -26,14 +27,11 @@ module.exports = {
     [
       'module:react-native-dotenv',
       {
-        envName: 'APP_ENV',
+        envName: 'APP_SERVER_URL',
         moduleName: '@env',
         path: '.env',
         blocklist: null,
         allowlist: null,
-        safe: false,
-        allowUndefined: true,
-        verbose: false,
       },
     ],
     ['react-native-reanimated/plugin'],
