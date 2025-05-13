@@ -5,9 +5,12 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
-platform :ios, min_ios_version_supported
+# iOS 최소 버전 설정
+platform :ios, '15.1'
 prepare_react_native_project!
 
+
+#lottie-ios 모듈 통합을 위한 전역 설정
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
@@ -17,6 +20,7 @@ end
 target 'GenD' do
   config = use_native_modules!
 
+  # React Native 기본 설정
   use_react_native!(
     :path => config[:reactNativePath],
     # An absolute path to your application root.
@@ -25,18 +29,29 @@ target 'GenD' do
 
   # Firebase 관련 모듈 설정 (절대 바꾸지 마세요.. 6시간 삽질 했습니다..)
   # https://stackoverflow.com/questions/72289521/swift-pods-cannot-yet-be-integrated-as-static-libraries-firebasecoreinternal-lib)
-  pod 'Firebase', :modular_headers => true
-  pod 'FirebaseCoreInternal', :modular_headers => true
-  pod 'GoogleUtilities', :modular_headers => true
-  pod 'FirebaseCore', :modular_headers => true
-
+  # =============================================
+  # Post Install 설정
+  # =============================================
   post_install do |installer|
-    # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
+    # React Native 기본 post_install 설정
     react_native_post_install(
       installer,
       config[:reactNativePath],
-      :mac_catalyst_enabled => false,
-      # :ccache_enabled => true
+      :mac_catalyst_enabled => false
     )
+    
+    # Apple Silicon 시뮬레이터 이슈 해결을 위한 설정
+    installer.pods_project.build_configurations.each do |config|
+      config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+    end
+    
+    # 최소 배포 타겟 설정 확인
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.1'
+      end
+    end
   end
+
+
 end
