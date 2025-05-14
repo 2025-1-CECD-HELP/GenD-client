@@ -10,13 +10,15 @@ platform :ios, '15.1'
 prepare_react_native_project!
 
 
-#lottie-ios 모듈 통합을 위한 전역 설정
+#모듈 통합을 위한 전역 설정 (단순히 use_frameworks! 를 쓰면 터집니다.)
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
   use_frameworks! :linkage => linkage.to_sym
 end
 
+# =============================================
+# 참고자료 : https://vignesh-prakash.medium.com/command-swiftverifyemittedmoduleinterface-failed-with-a-nonzero-exit-code-62f011dce5a0
 target 'GenD' do
   config = use_native_modules!
 
@@ -25,6 +27,8 @@ target 'GenD' do
     :path => config[:reactNativePath],    
     # 어플리케이션 루트 경로
     :app_path => "#{Pod::Config.instance.installation_root}/..",
+    :hermes_enabled => true,
+    :fabric_enabled => false
   )
 
   # Firebase 관련 모듈 설정 (절대 바꾸지 마세요.. 6시간 삽질 했습니다..)
@@ -34,6 +38,11 @@ target 'GenD' do
   pod 'GoogleUtilities', '~> 8.0', :modular_headers => true
   pod 'FirebaseCore', '~> 11.12.0', :modular_headers => true
   pod 'Firebase/Messaging', '~> 11.12.0', :modular_headers => true
+
+  # 카카오 로그인 모듈 설정도 따로 버전을 명시해 추가해줘야합니다.
+  pod 'KakaoSDKCommon', '~> 2.22.0'
+  pod 'KakaoSDKAuth', '~> 2.22.0'
+  pod 'KakaoSDKUser', '~> 2.22.0'
 
   # =============================================
   # Post Install 설정
@@ -45,19 +54,5 @@ target 'GenD' do
       config[:reactNativePath],
       :mac_catalyst_enabled => false
     )
-    
-    # Apple Silicon 시뮬레이터 이슈 해결을 위한 설정
-    installer.pods_project.build_configurations.each do |config|
-      config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
-    end
-    
-    # 최소 배포 타겟 설정 확인
-    installer.pods_project.targets.each do |target|
-      target.build_configurations.each do |config|
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.1'
-      end
-    end
   end
-
-
 end

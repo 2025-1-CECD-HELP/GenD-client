@@ -2114,6 +2114,9 @@ DEPENDENCIES:
   - GoogleUtilities (~> 8.0)
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
   - "kakao-login (from `../node_modules/@react-native-seoul/kakao-login`)"
+  - KakaoSDKAuth (~> 2.22.0)
+  - KakaoSDKCommon (~> 2.22.0)
+  - KakaoSDKUser (~> 2.22.0)
   - lottie-ios (from `../node_modules/lottie-ios`)
   - lottie-react-native (from `../node_modules/lottie-react-native`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
@@ -2478,6 +2481,6 @@ SPEC CHECKSUMS:
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: afd04ff05ebe0121a00c468a8a3c8080221cb14c
 
-PODFILE CHECKSUM: b2358d617a050caecf3cc72e15195d2b7465e0e6
+PODFILE CHECKSUM: 14666cdab93a134aeefc7dcc326c7e091ff925e3
 
 COCOAPODS: 1.16.2
