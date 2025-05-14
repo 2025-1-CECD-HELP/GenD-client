@@ -1,6 +1,7 @@
 module.exports = {
   presets: ['module:@react-native/babel-preset'],
   plugins: [
+    // * 각 폴더 별 별칭 설정 * //
     [
       'module-resolver',
       {
@@ -24,14 +25,13 @@ module.exports = {
         },
       },
     ],
+    // * 환경변수 설정을 위한 설정 추가 * //
     [
       'module:react-native-dotenv',
       {
-        envName: 'APP_SERVER_URL',
-        moduleName: '@env',
         path: '.env',
-        blocklist: null,
-        allowlist: null,
+        safe: true,
+        allowUndefined: true,
       },
     ],
     ['react-native-reanimated/plugin'],
