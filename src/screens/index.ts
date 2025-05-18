@@ -15,3 +15,5 @@ export * from './file';
 export * from './calendar';
 export * from './meeting';
 export * from './my-page';
+export * from './write';
+export * from './postDetail';

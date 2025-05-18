@@ -1,6 +1,7 @@
 import React from 'react';
 import {Container, MenuContainer, MenuText, Divider} from './index.style';
 import {Menu} from './index.type';
+import {ViewStyle} from 'react-native';
 
 /**
  * 공통 드롭다운 메뉴 컴포넌트 입니다.
@@ -13,12 +14,13 @@ import {Menu} from './index.type';
 
 export type MenuProps = {
   menus: Menu[];
+  style?: ViewStyle;
 };
 
-export const DropDownMenu = ({menus}: MenuProps) => (
-  <Container>
+export const DropDownMenu = ({menus, style}: MenuProps) => (
+  <Container style={style}>
     {menus.map((menu, index) => (
-      <>
+      <React.Fragment key={index}>
         <MenuContainer activeOpacity={0.9} onPress={menu.onPress}>
           <MenuText
             color={
@@ -28,7 +30,7 @@ export const DropDownMenu = ({menus}: MenuProps) => (
           </MenuText>
         </MenuContainer>
         {index !== menus.length - 1 && <Divider />}
-      </>
+      </React.Fragment>
     ))}
   </Container>
 );

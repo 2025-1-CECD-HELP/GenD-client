@@ -1,7 +1,6 @@
 import {TRouteParams} from '@/navigation/types';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import BottomNavigator from '@/components/BottomNavigator';
 import {
@@ -10,6 +9,8 @@ import {
   CalendarScreen,
   MypageScreen,
   MeetingScreen,
+  WriteScreen,
+  PostDetailScreen,
 } from '@/screens';
 import {Header} from '@/components/Header';
 const Stack = createNativeStackNavigator<TRouteParams>();
@@ -28,6 +29,16 @@ export default function AppNavigator() {
         initialRouteName="LANDING"
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="LANDING" component={TabNavigator} />
+        <Stack.Screen
+          name="WRITE"
+          component={WriteScreen}
+          options={{headerShown: true, header: () => <Header />}}
+        />
+        <Stack.Screen
+          name="POST_DETAIL"
+          component={PostDetailScreen}
+          options={{headerShown: true, header: () => <Header />}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

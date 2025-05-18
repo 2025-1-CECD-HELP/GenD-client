@@ -42,8 +42,8 @@ export const MemberProfile: React.FC<MemberProfileProps> = ({
   const displayImageUrl = imageUrl ? imageUrl : defaultProfileImage;
 
   const positionTextMap: Record<MemberPosition, string> = {
-    member: '멤버',
-    manager: '관리자',
+    eMember: '멤버',
+    eAdmin: '관리자',
     none: '',
   };
   const positionText = positionTextMap[position];
