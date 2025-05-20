@@ -5,6 +5,7 @@ import {
   InternalAxiosRequestConfig,
 } from 'axios';
 import {logRequest, logResponse, logError} from '@/utils/debug';
+import {getErrorInfo} from '@/utils/error';
 
 /**
  * 공개 API 인터셉터 적용
@@ -12,7 +13,6 @@ import {logRequest, logResponse, logError} from '@/utils/debug';
  * @author 홍규진
  */
 export const applyPublicInterceptors = (instance: AxiosInstance) => {
-  
   instance.interceptors.request.use(
     (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
       logRequest(config);
@@ -20,7 +20,8 @@ export const applyPublicInterceptors = (instance: AxiosInstance) => {
     },
     (error: AxiosError): Promise<AxiosError> => {
       logError(error);
-      return Promise.reject(error);
+      const errorInfo = getErrorInfo(error);
+      return Promise.reject(new Error(errorInfo.message));
     },
   );
 
@@ -31,7 +32,8 @@ export const applyPublicInterceptors = (instance: AxiosInstance) => {
     },
     (error: AxiosError): Promise<AxiosError> => {
       logError(error);
-      return Promise.reject(error);
+      const errorInfo = getErrorInfo(error);
+      return Promise.reject(new Error(errorInfo.message));
     },
   );
 };

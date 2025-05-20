@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable react-native/no-inline-styles */
+import React, {Suspense} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import AppNavigator from '@/navigation/navigator';
 import {AuthProvider} from '@/contexts/auth/AuthContext';
@@ -10,6 +11,9 @@ import BottomSheetProvider from '@contexts/bottomSheet/BottomSheetContext';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/ko';
+import AdaptiveLoadingFallback from '@/components/FallBackUI/Loading/AdaptiveLoadingFallbackUI';
+import {AdaptiveErrorFallback} from '@/components/FallBackUI/Error/AdaptiveErrorFallbackUI';
+import ErrorBoundary from 'react-native-error-boundary';
 
 dayjs.extend(relativeTime);
 dayjs.locale('ko');
@@ -23,7 +27,11 @@ function App(): React.JSX.Element {
             <ModalProvider>
               <GestureHandlerRootView style={{flex: 1}}>
                 <BottomSheetProvider>
-                  <AppNavigator />
+                  <ErrorBoundary FallbackComponent={AdaptiveErrorFallback}>
+                    <Suspense fallback={<AdaptiveLoadingFallback />}>
+                      <AppNavigator />
+                    </Suspense>
+                  </ErrorBoundary>
                 </BottomSheetProvider>
               </GestureHandlerRootView>
             </ModalProvider>
