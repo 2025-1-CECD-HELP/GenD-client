@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-nested-components */
 import {TRouteParams} from '@/navigation/types';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -13,6 +14,7 @@ import {
   PostDetailScreen,
 } from '@/screens';
 import {Header} from '@/components/Header';
+import {RecordingScreen} from '@/screens/recording';
 const Stack = createNativeStackNavigator<TRouteParams>();
 const Tab = createBottomTabNavigator<TRouteParams>();
 
@@ -39,6 +41,7 @@ export default function AppNavigator() {
           component={PostDetailScreen}
           options={{headerShown: true, header: () => <Header />}}
         />
+        <Stack.Screen name="RECORDING" component={RecordingNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -67,5 +70,19 @@ function TabNavigator() {
       <Tab.Screen name="CALENDAR" component={CalendarScreen} />
       <Tab.Screen name="MYPAGE" component={MypageScreen} />
     </Tab.Navigator>
+  );
+}
+
+/**
+ * 녹음 페이지의 네비게이터입니다.
+ * 녹음 페이지는 템플릿 선택 후 회의록 작성 페이지로 이동합니다.
+ * @author 홍규진
+ */
+function RecordingNavigator() {
+  return (
+    <Stack.Navigator
+      screenOptions={{headerShown: true, header: () => <Header />}}>
+      <Stack.Screen name="RECORDING" component={RecordingScreen} />
+    </Stack.Navigator>
   );
 }

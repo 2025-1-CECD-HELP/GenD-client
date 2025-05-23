@@ -17,4 +17,5 @@ export type TRouteParams = {
   MEETING: {};
   WRITE: {};
   POST_DETAIL: {postId: number};
+  RECORDING: {templateId: string};
 };
