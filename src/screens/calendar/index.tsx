@@ -14,6 +14,7 @@ import {
 } from './index.style';
 import {AddScheduleButton} from './components/AddScheduleButton';
 import {formatDateTime, getModeIcon} from './utils/formatDate';
+// import {DUMMY_SCHEDULES} from './constants/calendar';
 
 /**
  * 캘린더 페이지입니다.

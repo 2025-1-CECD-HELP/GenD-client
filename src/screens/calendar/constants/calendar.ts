@@ -52,7 +52,12 @@ export const TYPE_COLORS: Record<string, string> = {
   활동: 'yellow',
   공부: 'pink',
 };
-export const TYPES: ScheduleType[] = ['회의', '발표', '활동', '공부'];
+export const TYPES: ScheduleType[] = [
+  'Meeting',
+  'Presentation',
+  'Activity',
+  'Study',
+];
 
 // 더미 일정 데이터
 export const DUMMY_SCHEDULES = [

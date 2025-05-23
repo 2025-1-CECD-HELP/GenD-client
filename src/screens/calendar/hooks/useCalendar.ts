@@ -23,7 +23,7 @@ export const useCalendar = () => {
   const [focusedDate, setFocusedDate] = useState<string | null>(null);
 
   // TODO-[규진] 워크스페이스 관련 로직 끝나면 이걸로 맞게 추가
-  const {data: scheduleListData} = useCalendarQuery('1');
+  // const {data: scheduleListData} = useCalendarQuery('1');
 
   // markedDates 생성
   const currentMarkedDates = useMemo(() => {
@@ -31,7 +31,7 @@ export const useCalendar = () => {
       string,
       {dots: {key: string; color: string}[]; selected?: boolean}
     > = {};
-    scheduleListData.forEach(schedule => {
+    DUMMY_SCHEDULES.forEach(schedule => {
       const dateStr = schedule.startSchedule.toISOString().split('T')[0];
       if (!marked[dateStr]) marked[dateStr] = {dots: []};
       marked[dateStr].dots.push({
@@ -45,7 +45,7 @@ export const useCalendar = () => {
       marked[focusedDate].selected = true;
     }
     return marked;
-  }, [focusedDate, scheduleListData]);
+  }, [focusedDate]);
 
   // filteredSchedules: focusedDate가 있으면 해당 날짜, 없으면 달
   const filteredSchedules = useMemo(() => {
