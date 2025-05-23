@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Button} from '@/components/Button';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {useSchedule} from '../../hooks/useSchedule';
-import {ScheduleCategory} from '../../types';
+import {TYPE_LABELS, ScheduleType} from '../../types';
 import {
   AddScheduleContainer,
   AddScheduleTitle,
@@ -30,23 +30,22 @@ import {
   AlarmOptionText,
 } from './index.style';
 import {formatDateTime} from '../../utils/formatDate';
-import {ALARM_OPTIONS, CATEGORIES} from '../../constants/calendar';
+import {ALARM_OPTIONS} from '../../constants/calendar';
 import {useThemeColors} from '@/contexts/theme/ThemeContext';
 import {Text} from 'react-native';
-
+import {TPostScheduleRequest} from '@/services/calendar/types';
 interface AddScheduleSheetProps {
-  onSubmit: () => void;
-  selectedDate: string;
+  onSubmit: (newSchedule: TPostScheduleRequest) => void;
 }
 
 export const AddScheduleSheet: React.FC<AddScheduleSheetProps> = ({
   onSubmit,
-  selectedDate,
 }) => {
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
   const [showAlarmDropdown, setShowAlarmDropdown] = useState(false);
-  const [selectedAlarmTime, setSelectedAlarmTime] = useState<number | null>(
+  const [selectedAlarmTime, setSelectedAlarmTime] = useState<Date | null>(null);
+  const [selectedAlarmOffset, setSelectedAlarmOffset] = useState<number | null>(
     null,
   );
 
@@ -67,8 +66,8 @@ export const AddScheduleSheet: React.FC<AddScheduleSheetProps> = ({
     handleMemoChange,
     toggleCategoryDropdown,
     showCategoryDropdown,
-    addSchedule,
-  } = useSchedule(selectedDate);
+    resetForm,
+  } = useSchedule();
 
   const handleStartDatePickerChange = (event: any, selectedDate?: Date) => {
     if (selectedDate) {
@@ -83,16 +82,29 @@ export const AddScheduleSheet: React.FC<AddScheduleSheetProps> = ({
   };
 
   const handleSubmit = () => {
-    addSchedule();
-    onSubmit();
+    // 부모로부터 받은 함수를 호출하여 일정 추가
+    onSubmit({
+      scheduleTitle: title,
+      startSchedule: startDate,
+      endSchedule: endDate,
+      type: category,
+      scheduleDescription: memo,
+      isAlarm: isAlarm,
+      startAlarm: selectedAlarmTime ?? undefined,
+      workspaceId: '1',
+    });
+    resetForm();
   };
 
-  const handleCategorySelect = (selectedCategory: ScheduleCategory) => {
-    handleCategoryChange(selectedCategory);
+  const handleCategorySelect = (type: ScheduleType) => {
+    handleCategoryChange(type);
   };
 
-  const handleAlarmTimeSelect = (value: number) => {
-    setSelectedAlarmTime(value);
+  const handleAlarmTimeSelect = (minutesBefore: number) => {
+    setSelectedAlarmOffset(minutesBefore);
+    const alarmDate = new Date(startDate.getTime() - minutesBefore * 60 * 1000);
+    console.log('alarmDate', alarmDate);
+    setSelectedAlarmTime(alarmDate);
     setShowAlarmDropdown(false);
   };
 
@@ -103,17 +115,18 @@ export const AddScheduleSheet: React.FC<AddScheduleSheetProps> = ({
       <HeaderContainer>
         <CategoryContainer>
           <CategoryButton category={category} onPress={toggleCategoryDropdown}>
-            <CategoryButtonText>{category}</CategoryButtonText>
+            <CategoryButtonText>{TYPE_LABELS[category]}</CategoryButtonText>
           </CategoryButton>
           {showCategoryDropdown && (
             <Dropdown>
-              {CATEGORIES.map(cat => (
+              {/* Meeting -> 회의, Presentation -> 발표, Activity -> 활동, Study -> 공부 */}
+              {Object.entries(TYPE_LABELS).map(([type, label]) => (
                 <CategoryOption
-                  key={cat}
-                  category={cat}
-                  onPress={() => handleCategorySelect(cat)}>
-                  <CategoryOptionText selected={category === cat}>
-                    {cat}
+                  key={type}
+                  category={type}
+                  onPress={() => handleCategorySelect(type as ScheduleType)}>
+                  <CategoryOptionText selected={category === type}>
+                    {label}
                   </CategoryOptionText>
                 </CategoryOption>
               ))}
@@ -187,8 +200,8 @@ export const AddScheduleSheet: React.FC<AddScheduleSheetProps> = ({
           <CategoryContainer>
             <AlarmButton onPress={() => setShowAlarmDropdown(prev => !prev)}>
               <AlarmButtonText>
-                {selectedAlarmTime
-                  ? ALARM_OPTIONS.find(opt => opt.value === selectedAlarmTime)
+                {selectedAlarmOffset !== null
+                  ? ALARM_OPTIONS.find(opt => opt.value === selectedAlarmOffset)
                       ?.label
                   : '알림 시간 선택'}
               </AlarmButtonText>

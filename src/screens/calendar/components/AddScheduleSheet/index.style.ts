@@ -42,7 +42,7 @@ export const Dropdown = styled.View`
   top: 100%;
   left: 0;
   right: 0;
-  background-color: ${({theme}) => theme.colors.background};
+  background-color: transparent;
   border-radius: 14px;
   z-index: 1;
   elevation: 5;
@@ -66,13 +66,13 @@ export const AlarmOptionText = styled.Text`
 
 const getCategoryColor = (category: string, theme: Theme) => {
   switch (category) {
-    case '회의':
+    case 'Meeting':
       return theme.colors.red;
-    case '발표':
+    case 'Presentation':
       return theme.colors.blue;
-    case '활동':
+    case 'Activity':
       return theme.colors.yellow;
-    case '공부':
+    case 'Study':
       return theme.colors.pink;
     default:
       return theme.colors.background;
