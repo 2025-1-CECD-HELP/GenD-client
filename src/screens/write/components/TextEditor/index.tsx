@@ -2,6 +2,7 @@ import React, {useRef} from 'react';
 import {Platform, KeyboardAvoidingView, SafeAreaView} from 'react-native';
 import {actions, RichEditor, RichToolbar} from 'react-native-pell-rich-editor';
 import {launchImageLibrary, Asset} from 'react-native-image-picker';
+import {useThemeColors} from '@/contexts/theme/ThemeContext';
 
 /**
  * 텍스트 에디터입니다.
@@ -17,6 +18,7 @@ interface TextEditorProps {
 }
 
 export const TextEditor = ({onChangeHtml, onImageInsert}: TextEditorProps) => {
+  const {background, textDisabled, backgroundElevated} = useThemeColors();
   const richText = useRef<RichEditor | null>(null);
 
   const handleInsertImage = async () => {
@@ -50,6 +52,8 @@ export const TextEditor = ({onChangeHtml, onImageInsert}: TextEditorProps) => {
             richText.current?.focusContentEditor(); // 강제 포커스
           }}
           editorStyle={{
+            backgroundColor: background,
+            placeholderColor: textDisabled,
             cssText: `
             img {
               max-width: 100%;
@@ -71,7 +75,11 @@ export const TextEditor = ({onChangeHtml, onImageInsert}: TextEditorProps) => {
       </KeyboardAvoidingView>
       <RichToolbar
         editor={richText}
-        style={{alignItems: 'flex-start', padding: 10}}
+        style={{
+          alignItems: 'flex-start',
+          padding: 10,
+          backgroundColor: backgroundElevated,
+        }}
         actions={[
           actions.insertImage,
           actions.setBold,
