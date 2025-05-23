@@ -24,31 +24,14 @@ export const WriteScreen = () => {
   const {setIsOpen, setModalContent} = useModal();
   const [htmlContent, setHtmlContent] = useState('');
   const [title, setTitle] = useState('');
-  const [imageFiles, setImageFiles] = useState<string[]>([]);
+  const [imageFiles, setImageFiles] = useState<Asset[]>([]);
   const {textDisabled} = useThemeColors();
+
   const handleImageInsert = async (asset: Asset) => {
-    if (!asset.uri || !asset.type || !asset.fileName) return;
-
-    const formData = new FormData();
-    formData.append('image', {
-      uri: asset.uri,
-      type: asset.type,
-      name: asset.fileName,
-    } as any);
-
-    try {
-      const res = await privateInstance.post('/upload/image', formData, {
-        headers: {'Content-Type': 'multipart/form-data'},
-      });
-
-      const imageUrl = res.data.imageUrl;
-      setImageFiles(prev => [...prev, imageUrl]);
-
-      return imageUrl;
-    } catch (error) {
-      console.error('이미지 업로드 실패', error);
-    }
+    if (!asset?.base64 || !asset?.type) return;
+    setImageFiles(prev => [...prev, asset]);
   };
+
   const handleSubmit = async () => {
     // TODO: 게시글 작성
     showPostSuccessModal();

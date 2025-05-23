@@ -42,6 +42,7 @@ export const TextEditor = ({onChangeHtml, onImageInsert}: TextEditorProps) => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{flex: 1}}>
         <RichEditor
+          placeholder="본문을 입력하세요"
           ref={richText}
           style={{flex: 1, height: 100}}
           initialFocus={true}
