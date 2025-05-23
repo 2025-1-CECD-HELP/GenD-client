@@ -25,6 +25,7 @@ declare module '@emotion/react' {
       blueSecondary: string;
       lime: string;
       pink: string;
+      yellow: string;
       red: string;
       backgroundGradient: string[];
     };
