@@ -103,7 +103,7 @@ export const PostContainer = ({
             </ToggleText>
           </Toggle>
           <WriteIcon
-            onPress={() => navigation.replace(ROUTE_NAMES.WRITE, {})}
+            onPress={() => navigation.navigate(ROUTE_NAMES.WRITE, {})}
             fill={textPrimary}
             width={18}
             height={18}
