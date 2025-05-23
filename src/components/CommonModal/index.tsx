@@ -1,6 +1,6 @@
 import {useModal} from '@contexts/modal/ModalContext';
 import {Button} from '../Button';
-import {Dimensions} from 'react-native';
+import {Dimensions, ScrollView} from 'react-native';
 import {
   CommonModalContainer,
   ModalContent,
@@ -11,7 +11,6 @@ import {
   CheckIconContainer,
   StyledButton,
 } from './index.style';
-import {useThemeColors} from '@/contexts/theme/ThemeContext';
 
 import LottieView from 'lottie-react-native';
 import React from 'react';
@@ -54,7 +53,7 @@ export const CommonModal: React.FC<ICommonModalProps> = ({
   children,
 }) => {
   const {setModalContent, setIsOpen} = useModal();
-  const {textDisabled} = useThemeColors();
+
   // 모달 닫기 핸들러
   const handleClose = () => {
     setModalContent(null);
@@ -66,7 +65,9 @@ export const CommonModal: React.FC<ICommonModalProps> = ({
   const handleConfirm = () => {
     setModalContent(null);
     setIsOpen(false);
-    if (onConfirm) onConfirm();
+    if (onConfirm) {
+      onConfirm();
+    }
   };
 
   // 버튼 타입(double, single)
@@ -76,32 +77,37 @@ export const CommonModal: React.FC<ICommonModalProps> = ({
   return (
     <CommonModalContainer width={width} height={height}>
       <ModalContent isCenter={isCenter}>
-        {type === 'check' && (
-          <CheckIconContainer>
-            <LottieView
-              source={require('@assets/animations/check.json')}
-              autoPlay
-              loop={false}
-              style={{
-                width: 90,
-                height: 90,
-                alignSelf: 'center',
-                justifyContent: 'center',
-              }}
-            />
-          </CheckIconContainer>
-        )}
-        <Title>{title}</Title>
+        <ScrollView
+          style={{width: '100%'}}
+          contentContainerStyle={{flexGrow: 1}}
+          showsVerticalScrollIndicator={false}>
+          {type === 'check' && (
+            <CheckIconContainer>
+              <LottieView
+                source={require('@assets/animations/check.json')}
+                autoPlay
+                loop={false}
+                // eslint-disable-next-line react-native/no-inline-styles
+                style={{
+                  width: 90,
+                  height: 90,
+                  alignSelf: 'center',
+                  justifyContent: 'center',
+                }}
+              />
+            </CheckIconContainer>
+          )}
+          <Title>{title}</Title>
 
-        {/* children이 있으면 children, 아니면 기존 content 렌더 */}
-        {children ? (
-          children
-        ) : type === 'input' ? (
-          <StyledTextInput placeholder="input content" />
-        ) : (
-          <Content>{content}</Content>
-        )}
-
+          {/* children이 있으면 children, 아니면 기존 content 렌더 */}
+          {children ? (
+            children
+          ) : type === 'input' ? (
+            <StyledTextInput placeholder="input content" />
+          ) : (
+            <Content>{content}</Content>
+          )}
+        </ScrollView>
         <ButtonContainer buttonType={buttonType}>
           {(type === 'default' || type === 'input') && (
             <StyledButton>
