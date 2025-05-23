@@ -12,15 +12,17 @@ export const CalendarContainer = styled.View`
   overflow: hidden;
 `;
 
-export const ScheduleContainer = styled.View`
+export const ScheduleContainer = styled.ScrollView`
   flex: 1;
   padding: 16px;
   background-color: ${({theme}) => theme.colors.background};
+  position: relative;
 `;
 
 export const ScheduleTitle = styled.Text`
   ${({theme}) => theme.fonts.title4};
   color: ${({theme}) => theme.colors.textPrimary};
+  margin-left: 24px;
   margin-bottom: 12px;
 `;
 
@@ -37,11 +39,11 @@ export const NoScheduleText = styled.Text`
   margin-top: 24px;
 `;
 
-export const ScheduleItemContainer = styled.View<{category: string}>`
+export const ScheduleItemContainer = styled.View<{type: string}>`
   background-color: ${({theme}) => theme.colors.backgroundBase};
   border-left-width: 4px;
   border-left-color: ${props => {
-    switch (props.category) {
+    switch (props.type) {
       case '회의':
         return props.theme.colors.red;
       case '발표':

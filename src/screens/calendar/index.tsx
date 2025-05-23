@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React from 'react';
 import {Calendar} from 'react-native-calendars';
 import {useCalendar} from './hooks/useCalendar';
 import {
@@ -13,8 +13,8 @@ import {
   ScheduleMemo,
 } from './index.style';
 import {AddScheduleButton} from './components/AddScheduleButton';
-import {formatDateTime} from './utils/formatDate';
-import {CATEGORY_COLORS, DUMMY_SCHEDULES} from './constants/calendar';
+import {formatDateTime, getModeIcon} from './utils/formatDate';
+// import {DUMMY_SCHEDULES} from './constants/calendar';
 
 /**
  * 캘린더 페이지입니다.
@@ -26,81 +26,56 @@ import {CATEGORY_COLORS, DUMMY_SCHEDULES} from './constants/calendar';
 
 export const CalendarScreen = () => {
   const {
-    selectedDate,
-    setSelectedDate,
     handleOpenAddSchedule,
-    // currentMarkedDates,
     calendarTheme,
     calendarKey,
+    focusedDate,
+    handleDayPress,
+    handleMonthChange,
+    currentMarkedDates,
+    filteredSchedules,
   } = useCalendar();
-
-  // const {filteredSchedules} = useSchedule(selectedDate);
-
-  // markedDates 생성
-  const currentMarkedDatesMemo = useMemo(() => {
-    const marked: Record<
-      string,
-      {dots: {key: string; color: string}[]; selected?: boolean}
-    > = {};
-    DUMMY_SCHEDULES.forEach(schedule => {
-      const dateStr = schedule.startDate.toISOString().split('T')[0];
-      if (!marked[dateStr]) marked[dateStr] = {dots: []};
-      marked[dateStr].dots.push({
-        key: schedule.category,
-        color: CATEGORY_COLORS[schedule.category] || 'blue',
-      });
-    });
-    // 선택된 날짜 강조
-    if (selectedDate) {
-      if (!marked[selectedDate]) marked[selectedDate] = {dots: []};
-      marked[selectedDate].selected = true;
-    }
-    return marked;
-  }, [selectedDate]);
-
-  // 선택된 날짜의 일정만 필터링
-  const filteredSchedulesMemo = useMemo(
-    () =>
-      DUMMY_SCHEDULES.filter(
-        s => s.startDate.toISOString().split('T')[0] === selectedDate,
-      ),
-    [selectedDate],
-  );
 
   return (
     <Container>
       <CalendarContainer>
         <Calendar
           key={calendarKey}
-          onDayPress={day => setSelectedDate(day.dateString)}
+          onDayPress={handleDayPress}
+          onMonthChange={handleMonthChange}
           enableSwipeMonths={true}
           markingType="multi-dot"
-          markedDates={currentMarkedDatesMemo}
+          markedDates={currentMarkedDates}
           monthFormat="yyyy년 MM월"
           theme={calendarTheme}
         />
       </CalendarContainer>
+      <ScheduleTitle>
+        {getModeIcon(focusedDate ? 'day' : 'month')}
+        {focusedDate ? '이 날의 일정' : '이 달의 일정'}
+      </ScheduleTitle>
       <ScheduleContainer>
-        <ScheduleTitle>일정</ScheduleTitle>
-        {filteredSchedulesMemo.length > 0 ? (
-          filteredSchedulesMemo.map(schedule => (
+        {filteredSchedules.length > 0 ? (
+          filteredSchedules.map(schedule => (
             <ScheduleItemContainer
-              key={schedule.id}
-              category={schedule.category}>
+              key={schedule.scheduleId}
+              type={schedule.type || ''}>
               <ScheduleItemTime>
-                {formatDateTime(schedule.startDate)} ~{' '}
-                {formatDateTime(schedule.endDate)}
+                {formatDateTime(schedule.startSchedule)} ~{' '}
+                {formatDateTime(schedule.endSchedule)}
               </ScheduleItemTime>
-              <ScheduleItemTitle>{schedule.title}</ScheduleItemTitle>
+              <ScheduleItemTitle>{schedule.scheduleTitle}</ScheduleItemTitle>
               {/* <ScheduleItemMaker>{schedule.maker}</ScheduleItemMaker> */}
-              {schedule.memo && <ScheduleMemo>{schedule.memo}</ScheduleMemo>}
+              {schedule.scheduleDescription && (
+                <ScheduleMemo>{schedule.scheduleDescription}</ScheduleMemo>
+              )}
             </ScheduleItemContainer>
           ))
         ) : (
           <NoScheduleText>등록된 일정이 없습니다.</NoScheduleText>
         )}
-        <AddScheduleButton handleOpenAddSchedule={handleOpenAddSchedule} />
       </ScheduleContainer>
+      <AddScheduleButton handleOpenAddSchedule={handleOpenAddSchedule} />
     </Container>
   );
 };

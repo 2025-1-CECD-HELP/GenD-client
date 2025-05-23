@@ -1,15 +1,23 @@
 export interface Schedule {
-  id: string;
-  category: ScheduleCategory;
-  title: string;
-  startDate: Date;
-  endDate: Date;
+  scheduleId: string;
   isAlarm: boolean;
-  memo: string;
+  type: string;
+  scheduleWriter: string;
+  scheduleTitle: string;
+  startSchedule: Date;
+  endSchedule: Date;
+  startAlarm?: Date;
+  scheduleDescription?: string;
 }
 
-export type ScheduleCategory = '회의' | '발표' | '활동' | '공부';
-
+export type ScheduleType = 'Study' | 'Presentation' | 'Meeting' | 'Activity';
+// 타입 매핑 테이블
+export const TYPE_LABELS: Record<ScheduleType, string> = {
+  Study: '공부',
+  Presentation: '발표',
+  Meeting: '회의',
+  Activity: '활동',
+};
 export interface MarkedDates {
   [date: string]: {
     marked?: boolean;
@@ -18,6 +26,23 @@ export interface MarkedDates {
   };
 }
 
+// 타입 정의 (파일 상단에 위치시키는 것이 좋음)
+export type DayPressEventData = {
+  dateString: string;
+  day: number;
+  month: number;
+  year: number;
+  timestamp: number;
+};
+
+export type Month = {
+  dateString: string;
+  month: number;
+  year: number;
+  timestamp: number;
+};
+
+/* 캘린더 테마 */
 export interface CalendarTheme {
   arrowColor: string;
   backgroundColor: string;
