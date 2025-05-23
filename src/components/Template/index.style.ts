@@ -27,6 +27,7 @@ export const Title = styled.Text`
 `;
 export const Description = styled.Text`
   ${({theme}) => theme.fonts.text5};
+  color: ${({theme}) => theme.colors.textSecondary};
 `;
 
 export const Button = styled.TouchableOpacity`
