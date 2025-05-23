@@ -1839,6 +1839,8 @@ PODS:
     - React-logger (= 0.78.0)
     - React-perflogger (= 0.78.0)
     - React-utils (= 0.78.0)
+  - RNAudioRecorderPlayer (3.6.12):
+    - React-Core
   - RNCAsyncStorage (2.1.2):
     - DoubleConversion
     - glog
@@ -2226,6 +2228,7 @@ DEPENDENCIES:
   - ReactAppDependencyProvider (from `build/generated/ios`)
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - RNAudioRecorderPlayer (from `../node_modules/react-native-audio-recorder-player`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
@@ -2407,6 +2410,8 @@ EXTERNAL SOURCES:
     :path: build/generated/ios
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNAudioRecorderPlayer:
+    :path: "../node_modules/react-native-audio-recorder-player"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCPicker:
@@ -2519,6 +2524,7 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: a1fb08dfdc7ebc387b2e54cfc9decd283ed821d8
   ReactCodegen: 008c319179d681a6a00966edfc67fda68f9fbb2e
   ReactCommon: 0c097b53f03d6bf166edbcd0915da32f3015dd90
+  RNAudioRecorderPlayer: 11df0c7b614e9767ef24d896465c3a758c592de7
   RNCAsyncStorage: 62fdbd7e63312228d4868779026248c2677911e1
   RNCPicker: cfb51a08c6e10357d9a65832e791825b0747b483
   RNDateTimePicker: e30677c15dfba25452b1434181970162115cc4fe

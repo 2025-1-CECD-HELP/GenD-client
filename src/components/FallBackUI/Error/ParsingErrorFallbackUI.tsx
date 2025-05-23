@@ -14,6 +14,7 @@ import {ErrorBoundaryProps} from './types';
 import {getErrorInfo} from '@/utils/error';
 /**
  * 파싱 오류가 발생했을 때 표시되는 컴포넌트입니다.
+ * 네트워크를 통해 받아온 Json 을 파싱하는 중 문제가 발생했을 때 표시됩니다.
  * @author 홍규진
  */
 

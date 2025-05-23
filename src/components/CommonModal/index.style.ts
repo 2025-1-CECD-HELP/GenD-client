@@ -17,6 +17,7 @@ export const CommonModalContainer = styled.View<{
 
 export const ModalContent = styled.View<{isCenter?: boolean}>`
   width: 90%;
+  max-height: 70%;
   padding: 24px;
   justify-content: ${({isCenter}) => (isCenter ? 'center' : 'flex-start')};
   align-items: ${({isCenter}) => (isCenter ? 'center' : 'flex-start')};
