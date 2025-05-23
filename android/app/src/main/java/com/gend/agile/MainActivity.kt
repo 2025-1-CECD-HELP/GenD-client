@@ -1,4 +1,4 @@
-package com.gend
+package com.gend.agile
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

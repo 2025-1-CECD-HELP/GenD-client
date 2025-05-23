@@ -26,6 +26,7 @@ DerivedData
 #
 build/
 .idea
+.history
 .gradle
 local.properties
 *.iml
@@ -34,6 +35,7 @@ local.properties
 *.keystore
 !debug.keystore
 .kotlin/
+android/app/google-services.json
 
 # node.js
 #
