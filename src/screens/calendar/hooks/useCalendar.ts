@@ -2,45 +2,86 @@ import React from 'react';
 import {useState, useMemo} from 'react';
 import {useBottomSheet} from '@/contexts/bottomSheet/BottomSheetContext';
 import {AddScheduleSheet} from '../components/AddScheduleSheet';
-import {Schedule, MarkedDates, CalendarTheme} from '../types';
-import {useSchedule} from './useSchedule';
+import {DayPressEventData, Month} from '../types';
 import {useTheme} from '@/contexts/theme/ThemeContext';
-interface UseCalendarReturn {
-  selectedDate: string;
-  setSelectedDate: (date: string) => void;
-  filteredSchedules: Schedule[];
-  handleOpenAddSchedule: () => void;
-  currentMarkedDates: MarkedDates;
-  calendarKey: string;
-  calendarTheme: CalendarTheme;
-}
+import {DUMMY_SCHEDULES, TYPE_COLORS} from '../constants/calendar';
+import {getMonth, isSameMonth} from '../utils/formatDate';
+import {TPostScheduleRequest} from '@/services/calendar/types';
+import {createSchedule} from '@/services/calendar';
+import {useCalendarQuery} from './useCalendarQuery';
 
-export const useCalendar = (): UseCalendarReturn => {
+export const useCalendar = () => {
   const {openBottomSheet, closeBottomSheet} = useBottomSheet();
   const theme = useTheme();
-  const [selectedDate, setSelectedDate] = useState<string>(
-    new Date().toISOString().split('T')[0],
+
+  // 선택된 달
+  const [selectedMonth, setSelectedMonth] = useState<string>(
+    getMonth(new Date()),
   );
-  const {filteredSchedules} = useSchedule(selectedDate);
 
+  // 선택된 날짜
+  const [focusedDate, setFocusedDate] = useState<string | null>(null);
+
+  // TODO-[규진] 워크스페이스 관련 로직 끝나면 이걸로 맞게 추가
+  const {data: scheduleListData} = useCalendarQuery('1');
+
+  // markedDates 생성
   const currentMarkedDates = useMemo(() => {
-    const markedDates: {[key: string]: {marked: boolean}} = {};
-    filteredSchedules.forEach(schedule => {
-      const date = new Date(schedule.startDate).toISOString().split('T')[0];
-      markedDates[date] = {marked: true};
+    const marked: Record<
+      string,
+      {dots: {key: string; color: string}[]; selected?: boolean}
+    > = {};
+    scheduleListData.forEach(schedule => {
+      const dateStr = schedule.startSchedule.toISOString().split('T')[0];
+      if (!marked[dateStr]) marked[dateStr] = {dots: []};
+      marked[dateStr].dots.push({
+        key: schedule.type || '',
+        color: TYPE_COLORS[schedule.type || ''] || 'blue',
+      });
     });
-    return markedDates;
-  }, [filteredSchedules]);
+    // 선택된 날짜 강조
+    if (focusedDate) {
+      if (!marked[focusedDate]) marked[focusedDate] = {dots: []};
+      marked[focusedDate].selected = true;
+    }
+    return marked;
+  }, [focusedDate, scheduleListData]);
 
-  const addSchedule = (newSchedule: Omit<Schedule, 'id'>) => {
+  // filteredSchedules: focusedDate가 있으면 해당 날짜, 없으면 달
+  const filteredSchedules = useMemo(() => {
+    if (!focusedDate) {
+      return DUMMY_SCHEDULES.filter(s =>
+        isSameMonth(s.startSchedule, selectedMonth),
+      );
+    }
+    return DUMMY_SCHEDULES.filter(
+      s => s.startSchedule.toISOString().split('T')[0] === focusedDate,
+    );
+  }, [focusedDate, selectedMonth]);
+
+  // 달력 날짜 클릭
+  const handleDayPress = (day: DayPressEventData) => {
+    setFocusedDate(day.dateString);
+  };
+
+  // 달 이동 시
+  const handleMonthChange = (monthObj: Month) => {
+    setSelectedMonth(getMonth(monthObj.dateString));
+    setFocusedDate(null);
+  };
+
+  const addSchedule = async (newSchedule: TPostScheduleRequest) => {
     //일정 추가 API 구현
-    console.log(newSchedule);
+    //TODO-[규진] workSpace 관련 로직 끝나면 이걸로 맞게 추가
+    await createSchedule({
+      ...newSchedule,
+    });
   };
 
   const handleOpenAddSchedule = () => {
     openBottomSheet(
       React.createElement(AddScheduleSheet, {
-        onSubmit: (newSchedule: Omit<Schedule, 'id'>) => {
+        onSubmit: (newSchedule: TPostScheduleRequest) => {
           addSchedule(newSchedule);
           closeBottomSheet();
         },
@@ -48,12 +89,12 @@ export const useCalendar = (): UseCalendarReturn => {
     );
   };
 
-  const calendarKey = useMemo(
+  const calendarKey = React.useMemo(
     () => JSON.stringify(theme.colors),
     [theme.colors],
   );
 
-  const calendarTheme = useMemo(() => {
+  const calendarTheme = React.useMemo(() => {
     return {
       arrowColor: theme.colors.blue,
       backgroundColor: theme.colors.background,
@@ -75,13 +116,18 @@ export const useCalendar = (): UseCalendarReturn => {
       disabledArrowColor: theme.colors.textDisabled,
     };
   }, [theme]);
+
   return {
-    selectedDate,
-    setSelectedDate,
+    selectedMonth,
+    setSelectedMonth,
+    focusedDate,
+    setFocusedDate,
+    handleDayPress,
+    handleMonthChange,
+    currentMarkedDates,
     filteredSchedules,
     handleOpenAddSchedule,
-    currentMarkedDates,
-    calendarKey,
     calendarTheme,
+    calendarKey,
   };
 };

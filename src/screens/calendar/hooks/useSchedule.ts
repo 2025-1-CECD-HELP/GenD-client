@@ -1,19 +1,8 @@
 import {useState} from 'react';
-import {ScheduleCategory} from '../types';
+import {ScheduleType} from '../types';
 
-export interface Schedule {
-  id: string;
-  category: ScheduleCategory;
-  title: string;
-  startDate: Date;
-  endDate: Date;
-  isAlarm: boolean;
-  memo: string;
-}
-
-export const useSchedule = (selectedDate: string) => {
-  const [schedules, setSchedules] = useState<Schedule[]>([]);
-  const [category, setCategory] = useState<ScheduleCategory>('회의');
+export const useSchedule = () => {
+  const [category, setCategory] = useState<ScheduleType>('Meeting');
   const [title, setTitle] = useState('');
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -21,8 +10,7 @@ export const useSchedule = (selectedDate: string) => {
   const [memo, setMemo] = useState('');
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
 
-
-  const handleCategoryChange = (newCategory: ScheduleCategory) => {
+  const handleCategoryChange = (newCategory: ScheduleType) => {
     setCategory(newCategory);
     setShowCategoryDropdown(false);
   };
@@ -51,23 +39,8 @@ export const useSchedule = (selectedDate: string) => {
     setShowCategoryDropdown(prev => !prev);
   };
 
-  const addSchedule = () => {
-    const newSchedule: Schedule = {
-      id: Date.now().toString(),
-      category,
-      title,
-      startDate,
-      endDate,
-      isAlarm,
-      memo,
-    };
-
-    setSchedules(prev => [...prev, newSchedule]);
-    resetForm();
-  };
-
   const resetForm = () => {
-    setCategory('회의');
+    setCategory('Meeting');
     setTitle('');
     setStartDate(new Date());
     setEndDate(new Date());
@@ -76,16 +49,7 @@ export const useSchedule = (selectedDate: string) => {
     setShowCategoryDropdown(false);
   };
 
-  const filteredSchedules = schedules.filter(schedule => {
-    const scheduleDate = new Date(schedule.startDate)
-      .toISOString()
-      .split('T')[0];
-    return scheduleDate === selectedDate;
-  });
-
   return {
-    schedules,
-    filteredSchedules,
     category,
     title,
     startDate,
@@ -100,6 +64,6 @@ export const useSchedule = (selectedDate: string) => {
     handleToggleAlarm,
     handleMemoChange,
     toggleCategoryDropdown,
-    addSchedule,
+    resetForm,
   };
 };
