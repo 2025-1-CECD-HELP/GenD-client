@@ -1,6 +1,6 @@
 import {login} from '@react-native-seoul/kakao-login';
 import {KakaoOAuthToken} from '@react-native-seoul/kakao-login';
-import {publicInstance} from '../api/axios';
+import {publicServerInstance} from '../api/axios';
 import {TGetResponse} from '../api/type';
 import {TGetLoginResponse} from './types';
 /**
@@ -34,7 +34,7 @@ export const afterKakaoLogin = async (
   fcmToken: string,
 ): Promise<TGetLoginResponse | null> => {
   try {
-    const response = await publicInstance.post<TGetResponse<TGetLoginResponse>>(
+    const response = await publicServerInstance.post<TGetResponse<TGetLoginResponse>>(
       '/oauth/login/kakao',
       {fcmToken: fcmToken},
       {headers: {Authorization: `Bearer ${token.accessToken}`}},
