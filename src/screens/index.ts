@@ -16,4 +16,7 @@ export * from './calendar';
 export * from './meeting';
 export * from './my-page';
 export * from './write';
-export * from './postDetail';
+export * from './post-detail';
+export * from './member';
+export * from './init-workspace';
+export * from './create-workspace';
