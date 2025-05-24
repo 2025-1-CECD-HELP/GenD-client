@@ -37,10 +37,13 @@ interface ICommonModalProps {
   type: ModalType;
   title: string;
   content?: string;
-  onConfirm?: () => void;
+  onConfirm?: (inputValue?: string) => void;
   onCancel?: () => void;
   isCenter?: boolean;
   children?: React.ReactNode;
+  inputPlaceholder?: string;
+  inputValue?: string;
+  onInputChange?: (text: string) => void;
 }
 
 export const CommonModal: React.FC<ICommonModalProps> = ({
@@ -51,8 +54,21 @@ export const CommonModal: React.FC<ICommonModalProps> = ({
   onCancel,
   isCenter,
   children,
+  inputPlaceholder = '입력해주세요',
+  inputValue: externalInputValue,
+  onInputChange: externalOnInputChange,
 }) => {
   const {setModalContent, setIsOpen} = useModal();
+  const [internalInputValue, setInternalInputValue] = React.useState(
+    externalInputValue || '',
+  );
+
+  // 외부 inputValue가 변경되면 내부 상태도 업데이트
+  React.useEffect(() => {
+    if (externalInputValue !== undefined) {
+      setInternalInputValue(externalInputValue);
+    }
+  }, [externalInputValue]);
 
   // 모달 닫기 핸들러
   const handleClose = () => {
@@ -66,7 +82,14 @@ export const CommonModal: React.FC<ICommonModalProps> = ({
     setModalContent(null);
     setIsOpen(false);
     if (onConfirm) {
-      onConfirm();
+      onConfirm(internalInputValue);
+    }
+  };
+
+  const handleInputChange = (text: string) => {
+    setInternalInputValue(text);
+    if (externalOnInputChange) {
+      externalOnInputChange(text);
     }
   };
 
@@ -103,7 +126,11 @@ export const CommonModal: React.FC<ICommonModalProps> = ({
           {children ? (
             children
           ) : type === 'input' ? (
-            <StyledTextInput placeholder="input content" />
+            <StyledTextInput
+              placeholder={inputPlaceholder}
+              value={internalInputValue}
+              onChangeText={handleInputChange}
+            />
           ) : (
             <Content>{content}</Content>
           )}
