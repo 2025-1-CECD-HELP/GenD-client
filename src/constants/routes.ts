@@ -16,4 +16,5 @@ export const ROUTE_NAMES = {
   LOGIN: 'LOGIN',
   WRITE: 'WRITE',
   POST_DETAIL: 'POST_DETAIL',
+  INIT_WORKSPACE: 'INIT_WORKSPACE',
 } as const;
