@@ -41,7 +41,6 @@ export const BottomSheetProvider = ({children}: {children: ReactNode}) => {
       bottomSheetRef.current?.snapToIndex(0);
     }, 200);
     setContent(bottomSheetComponent);
-    console.log(bottomSheetComponent);
   };
 
   const closeBottomSheet = () => {
