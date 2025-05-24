@@ -9,7 +9,7 @@ import {
   TDeleteMemberRequest,
   TUpdateMemberRequest,
 } from '@/services/member/types';
-import {deleteMember, updateMember} from '@/services/member';
+import {addMember, deleteMember, updateMember} from '@/services/member';
 
 /**
  * Tanstack Query 중 useMutation 사용시 편의성을 위해 키와 함수를 한 군데가 모아두는 파일입니다.
@@ -62,6 +62,19 @@ export const finalSubmitRecordMutationKey = () => {
     mutationSuccessKey: [],
     mutationFn: (request: TPostFinalTemplateContent) =>
       finalSubmitRecord(request),
+  };
+};
+
+/**
+ * 멤버 추가 뮤테이션 키
+ * @author 홍규진
+ */
+export const memberAddMutationKey = () => {
+  return {
+    mutationKey: ['memberAdd'],
+    mutationSuccessKey: [...memberListQuery().queryKey],
+    mutationFn: (workspaceId: string, email: string) =>
+      addMember(workspaceId, email),
   };
 };
 

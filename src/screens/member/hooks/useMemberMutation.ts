@@ -1,0 +1,86 @@
+import {useMutation, useQueryClient} from '@tanstack/react-query';
+import {
+  TDeleteMemberRequest,
+  TUpdateMemberRequest,
+} from '@/services/member/types';
+import {useModal} from '@/contexts/modal/ModalContext';
+import {
+  memberDeleteMutationKey,
+  memberUpdateMutationKey,
+  memberAddMutationKey,
+} from '@/constants/mutationKeys';
+
+/**
+ * 멤버 추가 뮤테이션 훅입니다.
+ * 멤버 추가 요청을 처리합니다.
+ * 멤버 추가시에 멤버 목록 조회 캐시를 무효화합니다.
+ * @returns 멤버 추가 뮤테이션 함수
+ * @author 홍규진
+ */
+export const useAddMemberMutation = () => {
+  const queryClient = useQueryClient();
+  const {mutateAsync} = useMutation({
+    mutationKey: memberAddMutationKey().mutationKey,
+    mutationFn: ({workspaceId, email}: {workspaceId: string; email: string}) =>
+      memberAddMutationKey().mutationFn(workspaceId, email),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: memberAddMutationKey().mutationSuccessKey,
+      });
+    },
+  });
+  return {
+    mutateAsync,
+  };
+};
+
+/**
+ * 멤버 권한 변경 뮤테이션 훅입니다.
+ * 멤버 권한 변경 요청을 처리합니다.
+ * 멤버 권한 변경시에 멤버 목록 조회 캐시를 무효화합니다.
+ * @returns 멤버 권한 변경 뮤테이션 함수
+ * @author 홍규진
+ */
+export const useMemberMutation = () => {
+  const queryClient = useQueryClient();
+  const {mutateAsync} = useMutation({
+    mutationKey: memberUpdateMutationKey().mutationKey,
+    mutationFn: (member: TUpdateMemberRequest) =>
+      memberUpdateMutationKey().mutationFn(member),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: memberUpdateMutationKey().mutationSuccessKey,
+      });
+    },
+  });
+
+  return {
+    mutateAsync,
+  };
+};
+
+/**
+ * 멤버 강제 탈퇴 뮤테이션 훅입니다.
+ * 멤버 강제 탈퇴 요청을 처리합니다.
+ * 멤버 강제 탈퇴시에 멤버 목록 조회 캐시를 무효화합니다.
+ * @returns 멤버 강제 탈퇴 뮤테이션 함수
+ * @author 홍규진
+ */
+export const useDeleteMemberMutation = () => {
+  const queryClient = useQueryClient();
+  const {setIsOpen} = useModal();
+  const {mutateAsync} = useMutation({
+    mutationKey: memberDeleteMutationKey().mutationKey,
+    mutationFn: ({workspaceId, memberId}: TDeleteMemberRequest) =>
+      memberDeleteMutationKey().mutationFn({workspaceId, memberId}),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: memberDeleteMutationKey().mutationSuccessKey,
+      });
+      setIsOpen(false);
+    },
+  });
+  return {
+    mutateAsync,
+  };
+};
