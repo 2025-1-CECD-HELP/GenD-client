@@ -10,6 +10,11 @@ import {
   TUpdateMemberRequest,
 } from '@/services/member/types';
 import {addMember, deleteMember, updateMember} from '@/services/member';
+import {
+  TGetChattingResponse,
+  TPostChattingRequest,
+} from '@/services/secretary/types';
+import {chatting} from '@/services/secretary';
 
 /**
  * Tanstack Query 중 useMutation 사용시 편의성을 위해 키와 함수를 한 군데가 모아두는 파일입니다.
@@ -100,5 +105,23 @@ export const memberDeleteMutationKey = () => {
     mutationSuccessKey: [...memberListQuery().queryKey],
     mutationFn: (member: TDeleteMemberRequest) =>
       deleteMember(member.workspaceId, member.memberId),
+  };
+};
+
+/**
+ * 채팅 전송 뮤테이션 키
+ * @author 홍규진
+ */
+export const chattingMutationKey = () => {
+  return {
+    mutationKey: ['chatting'],
+    mutationSuccessKey: [],
+    mutationFn: async (
+      workspaceId: string,
+      request: TPostChattingRequest,
+    ): Promise<TGetChattingResponse> => {
+      const response = await chatting(workspaceId, request);
+      return response;
+    },
   };
 };
