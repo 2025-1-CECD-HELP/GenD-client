@@ -14,7 +14,7 @@
 		5C8935562D929F6800A1B71E /* liblottie-react-native.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C8935552D929F6800A1B71E /* liblottie-react-native.a */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		C90B52715ECF8F39BEADC6E5 /* libPods-GenD.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85AB4F7A8951742C51933101 /* libPods-GenD.a */; };
+		A271DAEBBE0CFAB756D6BA2E /* Pods_GenD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDAE8E5233CE0CE96A95AE71 /* Pods_GenD.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,7 +31,7 @@
 		5CF95CAB2DD29F860057BCE6 /* GenDDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = GenDDebug.entitlements; path = GenD/GenDDebug.entitlements; sourceTree = "<group>"; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = GenD/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = GenD/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		85AB4F7A8951742C51933101 /* libPods-GenD.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GenD.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BDAE8E5233CE0CE96A95AE71 /* Pods_GenD.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GenD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D166B019DECCB924BC5D7092 /* Pods-GenD.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GenD.debug.xcconfig"; path = "Target Support Files/Pods-GenD/Pods-GenD.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -42,7 +42,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5C8935562D929F6800A1B71E /* liblottie-react-native.a in Frameworks */,
-				C90B52715ECF8F39BEADC6E5 /* libPods-GenD.a in Frameworks */,
+				A271DAEBBE0CFAB756D6BA2E /* Pods_GenD.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,7 +69,7 @@
 			children = (
 				5C8935552D929F6800A1B71E /* liblottie-react-native.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				85AB4F7A8951742C51933101 /* libPods-GenD.a */,
+				BDAE8E5233CE0CE96A95AE71 /* Pods_GenD.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -430,7 +430,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -510,7 +513,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
