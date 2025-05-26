@@ -47,10 +47,10 @@ LocaleConfig.defaultLocale = 'ko';
 
 // 카테고리별 색상
 export const TYPE_COLORS: Record<string, string> = {
-  회의: 'red',
-  발표: 'purple',
-  활동: 'yellow',
-  공부: 'pink',
+  Meeting: 'red',
+  Presentation: 'purple',
+  Activity: 'yellow',
+  Study: 'pink',
 };
 export const TYPES: ScheduleType[] = [
   'Meeting',
