@@ -18,6 +18,7 @@ import {useThemeColors} from '@/contexts/theme/ThemeContext';
 export type ChattingInputProps = {
   onSubmit: (text: string) => void;
   placeholder: string;
+  placeholderTextColor?: string;
   isDebouncing?: boolean;
 };
 
@@ -26,13 +27,13 @@ const ChattingInput: React.FC<ChattingInputProps> = ({
     console.log('onSubmit를 추가해주세요');
   },
   placeholder = 'AI 비서에게 질문하세요',
+
   isDebouncing = false,
 }) => {
   const {text, handleChangeText, handleSubmit} = useInput({
     onSubmit,
     isDebouncing,
   });
-
   const {textDisabled} = useThemeColors();
   return (
     <Container>

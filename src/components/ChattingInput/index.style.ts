@@ -24,6 +24,7 @@ export const InputField = styled.TextInput`
   ${({theme}) => theme.fonts.text2};
   padding-left: 20px;
   padding-bottom: 8px;
+  color: ${({theme}) => theme.colors.textPrimary};
 `;
 
 export const IconContainer = styled.TouchableOpacity`

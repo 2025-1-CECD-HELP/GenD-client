@@ -1,6 +1,7 @@
+/* eslint-disable react-native/no-inline-styles */
 import {useModal} from '@contexts/modal/ModalContext';
 import {Button} from '../Button';
-import {Dimensions, ScrollView} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {
   CommonModalContainer,
   ModalContent,
@@ -29,8 +30,6 @@ import React from 'react';
  */
 
 type ModalType = 'default' | 'check' | 'confirm' | 'input';
-
-const {width, height} = Dimensions.get('window');
 
 // CommonModal Props 정의
 interface ICommonModalProps {
@@ -74,7 +73,9 @@ export const CommonModal: React.FC<ICommonModalProps> = ({
   const handleClose = () => {
     setModalContent(null);
     setIsOpen(false);
-    if (onCancel) onCancel();
+    if (onCancel) {
+      onCancel();
+    }
   };
 
   // 확인 버튼 클릭 핸들러
@@ -98,19 +99,20 @@ export const CommonModal: React.FC<ICommonModalProps> = ({
     type === 'default' || type === 'input' ? 'double' : 'single';
 
   return (
-    <CommonModalContainer width={width} height={height}>
-      <ModalContent isCenter={isCenter}>
-        <ScrollView
-          style={{width: '100%'}}
-          contentContainerStyle={{flexGrow: 1}}
-          showsVerticalScrollIndicator={false}>
-          {type === 'check' && (
+    <CommonModalContainer>
+      <ModalContent isCenter={type === 'check' || isCenter}>
+        {type === 'check' ? (
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '100%',
+            }}>
             <CheckIconContainer>
               <LottieView
                 source={require('@assets/animations/check.json')}
                 autoPlay
                 loop={false}
-                // eslint-disable-next-line react-native/no-inline-styles
                 style={{
                   width: 90,
                   height: 90,
@@ -119,22 +121,33 @@ export const CommonModal: React.FC<ICommonModalProps> = ({
                 }}
               />
             </CheckIconContainer>
-          )}
-          <Title>{title}</Title>
+            <Title>{title}</Title>
+          </View>
+        ) : (
+          <ScrollView
+            style={{width: '100%'}}
+            contentContainerStyle={{
+              flexGrow: 1,
+              justifyContent: isCenter ? 'center' : 'flex-start',
+              alignItems: isCenter ? 'center' : 'flex-start',
+            }}
+            showsVerticalScrollIndicator={false}>
+            <Title>{title}</Title>
 
-          {/* children이 있으면 children, 아니면 기존 content 렌더 */}
-          {children ? (
-            children
-          ) : type === 'input' ? (
-            <StyledTextInput
-              placeholder={inputPlaceholder}
-              value={internalInputValue}
-              onChangeText={handleInputChange}
-            />
-          ) : (
-            <Content>{content}</Content>
-          )}
-        </ScrollView>
+            {/* children이 있으면 children, 아니면 기존 content 렌더 */}
+            {children ? (
+              children
+            ) : type === 'input' ? (
+              <StyledTextInput
+                placeholder={inputPlaceholder}
+                value={internalInputValue}
+                onChangeText={handleInputChange}
+              />
+            ) : (
+              <Content>{content}</Content>
+            )}
+          </ScrollView>
+        )}
         <ButtonContainer buttonType={buttonType}>
           {(type === 'default' || type === 'input') && (
             <StyledButton>

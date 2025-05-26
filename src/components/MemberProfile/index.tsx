@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useThemeColors} from '@/contexts/theme/ThemeContext';
 import {
   Container,
@@ -9,69 +9,100 @@ import {
   PositionTag,
   PositionText,
 } from './index.style';
-import {SettingIcon, CancelIcon} from '@/assets/images/svg/common';
+import {SettingIcon} from '@/assets/images/svg/common';
 import defaultProfileImage from '@/assets/images/png/defaultProfile.png';
-import {MemberPosition} from './index.type';
+import {MemberRole} from '@/screens/member/types';
+import {Member} from '@/screens/member/types';
+import {useModal} from '@/contexts/modal/ModalContext';
+import {MemberSettingModal} from '@/screens/member/components/MemberSettingModal';
+import CommonModal from '../CommonModal';
+import {
+  useDeleteMemberMutation,
+  useModifyMemberRoleMutation,
+} from '@/screens/member/hooks/useMemberMutation';
+import {useWorkspace} from '@/hooks/useWorkspace';
 
 /**
  * 멤버 페이지 혹은 멤버 추가 모달에 보여지는 멤버 프로필 컴포넌트입니다.
  * -> 멤버 페이지: 프로필 이미지, 이름, 권한, (선택적으로) 설정 아이콘을 표시합니다.
  * -> 멤버 추가 모달: 프로필 이미지, 이름, 취소 아이콘을 표시합니다.
  * 프로필 이미지가 없을 경우 기본 이미지(defaultProfileImage)를 사용합니다.
- * 아이콘 클릭 시 동작은 props로 전달받아 처리합니다.
- * @author 이정선
+ * 멤버 프로필 내에서 관련 함수들을 처리합니다.
+ * @author 이정선, 홍규진
  */
 
-interface MemberProfileProps {
-  name: string;
-  imageUrl?: string;
-  position: MemberPosition;
-  onSettingPress?: () => void; // Setting 아이콘 클릭 시 실행
-  onCancelPress?: () => void; // Cancel 아이콘 클릭 시 실행
-  isCurrentUserManager: boolean; // 현재 로그인된 유저가 해당 워크스페이스의 관리자인지 여부
+interface MemberProfileProps extends Member {
+  isCurrentUserManager: boolean;
 }
 
 export const MemberProfile: React.FC<MemberProfileProps> = ({
-  name,
-  imageUrl,
-  position,
-  onSettingPress,
-  onCancelPress,
+  memberId,
+  memberRole,
+  memberName,
+  memberImage,
   isCurrentUserManager,
 }) => {
-  const displayImageUrl = imageUrl ? imageUrl : defaultProfileImage;
-
-  const positionTextMap: Record<MemberPosition, string> = {
+  const displayImageUrl = memberImage ? memberImage : defaultProfileImage;
+  const positionTextMap: Record<MemberRole, string> = {
     eMember: '멤버',
     eAdmin: '관리자',
-    none: '',
   };
-  const positionText = positionTextMap[position];
+  const positionText = positionTextMap[memberRole];
   const {textSecondary} = useThemeColors();
+  const [isAdmin, setIsAdmin] = useState(memberRole === 'eAdmin');
+  const {setIsOpen, setModalContent} = useModal();
+  const {mutateAsync: deleteMember} = useDeleteMemberMutation();
+  const {mutateAsync: modifyMemberRole} = useModifyMemberRoleMutation();
+  const {workspaceId} = useWorkspace();
+
+  const handleSettingPress = () => {
+    setModalContent(
+      <CommonModal
+        isCenter={true}
+        title=""
+        children={
+          <MemberSettingModal
+            memberId={memberId}
+            memberRole={memberRole}
+            memberName={memberName}
+            memberImage={memberImage}
+            onAdminChange={setIsAdmin}
+            onDelete={() => {
+              deleteMember({workspaceId: workspaceId!, memberId});
+            }}
+          />
+        }
+        onConfirm={() => {
+          modifyMemberRole({
+            memberId,
+            memberRole: isAdmin ? 'eAdmin' : 'eMember',
+          });
+        }}
+        onCancel={() => {
+          console.log('cancel');
+        }}
+        type="default"
+      />,
+    );
+    setIsOpen(true);
+  };
+
   return (
     <Container>
       <ProfileContainer>
         <ProfileImage resizeMode="cover" source={displayImageUrl} />
         <ContentContainer>
-          <MemberName>{name}</MemberName>
-          {position !== 'none' && (
-            <PositionTag position={position}>
-              <PositionText position={position}>{positionText}</PositionText>
+          <MemberName>{memberName}</MemberName>
+          {memberRole === 'eAdmin' && (
+            <PositionTag position={memberRole}>
+              <PositionText position={memberRole}>{positionText}</PositionText>
             </PositionTag>
           )}
         </ContentContainer>
       </ProfileContainer>
-      {isCurrentUserManager && position !== 'none' && (
+      {isCurrentUserManager && memberRole === 'eMember' && (
         <SettingIcon
-          onPress={onSettingPress}
-          fill={textSecondary}
-          width={18}
-          height={18}
-        />
-      )}
-      {position === 'none' && (
-        <CancelIcon
-          onPress={onCancelPress}
+          onPress={handleSettingPress}
           fill={textSecondary}
           width={18}
           height={18}
