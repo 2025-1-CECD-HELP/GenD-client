@@ -28,6 +28,7 @@ export const applyPrivateInterceptors = (instance: AxiosInstance) => {
       config: CustomAxiosRequestConfig,
     ): Promise<CustomAxiosRequestConfig> => {
       const accessToken = await getAccessToken();
+      // console.debug('accessToken', accessToken);
       if (accessToken && config.headers) {
         config.headers.Authorization = `Bearer ${accessToken}`;
       }
