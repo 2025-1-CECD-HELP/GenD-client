@@ -33,17 +33,6 @@ const projectConfig = {
       '@': path.resolve(__dirname, './src'), // @ 경로 별칭 추가 (src 폴더)
     },
   },
-  // 프로덕션 빌드 최적화
-  serializer: {
-    getModulesRunBeforeMainModule: () => [
-      require.resolve('react-native/Libraries/Core/InitializeCore'),
-    ],
-    // 번들 크기 최적화
-    createModuleIdFactory: () => path => {
-      // 모듈 ID를 숫자로 변환하여 번들 크기 최적화
-      return path.replace(__dirname, '').replace(/[^a-zA-Z0-9]/g, '');
-    },
-  },
 };
 
 const finalConfig = mergeConfig(defaultConfig, projectConfig);

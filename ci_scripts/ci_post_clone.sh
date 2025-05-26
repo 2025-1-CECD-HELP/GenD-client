@@ -6,6 +6,7 @@ set -e
 # 디버깅을 위한 상세 출력 활성화
 set -x
 
+brew install cocoapods
 # 이 스크립트의 기본 실행 디렉토리는 ci_scripts 디렉토리입니다.
 cd $CI_PRIMARY_REPOSITORY_PATH
 
