@@ -29,9 +29,9 @@ import {PreviewContent} from './components/RecordingPreviewModal';
 import {TPostFinalTemplateContent} from '@/services/meeting/types';
 import {RecordingSubmitForm} from './components/RecordingSubmitModal';
 import {
-  useFinalSubmitRecordMutation,
-  useSubmitRecordMutation,
-} from './hooks/useSubmitRecord';
+  useFinalRecordMutation,
+  useRecordMutation,
+} from './hooks/useRecordMutation';
 export const RecordingScreen = () => {
   const {
     isRecording,
@@ -48,8 +48,8 @@ export const RecordingScreen = () => {
   const {m, s, msStr} = formatTime(timer);
   const {textPrimary} = useThemeColors();
   const {setModalContent, setIsOpen} = useModal();
-  const {mutateAsync: finalSubmitRecord} = useFinalSubmitRecordMutation();
-  const {mutateAsync: submitRecord} = useSubmitRecordMutation();
+  const {mutateAsync: finalSubmitRecord} = useFinalRecordMutation();
+  const {mutateAsync: submitRecord} = useRecordMutation();
   const [finalContent, setFinalContent] = useState<any[]>([]);
   // 0. 녹음 기능 초기화 중
   if (!isReady) {
@@ -123,7 +123,9 @@ export const RecordingScreen = () => {
 
   // 4. 최종 저장 API 호출
   const handleFinalSubmit = async () => {
+    //TODO-폴더 저장 기능 추가 필요
     finalSubmitRecord({
+      templateId: '1',
       templateContent: finalContent.map(item => ({
         objectKey: String(item.objectKey),
         objectValue: String(item.objectValue),
