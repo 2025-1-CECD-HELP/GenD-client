@@ -9,6 +9,7 @@ import {
   memberUpdateMutationKey,
   memberAddMutationKey,
 } from '@/constants/mutationKeys';
+import {useWorkspace} from '@hooks/useWorkspace';
 
 /**
  * 멤버 추가 뮤테이션 훅입니다.
@@ -18,14 +19,15 @@ import {
  * @author 홍규진
  */
 export const useAddMemberMutation = () => {
+  const {workspaceId} = useWorkspace();
   const queryClient = useQueryClient();
   const {mutateAsync} = useMutation({
-    mutationKey: memberAddMutationKey().mutationKey,
+    mutationKey: memberAddMutationKey(workspaceId!).mutationKey,
     mutationFn: ({workspaceId, email}: {workspaceId: string; email: string}) =>
-      memberAddMutationKey().mutationFn(workspaceId, email),
+      memberAddMutationKey(workspaceId!).mutationFn(workspaceId, email),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: memberAddMutationKey().mutationSuccessKey,
+        queryKey: memberAddMutationKey(workspaceId!).mutationSuccessKey,
       });
     },
   });
@@ -41,15 +43,16 @@ export const useAddMemberMutation = () => {
  * @returns 멤버 권한 변경 뮤테이션 함수
  * @author 홍규진
  */
-export const useMemberMutation = () => {
+export const useModifyMemberRoleMutation = () => {
+  const {workspaceId} = useWorkspace();
   const queryClient = useQueryClient();
   const {mutateAsync} = useMutation({
-    mutationKey: memberUpdateMutationKey().mutationKey,
+    mutationKey: memberUpdateMutationKey(workspaceId!).mutationKey,
     mutationFn: (member: TUpdateMemberRequest) =>
-      memberUpdateMutationKey().mutationFn(member),
+      memberUpdateMutationKey(workspaceId!).mutationFn(member),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: memberUpdateMutationKey().mutationSuccessKey,
+        queryKey: memberUpdateMutationKey(workspaceId!).mutationSuccessKey,
       });
     },
   });
@@ -67,15 +70,16 @@ export const useMemberMutation = () => {
  * @author 홍규진
  */
 export const useDeleteMemberMutation = () => {
+  const {workspaceId} = useWorkspace();
   const queryClient = useQueryClient();
   const {setIsOpen} = useModal();
   const {mutateAsync} = useMutation({
-    mutationKey: memberDeleteMutationKey().mutationKey,
+    mutationKey: memberDeleteMutationKey(workspaceId!).mutationKey,
     mutationFn: ({workspaceId, memberId}: TDeleteMemberRequest) =>
-      memberDeleteMutationKey().mutationFn({workspaceId, memberId}),
+      memberDeleteMutationKey(workspaceId!).mutationFn({workspaceId, memberId}),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: memberDeleteMutationKey().mutationSuccessKey,
+        queryKey: memberDeleteMutationKey(workspaceId!).mutationSuccessKey,
       });
       setIsOpen(false);
     },
