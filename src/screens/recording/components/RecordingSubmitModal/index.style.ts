@@ -19,9 +19,11 @@ export const SubmitRow = styled.View`
   margin-bottom: 12px;
 `;
 
-export const SubmitLabel = styled.Text`
+export const SubmitLabel = styled.Text<{selected?: boolean}>`
   flex: 1;
-  color: ${({theme}) => theme.colors.textSecondary};
+  color: ${({theme, selected}) =>
+    selected ? theme.colors.blue : theme.colors.textSecondary};
+  font-weight: ${({selected}) => (selected ? 'bold' : 'normal')};
   font-size: 15px;
 `;
 
