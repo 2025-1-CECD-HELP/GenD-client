@@ -16,6 +16,13 @@ const projectConfig = {
   transformer: {
     unstable_allowRequireContext: true, // require.context 지원 활성화 (Storybook에서 필요)
     babelTransformerPath: require.resolve('react-native-svg-transformer'),
+    // 캐싱 최적화를 위한 설정
+    getTransformOptions: async () => ({
+      transform: {
+        experimentalImportSupport: false,
+        inlineRequires: true, // 성능 향상을 위한 인라인 require
+      },
+    }),
   },
 
   resolver: {
@@ -24,6 +31,17 @@ const projectConfig = {
     assetExts: defaultConfig.resolver.assetExts.filter(ext => ext !== 'svg'), // svg 확장자 제외
     alias: {
       '@': path.resolve(__dirname, './src'), // @ 경로 별칭 추가 (src 폴더)
+    },
+  },
+  // 프로덕션 빌드 최적화
+  serializer: {
+    getModulesRunBeforeMainModule: () => [
+      require.resolve('react-native/Libraries/Core/InitializeCore'),
+    ],
+    // 번들 크기 최적화
+    createModuleIdFactory: () => path => {
+      // 모듈 ID를 숫자로 변환하여 번들 크기 최적화
+      return path.replace(__dirname, '').replace(/[^a-zA-Z0-9]/g, '');
     },
   },
 };
