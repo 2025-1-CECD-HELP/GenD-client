@@ -1,94 +1,94 @@
-import React, {useRef} from 'react';
-import {Platform, KeyboardAvoidingView, SafeAreaView} from 'react-native';
-import {actions, RichEditor, RichToolbar} from 'react-native-pell-rich-editor';
+import React, {useState} from 'react';
+import {Platform} from 'react-native';
 import {launchImageLibrary, Asset} from 'react-native-image-picker';
+import Markdown from 'react-native-markdown-display';
 import {useThemeColors} from '@/contexts/theme/ThemeContext';
+import {
+  Container,
+  KeyboardView,
+  Editor,
+  Toolbar,
+  ToolbarButton,
+  ToolbarButtonText,
+  Thumbnail,
+  themedMarkdownStyles,
+} from './index.style';
 
 /**
- * 텍스트 에디터입니다.
- * 글 본문 작성에 사용되며, 텍스트 포맷팅 및 이미지 삽입 기능을 제공합니다.
- * 로컬 이미지 업로드 시 스크린 내부에 base64로 삽입하여 사진 미리보기를 표시합니다.
- * 상위 컴포넌트로 HTML 콘텐츠 및 이미지 asset을 전달합니다.
- * @author 이정선
+ * 마크다운 에디터입니다.
+ * 글 본문 작성에 사용되며, 마크다운 문법 및 이미지 삽입 기능을 제공합니다.
+ * 로컬 이미지 업로드 시 마크다운 이미지 문법으로 삽입하여 사진 미리보기를 표시합니다.
+ * 상위 컴포넌트로 마크다운 콘텐츠 및 이미지 asset을 전달합니다.
+ * @author 홍규진
  */
 
 interface TextEditorProps {
-  onChangeHtml: (html: string) => void;
+  onChangeMarkdown: (markdown: string) => void;
   onImageInsert?: (asset: Asset) => void;
+  imageAsset?: Asset;
 }
 
-export const TextEditor = ({onChangeHtml, onImageInsert}: TextEditorProps) => {
-  const {background, textDisabled, backgroundElevated} = useThemeColors();
-  const richText = useRef<RichEditor | null>(null);
+export const TextEditor = ({
+  onChangeMarkdown,
+  onImageInsert,
+  imageAsset,
+}: TextEditorProps) => {
+  const {background, textDisabled, backgroundElevated, textPrimary} =
+    useThemeColors();
+  const [markdown, setMarkdown] = useState('');
+  const [isPreview, setIsPreview] = useState(false);
 
   const handleInsertImage = async () => {
     const result = await launchImageLibrary({
       mediaType: 'photo',
       quality: 1,
       selectionLimit: 1,
-      includeBase64: true,
     });
 
     const asset = result.assets?.[0];
-    if (!asset) return;
+    if (!asset) {
+      return;
+    }
 
     onImageInsert?.(asset);
-
-    // 사진 미리보기 용도
-    const base64Uri = `data:${asset.type};base64,${asset.base64}`;
-    richText.current?.insertImage(base64Uri);
   };
+
+  const handleTextChange = (text: string) => {
+    setMarkdown(text);
+    onChangeMarkdown(text);
+  };
+
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{flex: 1}}>
-        <RichEditor
-          placeholder="본문을 입력하세요"
-          ref={richText}
-          style={{flex: 1, height: 100}}
-          initialFocus={true}
-          editorInitializedCallback={() => {
-            richText.current?.focusContentEditor(); // 강제 포커스
-          }}
-          editorStyle={{
-            backgroundColor: background,
-            placeholderColor: textDisabled,
-            cssText: `
-            img {
-              max-width: 100%;
-              height: auto;
-              display: block;
-              object-fit: contain;
-              margin: 12px 0;
-            }
-            body {
-              padding: 20px;
-            }
-          `,
-          }}
-          onChange={html => {
-            console.log('에디터 내용:', html);
-            onChangeHtml(html);
-          }}
-        />
-      </KeyboardAvoidingView>
-      <RichToolbar
-        editor={richText}
-        style={{
-          alignItems: 'flex-start',
-          padding: 10,
-          backgroundColor: backgroundElevated,
-        }}
-        actions={[
-          actions.insertImage,
-          actions.setBold,
-          actions.setItalic,
-          actions.setUnderline,
-          actions.insertLink,
-        ]}
-        onPressAddImage={handleInsertImage}
-      />
-    </SafeAreaView>
+    <Container style={{backgroundColor: background}}>
+      <KeyboardView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        {isPreview ? (
+          <Markdown style={themedMarkdownStyles}>{markdown}</Markdown>
+        ) : (
+          <Editor
+            multiline
+            value={markdown}
+            onChangeText={handleTextChange}
+            style={{color: textPrimary}}
+            placeholder="마크다운으로 작성하세요"
+            placeholderTextColor={textDisabled}
+          />
+        )}
+        {imageAsset?.uri && (
+          <Thumbnail source={{uri: imageAsset.uri}} resizeMode="cover" />
+        )}
+      </KeyboardView>
+      <Toolbar style={{backgroundColor: backgroundElevated}}>
+        <ToolbarButton onPress={() => setIsPreview(!isPreview)}>
+          <ToolbarButtonText style={{color: textPrimary}}>
+            {isPreview ? '편집' : '미리보기'}
+          </ToolbarButtonText>
+        </ToolbarButton>
+        <ToolbarButton onPress={handleInsertImage}>
+          <ToolbarButtonText style={{color: textPrimary}}>
+            이미지 추가
+          </ToolbarButtonText>
+        </ToolbarButton>
+      </Toolbar>
+    </Container>
   );
 };
