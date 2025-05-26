@@ -26,9 +26,18 @@ ls -la
 # 기존 CocoaPods 설치 완전 정리
 rm -rf Pods
 rm -rf Podfile.lock
+rm -rf ~/Library/Caches/CocoaPods
+rm -rf ~/Library/Developer/Xcode/DerivedData/*
+
+# CocoaPods 저장소 업데이트
+pod repo update
 
 # CocoaPods 의존성을 상세 출력과 함께 설치
 pod install --verbose
+
+# Pods 디렉토리 권한 확인 및 수정
+chmod -R 755 Pods
+chmod -R 755 Pods/Target\ Support\ Files
 
 echo "pod install 실행 후 ios 디렉토리 내용:"
 ls -la
