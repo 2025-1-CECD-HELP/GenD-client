@@ -1,14 +1,11 @@
-import {useState} from 'react';
 import {TopBar} from '@/components/TopBar';
 import {Container, Divider, TitleInputContainer} from './index.style';
-import {CATEGORY_OPTIONS} from './constants/category';
 import {useThemeColors} from '@/contexts/theme/ThemeContext';
 import {TextEditor, CategoryDropdown} from './components';
-import {Asset} from 'react-native-image-picker';
-import {privateInstance} from '@/services/api/axios';
-import CommonModal from '@components/CommonModal';
-import {useModal} from '@contexts/modal/ModalContext';
+import {useWrite} from './hooks/useWrite';
 import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
+import {useCategoryListQuery} from '../home/hooks/useCategoryListQuery';
+
 /**
  * 글쓰기 페이지입니다.
  * 사용자가 게시글의 제목, 카테고리, 본문을 입력할 수 있도록 합니다.
@@ -17,42 +14,20 @@ import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
  */
 
 export const WriteScreen = () => {
-  const navigation = useTypeSafeNavigation();
-  const [selectedCategory, setSelectedCategory] = useState<string>(
-    CATEGORY_OPTIONS[0],
-  );
-  const {setIsOpen, setModalContent} = useModal();
-  const [htmlContent, setHtmlContent] = useState('');
-  const [title, setTitle] = useState('');
-  const [imageFiles, setImageFiles] = useState<Asset[]>([]);
+  const {
+    selectedCategory,
+    setSelectedCategory,
+    title,
+    setTitle,
+    handleImageInsert,
+    setMarkdownContent,
+    handleSubmit,
+    imageFile,
+  } = useWrite();
+
   const {textDisabled} = useThemeColors();
-
-  const handleImageInsert = async (asset: Asset) => {
-    if (!asset?.base64 || !asset?.type) return;
-    setImageFiles(prev => [...prev, asset]);
-  };
-
-  const handleSubmit = async () => {
-    // TODO: 게시글 작성
-    showPostSuccessModal();
-  };
-
-  const showPostSuccessModal = () => {
-    setIsOpen(true);
-    setModalContent(
-      <CommonModal
-        type="check"
-        title="게시글이 등록되었습니다!"
-        content="다른 사용자들과 지금 공유해보세요."
-        isCenter={true}
-        onConfirm={() => {
-          setIsOpen(false);
-          navigation.goBack();
-        }}
-      />,
-    );
-  };
-
+  const navigation = useTypeSafeNavigation();
+  const {data: categoryList} = useCategoryListQuery();
   return (
     <Container
       keyboardShouldPersistTaps="handled"
@@ -62,10 +37,13 @@ export const WriteScreen = () => {
         showBackButton={true}
         showSubmitButton={true}
         onPressSubmit={handleSubmit}
+        onPressBack={() => {
+          navigation.navigate('LANDING', {});
+        }}
       />
-
       <CategoryDropdown
-        category={selectedCategory}
+        categories={categoryList || []}
+        selectedCategory={selectedCategory}
         onChangeCategory={setSelectedCategory}
       />
 
@@ -79,8 +57,9 @@ export const WriteScreen = () => {
 
       <Divider />
       <TextEditor
-        onChangeHtml={setHtmlContent}
+        onChangeMarkdown={setMarkdownContent}
         onImageInsert={handleImageInsert}
+        imageAsset={imageFile}
       />
     </Container>
   );
