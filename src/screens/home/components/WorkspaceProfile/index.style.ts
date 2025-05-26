@@ -22,7 +22,15 @@ export const ProfileContainer = styled.View`
   align-items: center;
   padding: 30px 0;
 `;
-
+export const ImageContainer = styled.View`
+  width: 70px;
+  height: 70px;
+  border-radius: 35px;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  background-color: ${({theme}) => theme.colors.blue};
+`;
 export const ProfileImage = styled.Image`
   border-radius: 35px;
 `;
