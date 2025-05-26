@@ -20,25 +20,25 @@ dayjs.locale('ko');
 
 function App(): React.JSX.Element {
   return (
-    <SafeAreaProvider>
-      <QueryClientProvider>
-        <AuthProvider>
-          <ThemeProvider>
-            <ModalProvider>
+    <ThemeProvider>
+      <ErrorBoundary FallbackComponent={AdaptiveErrorFallback}>
+        <QueryClientProvider>
+          <SafeAreaProvider>
+            <AuthProvider>
               <GestureHandlerRootView style={{flex: 1}}>
                 <BottomSheetProvider>
-                  <ErrorBoundary FallbackComponent={AdaptiveErrorFallback}>
+                  <ModalProvider>
                     <Suspense fallback={<AdaptiveLoadingFallback />}>
                       <AppNavigator />
                     </Suspense>
-                  </ErrorBoundary>
+                  </ModalProvider>
                 </BottomSheetProvider>
               </GestureHandlerRootView>
-            </ModalProvider>
-          </ThemeProvider>
-        </AuthProvider>
-      </QueryClientProvider>
-    </SafeAreaProvider>
+            </AuthProvider>
+          </SafeAreaProvider>
+        </QueryClientProvider>
+      </ErrorBoundary>
+    </ThemeProvider>
   );
 }
 
