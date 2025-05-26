@@ -4,6 +4,7 @@
  * 컬러 코드는 테마 컬러 상수 정의에 사용됩니다.
  */
 import {Theme} from '@emotion/react';
+import {themeFonts} from './font';
 
 export type ThemeType = 'light' | 'dark';
 
@@ -24,15 +25,17 @@ export const lightTheme: Theme = {
     textPrimary: '#1A1A1A',
     textSecondary: '#666666',
     textDisabled: '#BFBFBF',
-    shadow: '#000000 10%',
+    shadow: 'rgba(0, 0, 0, 0.1)',
     backgroundSelected: '#E2E2F1',
     blue: '#5354E8',
     blueSecondary: '#C5C5F2',
     lime: '#C0E021',
+    yellow: '#FFBE27',
     pink: '#FF52A8',
     red: '#DE3131',
-    backgroundGradient: '(174deg, #5354E8 5%, #603DBF 100%)',
+    backgroundGradient: ['#5354E8', '#603DBF'],
   },
+  fonts: themeFonts,
 };
 
 export const darkTheme: Theme = {
@@ -47,15 +50,17 @@ export const darkTheme: Theme = {
     textPrimary: '#F9F9F9',
     textSecondary: '#CCCCCC',
     textDisabled: '#666666',
-    shadow: '#000000 10%',
+    shadow: 'rgba(0, 0, 0, 0.2)',
     backgroundSelected: '#363645',
     blue: '#5354E8',
     blueSecondary: '#3C3C87',
     lime: '#C0E021',
+    yellow: '#FFBE27',
     pink: '#FF52A8',
     red: '#DE3131',
-    backgroundGradient: '(174deg, #5354E8 5%, #603DBF 100%)',
+    backgroundGradient: ['#5354E8', '#603DBF'],
   },
+  fonts: themeFonts,
 };
 
 export const theme = {

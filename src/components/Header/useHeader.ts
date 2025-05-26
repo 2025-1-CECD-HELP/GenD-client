@@ -1,64 +1,36 @@
 // useHeader.ts
 import {useCallback} from 'react';
 import {useTheme} from '@/contexts/theme/ThemeContext';
-
+import {useWorkspaceListQuery} from '@/screens/home/hooks/useWorkspaceQuery';
+import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
+import {useWorkspaceBottomSheet} from '@/hooks/useWorkspace';
 /**
  * 헤더 컴포넌트에 필요한 로직을 작성합니다.
  * 관심사 분리를 위해서, 헤더 컴포넌트에 필요한 로직들만 분리합니다.
  * @author 홍규진
  */
-interface UseHeaderProps {
-  onNotificationPress?: () => void;
-  onWorkSpacePress?: () => void;
-  onLogoPress?: () => void;
-  onDarkLightLogoPress?: () => void;
-}
 
-export const useHeader = ({
-  onNotificationPress,
-  onWorkSpacePress,
-  onLogoPress,
-  onDarkLightLogoPress,
-}: UseHeaderProps) => {
+export const useHeader = () => {
   const {colors, toggleTheme, isDarkMode} = useTheme();
+  const {data} = useWorkspaceListQuery();
+  const navigation = useTypeSafeNavigation();
+  const {handleOpenBottomSheet} = useWorkspaceBottomSheet();
 
-  // 여기에 추가적인 상태나 로직을 구현할 수 있습니다
-
-  // 필요한 핸들러 함수들
-  const handleNotificationPress = useCallback(() => {
-    if (onNotificationPress) {
-      onNotificationPress();
-    } else {
-      console.log('알림 클릭 이벤트가 없습니다.');
-    }
-  }, [onNotificationPress]);
-
-  // 다크 라이트 로고 클릭 이벤트 처리
-  const handleDarkLightLogoPress = useCallback(() => {
-    if (onDarkLightLogoPress) {
-      onDarkLightLogoPress();
-    } else {
-      toggleTheme();
-    }
-  }, [onDarkLightLogoPress, toggleTheme]);
-
-  // 워크스페이스 관련 로직 처리
   const handleWorkSpacePress = useCallback(() => {
-    if (onWorkSpacePress) {
-      onWorkSpacePress();
-    } else {
-      console.log('워크스페이스 클릭 이벤트가 없습니다.');
-    }
-  }, [onWorkSpacePress]);
+    handleOpenBottomSheet();
+  }, [handleOpenBottomSheet]);
 
-  // 로고 관련 로직 처리
+  const handleNotificationPress = useCallback(() => {
+    console.log('notification');
+  }, []);
+
   const handleLogoPress = useCallback(() => {
-    if (onLogoPress) {
-      onLogoPress();
-    } else {
-      console.log('로고 클릭 이벤트가 없습니다.');
-    }
-  }, [onLogoPress]);
+    navigation.navigate('LANDING', {isInit: false});
+  }, [navigation]);
+
+  const handleDarkLightLogoPress = useCallback(() => {
+    toggleTheme();
+  }, [toggleTheme]);
 
   return {
     colors,
@@ -67,6 +39,6 @@ export const useHeader = ({
     handleWorkSpacePress,
     handleLogoPress,
     handleDarkLightLogoPress,
-    // 추가적인 상태나 함수들을 여기서 반환
+    workspaceList: data.workspaceList,
   };
 };

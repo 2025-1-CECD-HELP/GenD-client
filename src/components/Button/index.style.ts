@@ -7,7 +7,7 @@ export const ButtonContainer = styled.TouchableOpacity<{
   padding: 10px 15px;
   border-radius: 4px;
   background-color: ${({variant, theme}) =>
-    variant === 'filled' ? theme.colors.blue : theme.colors.background};
+    variant === 'filled' ? theme.colors.blue : theme.colors.popup};
   border: ${({variant, theme}) => {
     if (variant === 'filled') return 'none';
     if (variant === 'outline') return `1px solid ${theme.colors.blue}`;

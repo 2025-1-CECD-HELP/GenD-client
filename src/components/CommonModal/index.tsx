@@ -1,5 +1,7 @@
+/* eslint-disable react-native/no-inline-styles */
 import {useModal} from '@contexts/modal/ModalContext';
 import {Button} from '../Button';
+import {ScrollView, View} from 'react-native';
 import {
   CommonModalContainer,
   ModalContent,
@@ -12,6 +14,7 @@ import {
 } from './index.style';
 
 import LottieView from 'lottie-react-native';
+import React from 'react';
 
 /**
  * 가장 일반적인 경우에 사용하는 모달 컴포넌트입니다.
@@ -33,9 +36,13 @@ interface ICommonModalProps {
   type: ModalType;
   title: string;
   content?: string;
-  onConfirm?: () => void;
+  onConfirm?: (inputValue?: string) => void;
   onCancel?: () => void;
   isCenter?: boolean;
+  children?: React.ReactNode;
+  inputPlaceholder?: string;
+  inputValue?: string;
+  onInputChange?: (text: string) => void;
 }
 
 export const CommonModal: React.FC<ICommonModalProps> = ({
@@ -45,21 +52,46 @@ export const CommonModal: React.FC<ICommonModalProps> = ({
   onConfirm,
   onCancel,
   isCenter,
+  children,
+  inputPlaceholder = '입력해주세요',
+  inputValue: externalInputValue,
+  onInputChange: externalOnInputChange,
 }) => {
   const {setModalContent, setIsOpen} = useModal();
+  const [internalInputValue, setInternalInputValue] = React.useState(
+    externalInputValue || '',
+  );
+
+  // 외부 inputValue가 변경되면 내부 상태도 업데이트
+  React.useEffect(() => {
+    if (externalInputValue !== undefined) {
+      setInternalInputValue(externalInputValue);
+    }
+  }, [externalInputValue]);
 
   // 모달 닫기 핸들러
   const handleClose = () => {
     setModalContent(null);
     setIsOpen(false);
-    if (onCancel) onCancel();
+    if (onCancel) {
+      onCancel();
+    }
   };
 
   // 확인 버튼 클릭 핸들러
   const handleConfirm = () => {
     setModalContent(null);
     setIsOpen(false);
-    if (onConfirm) onConfirm();
+    if (onConfirm) {
+      onConfirm(internalInputValue);
+    }
+  };
+
+  const handleInputChange = (text: string) => {
+    setInternalInputValue(text);
+    if (externalOnInputChange) {
+      externalOnInputChange(text);
+    }
   };
 
   // 버튼 타입(double, single)
@@ -68,25 +100,54 @@ export const CommonModal: React.FC<ICommonModalProps> = ({
 
   return (
     <CommonModalContainer>
-      <ModalContent isCenter={isCenter}>
-        {type === 'check' && (
-          <CheckIconContainer>
-            <LottieView
-              source={require('@assets/animations/check.json')}
-              autoPlay
-              loop={false}
-              style={{width: 90, height: 90}}
-            />
-          </CheckIconContainer>
-        )}
-        <Title>{title}</Title>
-
-        {type === 'input' ? (
-          <StyledTextInput placeholder="input content" />
+      <ModalContent isCenter={type === 'check' || isCenter}>
+        {type === 'check' ? (
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '100%',
+            }}>
+            <CheckIconContainer>
+              <LottieView
+                source={require('@assets/animations/check.json')}
+                autoPlay
+                loop={false}
+                style={{
+                  width: 90,
+                  height: 90,
+                  alignSelf: 'center',
+                  justifyContent: 'center',
+                }}
+              />
+            </CheckIconContainer>
+            <Title>{title}</Title>
+          </View>
         ) : (
-          <Content>{content}</Content>
-        )}
+          <ScrollView
+            style={{width: '100%'}}
+            contentContainerStyle={{
+              flexGrow: 1,
+              justifyContent: isCenter ? 'center' : 'flex-start',
+              alignItems: isCenter ? 'center' : 'flex-start',
+            }}
+            showsVerticalScrollIndicator={false}>
+            <Title>{title}</Title>
 
+            {/* children이 있으면 children, 아니면 기존 content 렌더 */}
+            {children ? (
+              children
+            ) : type === 'input' ? (
+              <StyledTextInput
+                placeholder={inputPlaceholder}
+                value={internalInputValue}
+                onChangeText={handleInputChange}
+              />
+            ) : (
+              <Content>{content}</Content>
+            )}
+          </ScrollView>
+        )}
         <ButtonContainer buttonType={buttonType}>
           {(type === 'default' || type === 'input') && (
             <StyledButton>

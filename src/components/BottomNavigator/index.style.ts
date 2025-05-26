@@ -7,7 +7,9 @@ export const NavContainer = styled.View`
   background-color: ${props => props.theme.colors.background};
   align-items: center;
   position: relative;
+  z-index: 33;
   padding-bottom: 20px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
 `;
 
 export const NavItem = styled.TouchableOpacity<{active: boolean}>`
@@ -34,7 +36,10 @@ export const CenterButtonContainer = styled.View`
   justify-content: center;
   top: -25px;
   align-items: center;
+  z-index: 1;
   align-self: center;
+  elevation: 1;
+  box-shadow: 0px -2.5px 2px rgba(0, 0, 0, 0.09);
 `;
 export const CenterButton = styled.TouchableOpacity`
   width: 60px;

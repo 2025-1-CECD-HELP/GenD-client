@@ -5,8 +5,8 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 type TAuthContextType = {
   isSignedIn: boolean;
   isLoading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  handleAuthError: (error: Error) => void;
 };
 
 /**
@@ -28,7 +28,7 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
         const token = await EncryptedStorage.getItem('accessToken');
         setIsSignedIn(!!token);
       } catch (error) {
-        console.error('인증 상태 확인 실패:', error);
+        handleAuthError(error as Error);
       } finally {
         setIsLoading(false);
       }
@@ -37,39 +37,26 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
     checkAuthState();
   }, []);
 
-  const signIn = async () => {
-    // // 실제 인증 로직 구현
-    // // 예시: API 호출 후 토큰 저장
-    // try {
-    //   // 여기에 실제 로그인 API 호출 코드 작성
-    //   // const response = await api.login(email, password);
-    //   // 토큰을 JSON 형태로 저장할 경우 예시
-    //   await EncryptedStorage.setItem(
-    //     'userToken',
-    //     JSON.stringify({
-    //       token: 'sample-token',
-    //       timestamp: new Date().toISOString()
-    //     })
-    //   );
-    //   setIsSignedIn(true);
-    // } catch (error) {
-    //   console.error('로그인 실패:', error);
-    //   throw error;
-    // }
-  };
-
   const signOut = async () => {
     try {
-      await EncryptedStorage.removeItem('accessToken');
+      const token = await EncryptedStorage.getItem('accessToken');
+      if (token) {
+        await EncryptedStorage.removeItem('accessToken');
+      }
       setIsSignedIn(false);
     } catch (error) {
       console.error('로그아웃 실패:', error);
       throw error;
     }
   };
+  const handleAuthError = (error: Error) => {
+    console.error('인증 오류:', error);
+    throw error;
+  };
 
   return (
-    <AuthContext.Provider value={{isSignedIn, isLoading, signIn, signOut}}>
+    <AuthContext.Provider
+      value={{isSignedIn, isLoading, signOut, handleAuthError}}>
       {children}
     </AuthContext.Provider>
   );

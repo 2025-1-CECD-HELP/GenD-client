@@ -5,31 +5,54 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
-platform :ios, min_ios_version_supported
+# iOS 최소 버전 설정
+platform :ios, '15.1'
 prepare_react_native_project!
 
+
+#모듈 통합을 위한 전역 설정 (단순히 use_frameworks! 를 쓰면 터집니다.)
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
   use_frameworks! :linkage => linkage.to_sym
 end
 
+# =============================================
+# 참고자료 : https://vignesh-prakash.medium.com/command-swiftverifyemittedmoduleinterface-failed-with-a-nonzero-exit-code-62f011dce5a0
 target 'GenD' do
   config = use_native_modules!
 
+  # React Native 기본 설정
   use_react_native!(
-    :path => config[:reactNativePath],
-    # An absolute path to your application root.
-    :app_path => "#{Pod::Config.instance.installation_root}/.."
+    :path => config[:reactNativePath],    
+    # 어플리케이션 루트 경로
+    :app_path => "#{Pod::Config.instance.installation_root}/..",
+    :hermes_enabled => true,
+    :fabric_enabled => false
   )
 
+  # Firebase 관련 모듈 설정 (절대 바꾸지 마세요.. 6시간 삽질 했습니다..)
+  # https://stackoverflow.com/questions/72289521/swift-pods-cannot-yet-be-integrated-as-static-libraries-firebasecoreinternal-lib)
+  pod 'Firebase', '~> 11.12.0', :modular_headers => true
+  pod 'FirebaseCoreInternal', '~> 11.12.0', :modular_headers => true
+  pod 'GoogleUtilities', '~> 8.0', :modular_headers => true
+  pod 'FirebaseCore', '~> 11.12.0', :modular_headers => true
+  pod 'Firebase/Messaging', '~> 11.12.0', :modular_headers => true
+
+  # 카카오 로그인 모듈 설정도 따로 버전을 명시해 추가해줘야합니다.
+  pod 'KakaoSDKCommon', '~> 2.22.0'
+  pod 'KakaoSDKAuth', '~> 2.22.0'
+  pod 'KakaoSDKUser', '~> 2.22.0'
+
+  # =============================================
+  # Post Install 설정
+  # =============================================
   post_install do |installer|
-    # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
+    # React Native 기본 post_install 설정
     react_native_post_install(
       installer,
       config[:reactNativePath],
-      :mac_catalyst_enabled => false,
-      # :ccache_enabled => true
+      :mac_catalyst_enabled => false
     )
   end
 end
