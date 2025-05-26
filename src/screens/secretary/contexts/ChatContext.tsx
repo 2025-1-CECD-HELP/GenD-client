@@ -2,7 +2,7 @@ import React, {createContext, useContext, useState} from 'react';
 import {ChatMessage} from '../types';
 import {useChattingMutation} from '../hooks/useChattingMutation';
 import {TPostChattingRequest} from '@/services/secretary/types';
-import {useWorkspace} from '@/contexts/workspace/WorkspaceContenxt';
+import {useWorkspace} from '@hooks/useWorkspace';
 import {formatTime} from '../utils/formatTime';
 
 /**
@@ -47,6 +47,7 @@ export const ChatProvider = ({children}: {children: React.ReactNode}) => {
             sender: 'ai',
             text: response.secretaryAnswer,
             time: formatTime(),
+            fileList: response.fileList,
           });
         },
       },
