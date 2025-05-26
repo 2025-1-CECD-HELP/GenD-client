@@ -1,13 +1,102 @@
-import {View, Text, Button} from 'react-native';
-/**
- * 파일 페이지입니다.
- * @author 홍규진
- */
-export const FileScreen = () => {
+import React from 'react';
+import {
+  Container,
+  SearchBarWrapper,
+  EmptyView,
+  FileList,
+  ItemWrapper,
+  columnWrapperStyle,
+} from './index.style';
+import {SearchBar} from '@/components/SearchBar';
+import {FolderPreview} from '@/components/FolderPreview';
+import {FilePreview} from '@/components/FilePreview';
+import {FolderData} from '@/components/FolderPreview/index.type';
+import {FileData} from '@/components/FilePreview/index.type';
+import {useFile} from './hooks/useFile';
+import {useWorkspace} from '@/hooks/useWorkspace';
+import CommonModal from '@/components/CommonModal';
+import {useAddFileMutation} from './hooks/uesFileMutation';
+import {useModal} from '@/contexts/modal/ModalContext';
+
+export const FileScreen: React.FC = () => {
+  const {workspaceId, workspace: workspaceInfo, rootDirId} = useWorkspace();
+  const {setIsOpen, setModalContent} = useModal();
+  const {mutate: addFileMutation} = useAddFileMutation(
+    workspaceId!,
+    parseInt(rootDirId, 10),
+  );
+
+  const {setSearch, mergedList, filteredFolders, filteredFiles} = useFile();
+
   return (
-    <View>
-      <Text>FileScreen</Text>
-      <Button title="Home" />
-    </View>
+    <Container>
+      <SearchBarWrapper>
+        <SearchBar
+          placeholder="이름으로 검색하세요"
+          onSearchSubmit={setSearch}
+          onPlusPress={() => {
+            setIsOpen(true);
+            setModalContent(
+              <CommonModal
+                type="input"
+                title="폴더 추가하기"
+                inputPlaceholder="폴더 이름을 입력하세요"
+                onConfirm={inputValue => {
+                  addFileMutation({
+                    workspaceId: workspaceId!,
+                    parentId: 1,
+                    directoryName: inputValue!,
+                  });
+                }}
+                onCancel={() => {
+                  setIsOpen(false);
+                }}
+              />,
+            );
+          }}
+        />
+      </SearchBarWrapper>
+      {filteredFolders.length === 0 && filteredFiles.length === 0 && (
+        <EmptyView>폴더나 파일이 없습니다.</EmptyView>
+      )}
+      {/* <Breadcrumb>
+        {breadcrumbs.map((name, idx) => (
+          <View key={idx} style={{flexDirection: 'row', alignItems: 'center'}}>
+            <BreadcrumbText>{name}</BreadcrumbText>
+            {idx < breadcrumbs.length - 1 && (
+              <BreadcrumbArrow>›</BreadcrumbArrow>
+            )}
+          </View>
+        ))}
+      </Breadcrumb> */}
+      <FileList
+        data={mergedList}
+        numColumns={2}
+        scrollEnabled={false}
+        columnWrapperStyle={columnWrapperStyle}
+        renderItem={({item}) => {
+          if ((item as {type: string}).type === 'folder') {
+            return (
+              <ItemWrapper>
+                <FolderPreview
+                  folder={item as FolderData}
+                  isAdmin={workspaceInfo.isAdmin}
+                />
+              </ItemWrapper>
+            );
+          }
+          return (
+            <ItemWrapper>
+              <FilePreview {...(item as FileData)} />
+            </ItemWrapper>
+          );
+        }}
+        keyExtractor={(item, index) =>
+          `${item as FileData | FolderData}-${index}`
+        }
+      />
+    </Container>
   );
 };
+
+export default FileScreen;
