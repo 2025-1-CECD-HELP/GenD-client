@@ -39,6 +39,25 @@ pod install --verbose
 chmod -R 755 Pods
 chmod -R 755 Pods/Target\ Support\ Files
 
+# xcconfig 파일들이 제대로 생성되었는지 확인
+if [ ! -f "Pods/Target Support Files/Pods-GenD/Pods-GenD.release.xcconfig" ]; then
+    echo "xcconfig 파일이 생성되지 않았습니다. Pods 재설치를 시도합니다."
+    pod deintegrate
+    pod cache clean --all
+    pod install --verbose
+fi
+
+# xcfilelist 파일들이 제대로 생성되었는지 확인
+if [ ! -f "Pods/Target Support Files/Pods-GenD/Pods-GenD-frameworks-Release-output-files.xcfilelist" ] || \
+   [ ! -f "Pods/Target Support Files/Pods-GenD/Pods-GenD-resources-Release-output-files.xcfilelist" ] || \
+   [ ! -f "Pods/Target Support Files/Pods-GenD/Pods-GenD-frameworks-Release-input-files.xcfilelist" ] || \
+   [ ! -f "Pods/Target Support Files/Pods-GenD/Pods-GenD-resources-Release-input-files.xcfilelist" ]; then
+    echo "xcfilelist 파일들이 생성되지 않았습니다. Pods 재설치를 시도합니다."
+    pod deintegrate
+    pod cache clean --all
+    pod install --verbose
+fi
+
 echo "pod install 실행 후 ios 디렉토리 내용:"
 ls -la
 echo "Pods 디렉토리 내용:"
