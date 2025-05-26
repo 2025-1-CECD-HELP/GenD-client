@@ -7,6 +7,8 @@
  * router.push(ROUTE_NAMES.SEARCH, { searchQuery: 'test' });
  */
 
+import {Post} from '@/services/post/types';
+
 export type TRouteParams = {
   LANDING: {};
   HOME: {};
@@ -17,8 +19,9 @@ export type TRouteParams = {
   MEETING: {};
   WRITE: {};
   MEMBER: {};
-  POST_DETAIL: {postId: number};
+  POST_DETAIL: {post: Post};
   RECORDING: {templateId: string};
   INIT_WORKSPACE: {};
   CREATE_WORKSPACE: {};
+  SECRETARY: {};
 };
