@@ -1,4 +1,6 @@
+import {getMemberList} from '@/services';
 import {getScheduleList} from '@/services/calendar';
+import {getDirectoryList, getFileList} from '@/services/file';
 import {getCategoryList, getPostList} from '@/services/post';
 import {getWorkspaceInfo, getWorkspaceList} from '@/services/workspace';
 
@@ -40,7 +42,7 @@ export const workspaceQuery = (workspaceId: string) => {
 /** 게시글 목록 조회 */
 export const postQuery = (workspaceId: string) => {
   return {
-    queryKey: ['post', {workspaceId}],
+    queryKey: ['post', workspaceId],
     queryFn: () => getPostList(workspaceId),
   };
 };
@@ -53,15 +55,26 @@ export const categoryListQuery = (workspaceId: string) => {
   };
 };
 
-
-
-
-
-
 /** 멤버 목록 조회 */
-export const memberListQuery = () => {
+export const memberListQuery = (workspaceId: string) => {
   return {
-    queryKey: ['memberList'],
-    queryFn: () => getMemberList(),
+    queryKey: ['memberList', {workspaceId}],
+    queryFn: () => getMemberList(workspaceId),
+  };
+};
+
+/** 파일 목록 조회 */
+export const fileQuery = (workspaceId: string, dirId: number) => {
+  return {
+    queryKey: ['file', {workspaceId, dirId}],
+    queryFn: () => getFileList({workspaceId, dirId}),
+  };
+};
+
+/** 디렉토리 목록 조회 (현재는 회의록 저장 시에만 사용합니다.) */
+export const directoryListQuery = (workspaceId: string) => {
+  return {
+    queryKey: ['directoryList', {workspaceId}],
+    queryFn: () => getDirectoryList(workspaceId),
   };
 };

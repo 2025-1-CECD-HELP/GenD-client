@@ -15,6 +15,25 @@ import {
   TPostChattingRequest,
 } from '@/services/secretary/types';
 import {chatting} from '@/services/secretary';
+import {postQuery} from './queryKeys';
+import {TDeletePostRequest, TUpdatePostPinRequest} from '@/services/post/types';
+import {patchPostPin} from '@/services/post';
+import {deletePost} from '@/services/post';
+import {
+  deleteDirectory,
+  deleteFile,
+  patchDirectory,
+  patchFile,
+  postDirectory,
+} from '@/services/file';
+import {
+  TAddDirectoryRequest,
+  TDeleteFileRequest,
+  TPatchDirectoryRequest,
+  TDeleteDirectoryRequest,
+  TPatchFileRequest,
+} from '@/services/file/types';
+import {fileQuery} from './queryKeys';
 
 /**
  * Tanstack Query 중 useMutation 사용시 편의성을 위해 키와 함수를 한 군데가 모아두는 파일입니다.
@@ -74,10 +93,10 @@ export const finalSubmitRecordMutationKey = () => {
  * 멤버 추가 뮤테이션 키
  * @author 홍규진
  */
-export const memberAddMutationKey = () => {
+export const memberAddMutationKey = (workspaceId: string) => {
   return {
     mutationKey: ['memberAdd'],
-    mutationSuccessKey: [...memberListQuery().queryKey],
+    mutationSuccessKey: [...memberListQuery(workspaceId).queryKey],
     mutationFn: (workspaceId: string, email: string) =>
       addMember(workspaceId, email),
   };
@@ -87,11 +106,12 @@ export const memberAddMutationKey = () => {
  * 멤버 권한 변경 뮤테이션 키
  * @author 홍규진
  */
-export const memberUpdateMutationKey = () => {
+export const memberUpdateMutationKey = (workspaceId: string) => {
   return {
     mutationKey: ['memberUpdate'],
-    mutationSuccessKey: [...memberListQuery().queryKey],
-    mutationFn: (member: TUpdateMemberRequest) => updateMember('1', member),
+    mutationSuccessKey: [...memberListQuery(workspaceId).queryKey],
+    mutationFn: (member: TUpdateMemberRequest) =>
+      updateMember(workspaceId, member),
   };
 };
 
@@ -99,10 +119,10 @@ export const memberUpdateMutationKey = () => {
  * 멤버 강퇴 뮤테이션 키
  * @author 홍규진
  */
-export const memberDeleteMutationKey = () => {
+export const memberDeleteMutationKey = (workspaceId: string) => {
   return {
     mutationKey: ['memberDelete'],
-    mutationSuccessKey: [...memberListQuery().queryKey],
+    mutationSuccessKey: [...memberListQuery(workspaceId).queryKey],
     mutationFn: (member: TDeleteMemberRequest) =>
       deleteMember(member.workspaceId, member.memberId),
   };
@@ -123,5 +143,93 @@ export const chattingMutationKey = () => {
       const response = await chatting(workspaceId, request);
       return response;
     },
+  };
+};
+
+/**
+ * 게시글 핀 박기 뮤테이션 키
+ * @author 홍규진
+ */
+export const patchPostPinMutationKey = (workspaceId: string) => {
+  return {
+    mutationKey: ['patchPostPin'],
+    mutationSuccessKey: [...postQuery(workspaceId).queryKey],
+    mutationFn: async (request: TUpdatePostPinRequest): Promise<void> => {
+      await patchPostPin(request.postId);
+    },
+  };
+};
+
+/**
+ * 게시글 삭제 뮤테이션 키
+ * @author 홍규진
+ */
+export const deletePostMutationKey = (workspaceId: string) => {
+  return {
+    mutationKey: ['deletePost'],
+    mutationSuccessKey: [...postQuery(workspaceId).queryKey],
+    mutationFn: async (request: TDeletePostRequest) => {
+      await deletePost(request.postId);
+    },
+  };
+};
+
+/**
+ * 파일 추가 뮤테이션 키
+ * @author 홍규진
+ */
+export const addFileMutationKey = (workspaceId: string, parentId: number) => {
+  return {
+    mutationKey: ['addFile'],
+    mutationSuccessKey: [...fileQuery(workspaceId, parentId).queryKey],
+    mutationFn: (request: TAddDirectoryRequest) => postDirectory(request),
+  };
+};
+
+/**
+ * 파일 삭제 뮤테이션 키
+ * @author 홍규진
+ */
+export const deleteFileMutationKey = () => {
+  return {
+    mutationKey: ['deleteFile'],
+    mutationSuccessKey: [],
+    mutationFn: (request: TDeleteFileRequest) => deleteFile(request),
+  };
+};
+
+/**
+ * 폴더 명 변경 뮤테이션 키
+ * @author 홍규진
+ */
+export const patchDirectoryMutationKey = () => {
+  return {
+    mutationKey: ['patchDirectory'],
+    mutationSuccessKey: [],
+    mutationFn: (request: TPatchDirectoryRequest) => patchDirectory(request),
+  };
+};
+
+/**
+ * 폴더 삭제 뮤테이션 키
+ * @author 홍규진
+ */
+export const deleteDirectoryMutationKey = () => {
+  return {
+    mutationKey: ['deleteDirectory'],
+    mutationSuccessKey: [],
+    mutationFn: (request: TDeleteDirectoryRequest) => deleteDirectory(request),
+  };
+};
+
+/**
+ * 파일 명 변경 뮤테이션 키
+ * @author 홍규진
+ */
+export const patchFileMutationKey = () => {
+  return {
+    mutationKey: ['patchFile'],
+    mutationSuccessKey: [],
+    mutationFn: (request: TPatchFileRequest) => patchFile(request),
   };
 };
