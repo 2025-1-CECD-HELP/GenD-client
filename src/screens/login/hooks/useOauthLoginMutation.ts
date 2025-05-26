@@ -1,7 +1,7 @@
 import {ROUTE_NAMES} from '@/constants/routes';
 import {useAuth} from '@/contexts/auth/AuthContext';
 import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
-import {afterKakaoLogin, initiateKakaoLogin} from '@/services/auth/oAuthLogin';
+import {afterKakaoLogin, initiateKakaoLogin} from '@/services/auth';
 import {setAccessToken, setRefreshToken} from '@/utils/auth';
 import {useMutation} from '@tanstack/react-query';
 

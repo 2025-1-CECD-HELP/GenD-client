@@ -44,13 +44,13 @@ export const ScheduleItemContainer = styled.View<{type: string}>`
   border-left-width: 4px;
   border-left-color: ${props => {
     switch (props.type) {
-      case '회의':
+      case 'Meeting':
         return props.theme.colors.red;
-      case '발표':
+      case 'Presentation':
         return props.theme.colors.blue;
-      case '활동':
+      case 'Activity':
         return props.theme.colors.yellow;
-      case '공부':
+      case 'Study':
         return props.theme.colors.pink;
       default:
         return props.theme.colors.backgroundBase;

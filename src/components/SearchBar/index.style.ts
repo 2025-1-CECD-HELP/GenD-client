@@ -24,6 +24,7 @@ export const SearchInput = styled.TextInput`
   flex: 1;
   height: 48px;
   ${({theme}) => theme.fonts.text2};
+  color: ${props => props.theme.colors.textPrimary};
   padding: 8px;
 `;
 

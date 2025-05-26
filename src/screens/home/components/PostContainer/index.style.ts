@@ -1,25 +1,33 @@
 import styled from '@emotion/native';
+import {ScrollView} from 'react-native';
 
 export const Container = styled.View<{minHeight: number}>`
-  display: flex;
-  flex-direction: column;
-  padding: 30px;
-  border-radius: 30px 30px 0 0;
+  width: 100%;
+  min-height: ${({minHeight}) => minHeight}px;
   background-color: ${({theme}) => theme.colors.background};
-  gap: 16px;
-  min-height: ${({minHeight}) => minHeight};
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  padding-horizontal: 20px;
+  padding-top: 20px;
 `;
 
 export const PostList = styled.ScrollView<{maxHeight: number}>`
-  padding: 10px;
-  max-height: ${({maxHeight}) => maxHeight};
+  max-height: ${({maxHeight}) => maxHeight}px;
 `;
 
 export const PostCategoryList = styled.View`
-  display: flex;
+  width: 100%;
+  margin-bottom: 20px;
+  margin-top: 10px;
+`;
+
+export const PostCategoryScrollView = styled(ScrollView)`
+  width: 100%;
+`;
+
+export const PostCategoryListContent = styled.View`
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
   gap: 10px;
 `;
 
@@ -40,4 +48,18 @@ export const Header = styled.View`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+`;
+
+export const EmptyPostList = styled.View`
+  display: flex;
+  width: 100%;
+  height: 50%;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+`;
+
+export const EmptyPostListText = styled.Text`
+  ${({theme}) => theme.fonts.title4};
+  color: ${({theme}) => theme.colors.textDisabled};
 `;

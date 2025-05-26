@@ -6,6 +6,7 @@ import {
   SubmitLabel,
   SubmitDropdown,
 } from './index.style';
+import {useRecord} from '../../hooks/useRecord';
 
 export const RecordingSubmitForm = ({
   initialTitle = '',
@@ -20,9 +21,9 @@ export const RecordingSubmitForm = ({
 }) => {
   const [title, setTitle] = useState(initialTitle);
   const [folder, setFolder] = useState(initialFolder);
-  const [dropdown, setDropdown] = useState(initialDropdown);
+  const [dropdown, _setDropdown] = useState(initialDropdown);
+  const {directoryList} = useRecord();
 
-  // 드롭다운은 실제로는 picker/modal 등으로 구현
   return (
     <SubmitFormContainer>
       <SubmitInput
@@ -36,7 +37,17 @@ export const RecordingSubmitForm = ({
       <SubmitRow>
         <SubmitLabel>폴더</SubmitLabel>
         <SubmitDropdown>
-          <SubmitLabel>{dropdown || '2차 회의 자료'}</SubmitLabel>
+          {directoryList?.directoryList.map(dir => (
+            <SubmitLabel
+              key={dir.dirId}
+              onPress={() => {
+                setFolder(dir.dirName);
+                onChange?.({title, folder: dir.dirId.toString(), dropdown});
+              }}
+              selected={folder === dir.dirId.toString()}>
+              {dir.dirName}
+            </SubmitLabel>
+          ))}
         </SubmitDropdown>
       </SubmitRow>
     </SubmitFormContainer>

@@ -19,7 +19,9 @@ import {
 import {Header} from '@/components/Header';
 import {RecordingScreen} from '@/screens/recording';
 import {InitWorkspaceScreen} from '@/screens/init-workspace';
-import {WorkspaceProvider} from '@/contexts/workspace/WorkspaceContenxt';
+import SecretaryScreen from '@/screens/secretary';
+import {ChatProvider} from '@/screens/secretary/contexts/ChatContext';
+import {useWorkspaceInit} from '@/hooks/useWorkspace';
 
 const Stack = createNativeStackNavigator<TRouteParams>();
 const Tab = createBottomTabNavigator<TRouteParams>();
@@ -32,36 +34,39 @@ const Tab = createBottomTabNavigator<TRouteParams>();
 export default function AppNavigator() {
   return (
     <NavigationContainer>
-      <WorkspaceProvider>
-        {/* 렌딩 페이지의 Depth 가 있을 경우 초기 라우트를 설정합니다. */}
-        <Stack.Navigator
-          initialRouteName="LANDING"
-          screenOptions={{headerShown: false}}>
-          <Stack.Screen name="LANDING" component={TabNavigator} />
-          <Stack.Screen
-            name="WRITE"
-            component={WriteScreen}
-            options={{headerShown: true, header: () => <Header />}}
-          />
-          <Stack.Screen
-            name="POST_DETAIL"
-            component={PostDetailScreen}
-            options={{headerShown: true, header: () => <Header />}}
-          />
-          <Stack.Screen name="RECORDING" component={RecordingNavigator} />
-          <Stack.Screen name="MEMBER" component={MemberNavigator} />
-          <Stack.Screen
-            name="INIT_WORKSPACE"
-            component={WorkspaceNavigator}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="LOGIN"
-            component={LoginNavigator}
-            options={{headerShown: false}}
-          />
-        </Stack.Navigator>
-      </WorkspaceProvider>
+      {/* 렌딩 페이지의 Depth 가 있을 경우 초기 라우트를 설정합니다. */}
+      <Stack.Navigator
+        initialRouteName="INIT_WORKSPACE"
+        screenOptions={{headerShown: false}}>
+        <Stack.Screen name="LANDING" component={TabNavigator} />
+        <Stack.Screen
+          name="WRITE"
+          component={WriteScreen}
+          options={{headerShown: true, header: () => <Header />}}
+        />
+        <Stack.Screen
+          name="POST_DETAIL"
+          component={PostDetailScreen}
+          options={{headerShown: true, header: () => <Header />}}
+        />
+        <Stack.Screen name="RECORDING" component={RecordingNavigator} />
+        <Stack.Screen name="MEMBER" component={MemberNavigator} />
+        <Stack.Screen
+          name="INIT_WORKSPACE"
+          component={WorkspaceNavigator}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="LOGIN"
+          component={LoginNavigator}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="SECRETARY"
+          component={SecretaryNavigator}
+          options={{headerShown: true, header: () => <Header />}}
+        />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
@@ -127,6 +132,7 @@ function MemberNavigator() {
  * @author 홍규진
  */
 function WorkspaceNavigator() {
+  useWorkspaceInit(true);
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="INIT_WORKSPACE" component={InitWorkspaceScreen} />
@@ -144,6 +150,26 @@ function LoginNavigator() {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="LOGIN" component={LoginScreen} />
+    </Stack.Navigator>
+  );
+}
+
+/**
+ * 비서 페이지의 네비게이터입니다.
+ * 비서 페이지는 비서 페이지를 조회합니다.
+ * @author 홍규진
+ */
+function SecretaryNavigator() {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen
+        name="SECRETARY"
+        component={() => (
+          <ChatProvider>
+            <SecretaryScreen />
+          </ChatProvider>
+        )}
+      />
     </Stack.Navigator>
   );
 }

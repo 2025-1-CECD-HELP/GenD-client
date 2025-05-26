@@ -10,11 +10,14 @@ import {
   AddButton,
   AddButtonText,
 } from './index.style';
-import {TGetWorkspaceListResponse} from '@/services/workspace/types';
+import {
+  TGetWorkspaceListResponse,
+  TWorkspace,
+} from '@/services/workspace/types';
 
 interface WorkspaceBottomSheetProps {
   workspaceList: TGetWorkspaceListResponse;
-  onSelect: (id: string) => void;
+  onSelect: (workspace: TWorkspace) => void;
   onAdd: () => void;
 }
 
@@ -27,9 +30,7 @@ export const WorkspaceBottomSheet: React.FC<WorkspaceBottomSheetProps> = ({
     <Container>
       <Title>워크스페이스 목록</Title>
       {workspaceList.workspaceList.map(ws => (
-        <WorkspaceItem
-          key={ws.workspaceId}
-          onPress={() => onSelect(ws.workspaceId)}>
+        <WorkspaceItem key={ws.workspaceId} onPress={() => onSelect(ws)}>
           <TitleRow>
             <WorkspaceTitle>{ws.workspaceName}</WorkspaceTitle>
             <GoText>바로가기 &gt;</GoText>

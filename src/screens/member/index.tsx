@@ -11,13 +11,19 @@ import {MemberProfile} from '@/components/MemberProfile';
 import {SearchBar} from '@/components/SearchBar';
 import {useMemberListQuery} from './hooks/useMemberListQuery';
 import {RefreshControl} from 'react-native';
-import {useWorkspace} from '@/contexts/workspace/WorkspaceContenxt';
+import {useWorkspace} from '@hooks/useWorkspace';
 import {PlusIcon} from '@/assets/images/svg/common';
 import {useTheme} from '@/contexts/theme/ThemeContext';
 import {useModal} from '@/contexts/modal/ModalContext';
 import {AddMemberModal} from './components/AddMemberModal';
 import CommonModal from '@/components/CommonModal';
 import {useAddMemberMutation} from './hooks/useMemberMutation';
+
+/**
+ * 멤버 리스트 화면입니다.
+ * 멤버 추가, 검색, 새로고침 기능을 제공합니다.
+ * @author 홍규진
+ */
 
 export const MemberScreen = () => {
   const theme = useTheme();
@@ -35,6 +41,7 @@ export const MemberScreen = () => {
     await refetchMemberList();
     setRefreshing(false);
   }, [refetchMemberList]);
+
   const filtered =
     search === ''
       ? memberList

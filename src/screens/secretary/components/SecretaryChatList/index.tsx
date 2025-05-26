@@ -1,5 +1,5 @@
 import React, {useRef, useEffect} from 'react';
-import {FlatList} from 'react-native';
+import {FlatList, Linking} from 'react-native';
 import {
   ChatListContainer,
   DateDivider,
@@ -10,10 +10,16 @@ import {
   AvatarWrapper,
   BubbleWrapper,
   MessageText,
+  FileItem,
+  FileName,
+  RowContainer,
+  ColumnContainer,
 } from './index.style';
 import {useChat} from '../../contexts/ChatContext';
 import {formatTime} from '../../utils/formatTime';
-
+import {TFile} from '@/services/secretary/types';
+import FileDownloadIcon from '@/assets/images/svg/chatting/FileDownload.svg';
+import {useThemeColors} from '@/contexts/theme/ThemeContext';
 const AI_AVATAR = require('@/assets/images/png/secretary/avartar.png');
 
 /**
@@ -27,7 +33,7 @@ const AI_AVATAR = require('@/assets/images/png/secretary/avartar.png');
 export const SecretaryChatList = () => {
   const {messages, isPending} = useChat();
   const flatListRef = useRef<FlatList>(null);
-
+  const {textSecondary} = useThemeColors();
   useEffect(() => {
     if (flatListRef.current && messages.length > 0) {
       const lastMsg = messages[messages.length - 1];
@@ -65,12 +71,28 @@ export const SecretaryChatList = () => {
                     <TimeText isUser={isUser}>{item.time}</TimeText>
                   </>
                 ) : (
-                  <>
-                    <Bubble isUser={isUser}>
-                      <MessageText isUser={isUser}>{item.text}</MessageText>
-                    </Bubble>
-                    <TimeText isUser={isUser}>{item.time}</TimeText>
-                  </>
+                  <ColumnContainer>
+                    <RowContainer>
+                      <Bubble isUser={isUser}>
+                        <MessageText isUser={isUser}>{item.text}</MessageText>
+                      </Bubble>
+                      <TimeText isUser={isUser}>{item.time}</TimeText>
+                    </RowContainer>
+                    {item.fileList?.map((file: TFile) => (
+                      <FileItem
+                        key={file.fileUrl}
+                        onPress={() => {
+                          Linking.openURL(file.fileUrl);
+                        }}>
+                        <FileName>{`출처 : ${file.fileName}`}</FileName>
+                        <FileDownloadIcon
+                          width={12}
+                          height={12}
+                          fill={textSecondary}
+                        />
+                      </FileItem>
+                    ))}
+                  </ColumnContainer>
                 )}
               </BubbleWrapper>
             </MessageRow>

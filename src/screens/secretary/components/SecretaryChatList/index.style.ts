@@ -46,6 +46,14 @@ export const MessageText = styled.Text<{isUser: boolean}>`
     isUser ? theme.colors.white : theme.colors.textSecondary};
   ${({theme}) => theme.fonts.text2};
 `;
+export const RowContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+export const ColumnContainer = styled.View`
+  flex-direction: column;
+  align-items: flex-start;
+`;
 
 export const Avatar = styled.Image`
   width: 40px;
@@ -59,4 +67,24 @@ export const TimeText = styled.Text<{isUser: boolean}>`
   ${({theme}) => theme.fonts.text3};
   color: ${({theme}) => theme.colors.textDisabled};
   text-align: right;
+`;
+
+export const FileItem = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+  margin-top: 4px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background-color: ${({theme}) => theme.colors.blue};
+`;
+
+export const FileDownloadIcon = styled.Image`
+  width: 16px;
+  height: 16px;
+`;
+
+export const FileName = styled.Text`
+  color: ${({theme}) => theme.colors.white};
+  ${({theme}) => theme.fonts.text3};
+  margin-right: 8px;
 `;

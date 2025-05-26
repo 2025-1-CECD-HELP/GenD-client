@@ -1,6 +1,7 @@
 import styled from '@emotion/native';
+import Markdown from 'react-native-markdown-display';
 
-export const Container = styled.View`
+export const Container = styled.TouchableOpacity`
   width: 100%;
   padding: 20px;
   border-radius: 12px;
@@ -28,10 +29,16 @@ export const PostTitle = styled.Text`
   color: ${({theme}) => theme.colors.textPrimary};
 `;
 
-export const PostContent = styled.Text`
-  ${({theme}) => theme.fonts.text4};
+export const PostContent = styled.View`
+  flex: 1;
+  margin-left: 12px;
+`;
+
+export const StyledMarkdown = styled(Markdown)`
+  font-size: 12px;
+  line-height: 16px;
+  font-family: ${({theme}) => theme.fonts.text4};
   color: ${({theme}) => theme.colors.textSecondary};
-  flex-shrink: 1;
 `;
 
 export const Writer = styled.Text`

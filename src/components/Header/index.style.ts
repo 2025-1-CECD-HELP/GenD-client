@@ -68,28 +68,29 @@ export const IconWrapper = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
 `;
-
+export const ThumbnailImage = styled.Image`
+  width: 21px;
+  height: 21px;
+  border-radius: 100px;
+`;
 // 첫 번째 아이콘 (맨 뒤)
 export const IconOne = styled(IconWrapper)`
   z-index: 1;
-  transform: translateX(-8px);
-  background-color: ${({theme}) => theme.colors.backgroundBase};
+  transform: translateX(-4px);
+
   border-radius: 12px;
 `;
 
 // 두 번째 아이콘 (중간)
 export const IconTwo = styled(IconWrapper)`
   z-index: 2;
-  background-color: ${({theme}) => theme.colors.backgroundBase};
   border-radius: 12px;
 `;
 
 // 세 번째 아이콘 (맨 앞)
 export const IconThree = styled(IconWrapper)`
-  z-index: 3;
-  transform: translateX(8px);
   background-color: ${({theme}) => theme.colors.blue};
-
-  border-color: ${({theme}) => theme.colors.background};
+  z-index: 3;
+  transform: translateX(4px);
   border-radius: 12px;
 `;

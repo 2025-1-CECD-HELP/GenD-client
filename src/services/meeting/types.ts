@@ -16,6 +16,7 @@ export type TPostSubmitRecordRequest = {
  * @author 홍규진
  */
 export type TPostSubmitRecordResponse = {
+  templateId: string;
   templateContent: TTemplateContent[];
 };
 
@@ -33,5 +34,6 @@ export type TTemplateContent = {
  * @author 홍규진
  */
 export type TPostFinalTemplateContent = {
+  templateId: string;
   templateContent: TTemplateContent[];
 };

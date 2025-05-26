@@ -41,11 +41,10 @@ export async function updateMember(
   workspaceId: string,
   member: TUpdateMemberRequest,
 ) {
-  const response = await privateServerInstance.put<TGetResponse<void>>(
+  await privateServerInstance.patch<TGetResponse<void>>(
     `/api/v1/members/${workspaceId}/${member.memberId}`,
-    member,
+    {isAdmin: member.memberRole === 'eAdmin'},
   );
-  return response.data.data;
 }
 
 /**

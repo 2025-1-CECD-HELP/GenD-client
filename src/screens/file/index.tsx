@@ -44,7 +44,7 @@ export const FileScreen: React.FC = () => {
                 onConfirm={inputValue => {
                   addFileMutation({
                     workspaceId: workspaceId!,
-                    parentId: 1,
+                    parentId: parseInt(rootDirId, 10),
                     directoryName: inputValue!,
                   });
                 }}

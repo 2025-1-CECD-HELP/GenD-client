@@ -13,4 +13,6 @@ export type TPostScheduleRequest = Omit<
 /**
  * 일정 조회 응답 타입
  */
-export type TGetScheduleResponse = Schedule[];
+export type TGetScheduleResponse = {
+  scheduleList: Schedule[];
+};

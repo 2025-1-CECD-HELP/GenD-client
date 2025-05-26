@@ -5,6 +5,12 @@ import {useModal} from '@/contexts/modal/ModalContext';
 import CommonModal from '@/components/CommonModal';
 import {useCreateWorkspaceMutation} from './useCreateWorkspaceMutation';
 
+/**
+ * 워크스페이스 생성 훅입니다.
+ * 워크스페이스 생성 화면에 필요한 상태와 함수를 제공합니다.
+ * 워크스페이스 생성 뮤테이션을 호출합니다.
+ * @author 홍규진
+ */
 export function useCreateWorkspace() {
   const [name, setName] = useState('');
   const [desc, setDesc] = useState('');
