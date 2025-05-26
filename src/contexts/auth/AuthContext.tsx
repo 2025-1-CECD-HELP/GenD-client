@@ -39,7 +39,10 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
 
   const signOut = async () => {
     try {
-      await EncryptedStorage.removeItem('accessToken');
+      const token = await EncryptedStorage.getItem('accessToken');
+      if (token) {
+        await EncryptedStorage.removeItem('accessToken');
+      }
       setIsSignedIn(false);
     } catch (error) {
       console.error('로그아웃 실패:', error);
