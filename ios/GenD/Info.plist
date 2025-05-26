@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleIconName</key>
+	<string>GenD</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -42,7 +44,6 @@
 		<string>storykompassauth</string>
 		<string>kakaolink</string>
 	</array>
-
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
@@ -79,5 +80,8 @@
 	<string>이 앱은 음성 인식을 위해 마이크를 사용합니다.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>이 앱은 음성 인식을 위해 사용자의 음성을 처리합니다.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>사진 라이브러리에 접근하여 사용자가 선택한 이미지를 앱에서 사용하기 위해 권한이 필요합니다.</string>
+
 </dict>
 </plist>
