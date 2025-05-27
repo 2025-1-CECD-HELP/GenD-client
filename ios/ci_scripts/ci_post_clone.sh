@@ -3,59 +3,68 @@
 set -e
 set -x
 
-echo "=========================================="
-echo "CI_POST_CLONE_SCRIPT 시작"
-echo "현재 디렉토리: $(pwd)"
-echo "=========================================="
+echo "🚀 =========================================="
+echo "🚀 CI_POST_CLONE_SCRIPT 시작"
+echo "🚀 현재 디렉토리: $(pwd)"
+echo "🚀 =========================================="
 
-# 프로젝트 루트로 이동 (스크립트가 ios/ci_scripts에서 실행되므로)
+# 📦 캐시 디렉토리 설정
+PODS_CACHE_DIR="$HOME/Library/Caches/CocoaPods"
+YARN_CACHE_DIR="$HOME/.yarn-cache"
+HOMEBREW_CACHE_DIR="$HOME/Library/Caches/Homebrew"
+
+# 📁 캐시 디렉토리 생성
+mkdir -p "$PODS_CACHE_DIR"
+mkdir -p "$YARN_CACHE_DIR"
+mkdir -p "$HOMEBREW_CACHE_DIR"
+
+# 🍺 Homebrew 캐시 설정
+export HOMEBREW_CACHE="$HOMEBREW_CACHE_DIR"
+
+# 📂 프로젝트 루트로 이동
 cd ../..
+echo "📂 프로젝트 루트로 이동: $(pwd)"
 
-echo "프로젝트 루트로 이동: $(pwd)"
-
-# Homebrew 설치 확인 및 설치
+# 🍺 Homebrew 설치 확인 및 설치
 if ! command -v brew &> /dev/null; then
-    echo "Homebrew가 설치되어 있지 않습니다. 설치를 시작합니다..."
-    # Xcode Cloud에서는 보통 이미 설치되어 있음
+    echo "🍺 Homebrew가 설치되어 있지 않습니다. 설치를 시작합니다..."
 else
-    echo "Homebrew 버전: $(brew --version)"
+    echo "🍺 Homebrew 버전: $(brew --version)"
 fi
 
-# CocoaPods 설치 확인 및 설치
+# 📦 CocoaPods 설치 확인 및 설치
 if ! command -v pod &> /dev/null; then
-    echo "CocoaPods가 설치되어 있지 않습니다. 설치를 시작합니다..."
+    echo "📦 CocoaPods가 설치되어 있지 않습니다. 설치를 시작합니다..."
     brew install cocoapods
 else
-    echo "CocoaPods가 이미 설치되어 있습니다: $(pod --version)"
+    echo "📦 CocoaPods가 이미 설치되어 있습니다: $(pod --version)"
 fi
 
-# Node.js 설치 확인 및 설치
+# ⚡️ Node.js 설치 확인 및 설치
 if ! command -v node &> /dev/null; then
-    echo "Node.js가 설치되어 있지 않습니다. 설치를 시작합니다..."
+    echo "⚡️ Node.js가 설치되어 있지 않습니다. 설치를 시작합니다..."
     brew install node
 else
-    echo "Node.js가 이미 설치되어 있습니다: $(node --version)"
+    echo "⚡️ Node.js가 이미 설치되어 있습니다: $(node --version)"
 fi
 
-# yarn 설치 확인 및 설치
+# 🧶 yarn 설치 확인 및 설치
 if ! command -v yarn &> /dev/null; then
-    echo "yarn이 설치되어 있지 않습니다. 설치를 시작합니다..."
+    echo "🧶 yarn이 설치되어 있지 않습니다. 설치를 시작합니다..."
     brew install yarn
 else
-    echo "yarn이 이미 설치되어 있습니다: $(yarn --version)"
+    echo "🧶 yarn이 이미 설치되어 있습니다: $(yarn --version)"
 fi
 
-# yarn을 사용하여 Node.js 의존성 설치
-echo "===== Running yarn install ====="
-yarn install --frozen-lockfile
+# 📦 yarn을 사용하여 Node.js 의존성 설치 (캐시 활용)
+echo "📦 ===== Running yarn install ====="
+yarn install --frozen-lockfile --cache-folder "$YARN_CACHE_DIR"
 
-
-
-# Storybook 비활성화를 위한 임시 Metro 설정 생성
-echo "===== Storybook 비활성화 Metro 설정 생성 ====="
+# 📝 Storybook 비활성화를 위한 임시 Metro 설정 생성
+echo "📝 ===== Storybook 비활성화 Metro 설정 생성 ====="
 cp metro.config.js metro.config.js.backup
 
-# Storybook 없는 Metro 설정으로 임시 교체
+# 📝 Storybook 없는 Metro 설정으로 임시 교체
 cat > metro.config.js << 'EOF'
 const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
 
@@ -78,9 +87,8 @@ const projectConfig = {
 module.exports = mergeConfig(defaultConfig, projectConfig);
 EOF
 
-
-# React Native 번들 생성 (main.jsbundle)
-echo "===== React Native 번들 생성 ====="
+# 📦 React Native 번들 생성 (main.jsbundle)
+echo "📦 ===== React Native 번들 생성 ====="
 npx react-native bundle \
   --entry-file='index.js' \
   --bundle-output='./ios/main.jsbundle' \
@@ -88,21 +96,20 @@ npx react-native bundle \
   --platform='ios' \
   --assets-dest='./ios'
 
-echo "main.jsbundle 생성 완료: $(ls -la ios/main.jsbundle)"
+echo "📦 main.jsbundle 생성 완료: $(ls -la ios/main.jsbundle)"
 
-
-# iOS 디렉토리로 이동
-echo "===== iOS 디렉토리로 이동 ====="
+# 📂 iOS 디렉토리로 이동
+echo "📂 ===== iOS 디렉토리로 이동 ====="
 cd ios
 
-# .xcode.env 파일 생성
+# ⚙️ .xcode.env 파일 생성
 echo export NODE_BINARY=$(command -v node) > .xcode.env
-echo ".xcode.env 파일 생성 완료: $(cat .xcode.env)"
+echo "⚙️ .xcode.env 파일 생성 완료: $(cat .xcode.env)"
 
-# GoogleService-Info.plist 파일 생성
-echo "환경변수 참조 GoogleService-Info.plist file 생성시작"
+# 🔑 GoogleService-Info.plist 파일 생성
+echo "🔑 환경변수 참조 GoogleService-Info.plist file 생성시작"
 
-# Boolean 값 변환
+# 🔄 Boolean 값 변환
 convert_bool() {
     if [ "$1" == "true" ]; then
         echo "<true/>"
@@ -148,13 +155,14 @@ cat <<EOF > GoogleService-Info.plist
 </plist>
 EOF
 
-echo "환경변수 참조 GoogleService-Info.plist file 생성완료"
-# CocoaPods 의존성 설치
-echo "===== Running pod install ====="
-pod install --repo-update
+echo "🔑 환경변수 참조 GoogleService-Info.plist file 생성완료"
 
-echo "=========================================="
-echo "CI_POST_CLONE_SCRIPT 완료"
-echo "=========================================="
+# 📦 CocoaPods 의존성 설치 (캐시 활용)
+echo "📦 ===== Running pod install ====="
+pod install --repo-update --cache-root="$PODS_CACHE_DIR"
+
+echo "✅ =========================================="
+echo "✅ CI_POST_CLONE_SCRIPT 완료"
+echo "✅ =========================================="
 
 exit 0
