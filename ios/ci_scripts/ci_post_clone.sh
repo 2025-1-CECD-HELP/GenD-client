@@ -111,7 +111,7 @@ convert_bool() {
     fi
 }
 
-cat <<EOF > "/Volumes/workspace/repository/GenD/GoogleService-Info.plist"
+cat <<EOF > GoogleService-Info.plist
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -133,20 +133,21 @@ cat <<EOF > "/Volumes/workspace/repository/GenD/GoogleService-Info.plist"
     <key>STORAGE_BUCKET</key>
     <string>${STORAGE_BUCKET}</string>
     <key>IS_ADS_ENABLED</key>
-    `convert_bool ${IS_ADS_ENABLED}`
+    $(convert_bool ${IS_ADS_ENABLED})
     <key>IS_ANALYTICS_ENABLED</key>
-    `convert_bool ${IS_ANALYTICS_ENABLED}`
+    $(convert_bool ${IS_ANALYTICS_ENABLED})
     <key>IS_APPINVITE_ENABLED</key>
-    `convert_bool ${IS_APPINVITE_ENABLED}`
+    $(convert_bool ${IS_APPINVITE_ENABLED})
     <key>IS_GCM_ENABLED</key>
-    `convert_bool ${IS_GCM_ENABLED}`
+    $(convert_bool ${IS_GCM_ENABLED})
     <key>IS_SIGNIN_ENABLED</key>
-    `convert_bool ${IS_SIGNIN_ENABLED}`
+    $(convert_bool ${IS_SIGNIN_ENABLED})
     <key>GOOGLE_APP_ID</key>
     <string>${GOOGLE_APP_ID}</string>
 </dict>
 </plist>
 EOF
+
 echo "환경변수 참조 GoogleService-Info.plist file 생성완료"
 # CocoaPods 의존성 설치
 echo "===== Running pod install ====="
