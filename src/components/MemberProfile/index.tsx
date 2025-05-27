@@ -20,7 +20,8 @@ import {
   useDeleteMemberMutation,
   useModifyMemberRoleMutation,
 } from '@/screens/member/hooks/useMemberMutation';
-import {useWorkspace} from '@/hooks/useWorkspace';
+import {useAtom} from 'jotai';
+import {workspaceState} from '@/atoms/workspace';
 
 /**
  * 멤버 페이지 혹은 멤버 추가 모달에 보여지는 멤버 프로필 컴포넌트입니다.
@@ -53,7 +54,7 @@ export const MemberProfile: React.FC<MemberProfileProps> = ({
   const {setIsOpen, setModalContent} = useModal();
   const {mutateAsync: deleteMember} = useDeleteMemberMutation();
   const {mutateAsync: modifyMemberRole} = useModifyMemberRoleMutation();
-  const {workspaceId} = useWorkspace();
+  const [workspace] = useAtom(workspaceState);
 
   const handleSettingPress = () => {
     setModalContent(
@@ -68,7 +69,7 @@ export const MemberProfile: React.FC<MemberProfileProps> = ({
             memberImage={memberImage}
             onAdminChange={setIsAdmin}
             onDelete={() => {
-              deleteMember({workspaceId: workspaceId!, memberId});
+              deleteMember({workspaceId: workspace.workspaceId, memberId});
             }}
           />
         }

@@ -1,5 +1,5 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
-import {useWorkspace} from '@hooks/useWorkspace';
+
 import {
   deletePostMutationKey,
   patchPostPinMutationKey,
@@ -7,6 +7,8 @@ import {
 import {TDeletePostRequest, TUpdatePostPinRequest} from '@/services/post/types';
 import {ROUTE_NAMES} from '@/constants/routes';
 import useTypeSafeNavigation from '@hooks/useTypeSafeNavigaion';
+import {useAtom} from 'jotai';
+import {workspaceState} from '@/atoms/workspace';
 
 /**
  * 게시글 핀 박기 뮤테이션 훅입니다.
@@ -17,15 +19,16 @@ import useTypeSafeNavigation from '@hooks/useTypeSafeNavigaion';
  */
 export const usePatchPostPinMutation = () => {
   const queryClient = useQueryClient();
-  const {workspaceId} = useWorkspace();
+  const [workspace] = useAtom(workspaceState);
   const {mutateAsync: patchPostPinMutation} = useMutation({
-    mutationKey: patchPostPinMutationKey(workspaceId!).mutationKey,
+    mutationKey: patchPostPinMutationKey(workspace.workspaceId).mutationKey,
     mutationFn: (request: TUpdatePostPinRequest) =>
-      patchPostPinMutationKey(workspaceId!).mutationFn(request),
+      patchPostPinMutationKey(workspace.workspaceId).mutationFn(request),
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: patchPostPinMutationKey(workspaceId!).mutationSuccessKey,
+        queryKey: patchPostPinMutationKey(workspace.workspaceId)
+          .mutationSuccessKey,
       });
     },
   });
@@ -40,15 +43,16 @@ export const usePatchPostPinMutation = () => {
  */
 export const useDeletePostMutation = () => {
   const queryClient = useQueryClient();
-  const {workspaceId} = useWorkspace();
+  const [workspace] = useAtom(workspaceState);
   const navigation = useTypeSafeNavigation();
   const {mutateAsync: deletePostMutation} = useMutation({
-    mutationKey: deletePostMutationKey(workspaceId!).mutationKey,
+    mutationKey: deletePostMutationKey(workspace.workspaceId).mutationKey,
     mutationFn: (request: TDeletePostRequest) =>
-      deletePostMutationKey(workspaceId!).mutationFn(request),
+      deletePostMutationKey(workspace.workspaceId).mutationFn(request),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: deletePostMutationKey(workspaceId!).mutationSuccessKey,
+        queryKey: deletePostMutationKey(workspace.workspaceId)
+          .mutationSuccessKey,
       });
       navigation.navigate(ROUTE_NAMES.LANDING, {});
     },

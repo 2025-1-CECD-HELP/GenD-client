@@ -7,6 +7,9 @@ import {setAccessToken, setRefreshToken} from '@/utils/auth';
 import {replace} from '@/navigation/navigator';
 import {ROUTE_NAMES} from '@/constants/routes';
 
+// 401 에러 처리 상태를 추적하기 위한 플래그
+let isHandling401 = false;
+
 /**
  * 인증이 필요한 API 인터셉터 적용
  * @param instance 적용할 axios 인스턴스
@@ -23,10 +26,10 @@ export const applyPrivateInterceptors = (instance: AxiosInstance) => {
       config: CustomAxiosRequestConfig,
     ): Promise<CustomAxiosRequestConfig> => {
       const accessToken = await getAccessToken();
-      // console.debug('accessToken', accessToken);
       if (accessToken && config.headers) {
         config.headers.Authorization = `Bearer ${accessToken}`;
       }
+      console.info('[interceptor] accessToken', accessToken);
       logRequest(config);
       return config;
     },
@@ -56,27 +59,23 @@ export const applyPrivateInterceptors = (instance: AxiosInstance) => {
       error.message = errorInfo.message;
 
       // 401 에러는 ErrorBoundary로 가지 않고 여기서 직접 처리
-      if (error.response?.status === 401) {
-        // 전역 상태 업데이트나 이벤트 발생
-        // ErrorBoundary를 거치지 않고 직접 처리
-
-        // 토큰 정리 및 로그인 페이지 이동을 여기서 처리
+      if (error.response?.status === 401 && !isHandling401) {
         try {
+          isHandling401 = true;
+          console.log('401 에러 처리 시작');
+
+          // 토큰 정리
           await setAccessToken('');
           await setRefreshToken('');
-          // 전역 네비게이션 사용
-          replace(ROUTE_NAMES.LOGIN, {});
 
-          // 에러를 throw하지 않고 빈 응답 반환하거나 특별한 응답 반환
-          return Promise.resolve({
-            data: null,
-            status: 401,
-            statusText: 'Unauthorized - Handled',
-            headers: {},
-            config: originalRequest,
-          } as AxiosResponse);
-        } catch (authError) {
-          console.error('401 에러 처리 실패:', authError);
+          replace(ROUTE_NAMES.LOGIN, {});
+        } catch (e) {
+          console.error('401 에러 처리 중 오류:', e);
+        } finally {
+          // 3초 후에 플래그 초기화 (연속된 401 에러 처리를 방지)
+          setTimeout(() => {
+            isHandling401 = false;
+          }, 3000);
         }
       }
 

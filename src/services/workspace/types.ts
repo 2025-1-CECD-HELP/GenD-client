@@ -26,9 +26,25 @@ export type TGetWorkspaceListResponse = {
  */
 export type TGetWorkspaceInfoResponse = TWorkspace;
 
+/**
+ * 워크스페이스 생성 요청 타입입니다.
+ * @author 홍규진
+ */
 export type TCreateWorkspaceRequest = {
   imageUri?: string;
   workspaceName: string;
   workspaceDescription: string;
   inviteEmailList: {email: string}[];
+};
+
+/**
+ * 워크스페이스 수정 요청 타입입니다.
+ * @author 홍규진
+ */
+export type TEditWorkspaceRequest = {
+  workspaceId: string;
+  imageUri?: string;
+  workspaceName?: string;
+  workspaceDescription?: string;
+  inviteEmailList?: {email: string}[];
 };

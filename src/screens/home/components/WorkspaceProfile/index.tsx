@@ -13,6 +13,8 @@ import {MemberIcon, MoreIcon} from '@assets/images/svg/home';
 import {useThemeColors} from '@contexts/theme/ThemeContext';
 import {LogoIcon} from '@assets/images/svg/common';
 import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
+import {useAtom} from 'jotai';
+import {workspaceState} from '@/atoms/workspace';
 /**
  * 홈 화면 상단의 워크스페이스 프로필 컴포넌트입니다.
  * 워크스페이스의 이름, 설명, 이미지를 표시하며,
@@ -36,6 +38,7 @@ export const WorkspaceProfile = ({
 }: WorkspaceProfileProps) => {
   const {textPrimary} = useThemeColors();
   const navigation = useTypeSafeNavigation();
+  const [workspace] = useAtom(workspaceState);
   return (
     <Container onLayout={onLayout}>
       <ButtonContainer>
@@ -45,7 +48,16 @@ export const WorkspaceProfile = ({
           height={21}
           onPress={() => navigation.navigate('MEMBER', {})}
         />
-        <MoreIcon fill={textPrimary} width={21} height={21} />
+        <MoreIcon
+          fill={textPrimary}
+          width={21}
+          height={21}
+          onPress={() => {
+            if (workspace.isAdmin) {
+              navigation.navigate('EDIT_WORKSPACE', {});
+            }
+          }}
+        />
       </ButtonContainer>
       <ProfileContainer>
         <ImageContainer>

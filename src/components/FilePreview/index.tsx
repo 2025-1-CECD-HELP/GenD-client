@@ -17,13 +17,15 @@ import {Shadow} from 'react-native-shadow-2';
 import {useThemeColors} from '@/contexts/theme/ThemeContext';
 import {OptionsBox} from '@/components/OptionsBox';
 import {View} from 'react-native';
-import {useWorkspace} from '@/hooks/useWorkspace';
+
 import {
   useDeleteFileMutation,
   useRenameFileMutation,
 } from '@/screens/file/hooks/uesFileMutation';
 import {useModal} from '@/contexts/modal/ModalContext';
 import {CommonModal} from '../CommonModal';
+import {useAtom} from 'jotai';
+import {workspaceState} from '@/atoms/workspace';
 
 /**
  * 자료 관리 페이지에 사용될 파일 프리뷰 컴포넌트 입니다.
@@ -35,7 +37,8 @@ import {CommonModal} from '../CommonModal';
 
 export const FilePreview = (file: FileData) => {
   const {blue, textDisabled, shadow, red, textPrimary} = useThemeColors();
-  const {workspace: workspaceInfo} = useWorkspace();
+  const [workspace] = useAtom(workspaceState);
+  console.log('workspace', workspace);
   const [isOptionsVisible, setIsOptionsVisible] = useState(false);
   const {mutate: renameFileMutation} = useRenameFileMutation();
   const {mutate: deleteFileMutation} = useDeleteFileMutation();
@@ -50,7 +53,7 @@ export const FilePreview = (file: FileData) => {
 
   const FormatIcon = file.docuementType === 'mp3' ? AudioFormat : DocFormat;
 
-  const MenuIcon = workspaceInfo.isAdmin ? MoreIcon : DownLoadIcon;
+  const MenuIcon = workspace.isAdmin ? MoreIcon : DownLoadIcon;
 
   const handleMenuPress = () => {
     menuRef.current?.measureInWindow((x, y, width, height) => {

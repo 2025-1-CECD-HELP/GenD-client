@@ -1,8 +1,10 @@
 // src/screens/file/hooks/useFile.ts
 import {useState} from 'react';
 // import {data} from '../constants/mockData';
-import {useWorkspace} from '@/hooks/useWorkspace';
+
 import {useFileQuery} from './useFileQuery';
+import {useAtom} from 'jotai';
+import {workspaceState} from '@/atoms/workspace';
 
 // import {useFileQuery} from './useFileQuery';
 /**
@@ -15,8 +17,11 @@ import {useFileQuery} from './useFileQuery';
  */
 export const useFile = () => {
   const [search, setSearch] = useState('');
-  const {workspaceId, rootDirId} = useWorkspace();
-  const {data} = useFileQuery(workspaceId, parseInt(rootDirId, 10));
+  const [workspace] = useAtom(workspaceState);
+  const {data} = useFileQuery(
+    workspace.workspaceId,
+    parseInt(workspace.rootDirId, 10),
+  );
   const filteredFolders = data.directoryList.filter(folder =>
     folder.dirName.includes(search),
   );

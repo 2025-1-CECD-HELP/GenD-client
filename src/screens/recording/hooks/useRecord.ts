@@ -3,8 +3,8 @@ import {useState, useEffect, useRef, useCallback} from 'react';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 import {Platform, PermissionsAndroid} from 'react-native';
 import {useDirectoryListQuery} from './useRecordQuery';
-import {useWorkspace} from '@/hooks/useWorkspace';
-// import {useWorkspace} from '@/contexts/workspace/WorkspaceContenxt';
+import {useAtom} from 'jotai';
+import {workspaceState} from '@/atoms/workspace';
 /**
  * 녹음 기능 관련 훅입니다.
  * @author 홍규진
@@ -17,8 +17,8 @@ export type RecordError = {
 };
 
 export function useRecord() {
-  const {workspaceId} = useWorkspace();
-  const {data: directoryList} = useDirectoryListQuery(workspaceId);
+  const [workspace] = useAtom(workspaceState);
+  const {data: directoryList} = useDirectoryListQuery(workspace.workspaceId);
 
   const [isRecording, setIsRecording] = useState(false);
   const [isPaused, setIsPaused] = useState(false);

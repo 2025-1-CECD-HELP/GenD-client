@@ -1,7 +1,9 @@
 import {DEFAULT_WORKSPACE_ID} from '@/atoms/workspace/types';
 import {categoryListQuery} from '@/constants/queryKeys';
-import {useWorkspace} from '@/hooks/useWorkspace';
+
 import {useQuery} from '@tanstack/react-query';
+import {useAtom} from 'jotai';
+import {workspaceState} from '@/atoms/workspace';
 
 /**
  * 카테고리 목록 조회 훅
@@ -11,11 +13,11 @@ import {useQuery} from '@tanstack/react-query';
  */
 
 export const useCategoryListQuery = () => {
-  const {workspaceId} = useWorkspace();
+  const [workspace] = useAtom(workspaceState);
   const {data, refetch} = useQuery({
-    queryKey: categoryListQuery(workspaceId!).queryKey,
-    queryFn: categoryListQuery(workspaceId!).queryFn,
-    enabled: workspaceId !== DEFAULT_WORKSPACE_ID,
+    queryKey: categoryListQuery(workspace.workspaceId).queryKey,
+    queryFn: categoryListQuery(workspace.workspaceId).queryFn,
+    enabled: workspace.workspaceId !== DEFAULT_WORKSPACE_ID,
   });
 
   return {

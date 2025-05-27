@@ -16,7 +16,7 @@ import {
 } from '@/services/workspace/types';
 
 interface WorkspaceBottomSheetProps {
-  workspaceList: TGetWorkspaceListResponse;
+  workspaceList?: TGetWorkspaceListResponse;
   onSelect: (workspace: TWorkspace) => void;
   onAdd: () => void;
 }
@@ -29,7 +29,7 @@ export const WorkspaceBottomSheet: React.FC<WorkspaceBottomSheetProps> = ({
   return (
     <Container>
       <Title>워크스페이스 목록</Title>
-      {workspaceList.workspaceList.map(ws => (
+      {workspaceList?.workspaceList.map(ws => (
         <WorkspaceItem key={ws.workspaceId} onPress={() => onSelect(ws)}>
           <TitleRow>
             <WorkspaceTitle>{ws.workspaceName}</WorkspaceTitle>

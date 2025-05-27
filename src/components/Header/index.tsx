@@ -63,7 +63,7 @@ export const Header: React.FC = () => {
       </LeftContainer>
       <RightContainer>
         <GDLogoContainer onPress={handleWorkSpacePress}>
-          {workspaceList.length > 0 ? (
+          {workspaceList && workspaceList.length > 0 ? (
             <StackedIconsContainer>
               {workspaceList.length >= 3 && (
                 <IconOne onPress={handleWorkSpacePress}>

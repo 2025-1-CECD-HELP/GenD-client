@@ -13,12 +13,11 @@ import enterWorkspaceImg from '@/assets/images/png/workspace/enter_workspace.png
 import LinearGradient from 'react-native-linear-gradient';
 import {useTheme} from '@/contexts/theme/ThemeContext';
 import {GenDLogoIcon} from '@/assets/images/svg/common';
-import {useWorkspaceBottomSheet, useWorkspaceInit} from '@/hooks/useWorkspace';
 import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
+import {useWorkspaceBottomSheet} from '@/hooks/useWorkspaceBottomSheet';
 
 export const InitWorkspaceScreen = () => {
   const theme = useTheme();
-  useWorkspaceInit(true);
   const {handleOpenBottomSheet} = useWorkspaceBottomSheet();
   const navigation = useTypeSafeNavigation();
 
