@@ -4,6 +4,7 @@ import React_RCTAppDelegate
 import ReactAppDependencyProvider
 import Firebase
 import UserNotifications
+import KakaoSDKAuth
 
 @main
 class AppDelegate: RCTAppDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
@@ -27,22 +28,22 @@ class AppDelegate: RCTAppDelegate, UNUserNotificationCenterDelegate, MessagingDe
     } else {
       // For iOS 9 and below
       let settings: UIUserNotificationSettings =
-        UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+      UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
       application.registerUserNotificationSettings(settings)
     }
     
     application.registerForRemoteNotifications()
-
+    
     self.moduleName = "GenD"
     self.dependencyProvider = RCTAppDependencyProvider()
-
+    
     // You can add your custom initial props in the dictionary below.
     // They will be passed down to the ViewController used by React Native.
     self.initialProps = [:]
-
+    
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
-
+  
   // APNS 토큰을 Firebase에 등록하는 메서드
   override func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
     Messaging.messaging().apnsToken = deviceToken
@@ -59,6 +60,16 @@ class AppDelegate: RCTAppDelegate, UNUserNotificationCenterDelegate, MessagingDe
       userInfo: dataDict
     )
   }
+  
+  // Kakao 카카오톡으로 로그인을 위한 설정 참고 : https://developers.kakao.com/docs/latest/ko/kakaologin/ios
+  override func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+    if (AuthApi.isKakaoTalkLoginUrl(url)) {
+      return AuthController.handleOpenUrl(url: url)
+    }
+    
+    return false
+  }
+
 
   override func sourceURL(for bridge: RCTBridge) -> URL? {
     return self.bundleURL()
