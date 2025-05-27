@@ -50,6 +50,35 @@ echo "===== Running yarn install ====="
 yarn install --frozen-lockfile
 
 
+
+# Storybook 비활성화를 위한 임시 Metro 설정 생성
+echo "===== Storybook 비활성화 Metro 설정 생성 ====="
+cp metro.config.js metro.config.js.backup
+
+# Storybook 없는 Metro 설정으로 임시 교체
+cat > metro.config.js << 'EOF'
+const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
+
+const defaultConfig = getDefaultConfig(__dirname);
+
+const projectConfig = {
+  transformer: {
+    unstable_allowRequireContext: true,
+    babelTransformerPath: require.resolve('react-native-svg-transformer'),
+  },
+  resolver: {
+    sourceExts: [...defaultConfig.resolver.sourceExts, 'cjs', 'mjs', 'svg'],
+    assetExts: defaultConfig.resolver.assetExts.filter(ext => ext !== 'svg'),
+    alias: {
+      '@': require('path').resolve(__dirname, './src'),
+    },
+  },
+};
+
+module.exports = mergeConfig(defaultConfig, projectConfig);
+EOF
+
+
 # React Native 번들 생성 (main.jsbundle)
 echo "===== React Native 번들 생성 ====="
 npx react-native bundle \
