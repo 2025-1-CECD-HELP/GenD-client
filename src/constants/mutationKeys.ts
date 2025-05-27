@@ -1,6 +1,13 @@
-import {TCreateWorkspaceRequest} from '@/services/workspace/types';
-import {memberListQuery, workspaceListQuery} from './queryKeys';
-import {createWorkspace} from '@/services/workspace';
+import {
+  TCreateWorkspaceRequest,
+  TEditWorkspaceRequest,
+} from '@/services/workspace/types';
+import {memberListQuery, workspaceListQuery, workspaceQuery} from './queryKeys';
+import {
+  createWorkspace,
+  deleteWorkspace,
+  editWorkspace,
+} from '@/services/workspace';
 import {TPostSubmitRecordRequest} from '@/services/meeting/types';
 import {submitRecord} from '@/services/meeting';
 import {TPostFinalTemplateContent} from '@/services/meeting/types';
@@ -59,6 +66,33 @@ export const createWorkspaceMutationKey = () => {
     mutationSuccessKey: [...workspaceListQuery().queryKey],
     mutationFn: (workspace: TCreateWorkspaceRequest) =>
       createWorkspace(workspace),
+  };
+};
+
+/**
+ * 워크스페이스 수정 뮤테이션 키
+ * @author 홍규진
+ */
+export const editWorkspaceMutationKey = (workspaceId: string) => {
+  return {
+    mutationKey: ['editWorkspace'],
+    mutationSuccessKey: [
+      ...workspaceQuery(workspaceId).queryKey,
+      ...workspaceListQuery().queryKey,
+    ],
+    mutationFn: (workspace: TEditWorkspaceRequest) => editWorkspace(workspace),
+  };
+};
+
+/**
+ * 워크스페이스 삭제 뮤테이션 키
+ * @author 홍규진
+ */
+export const deleteWorkspaceMutationKey = () => {
+  return {
+    mutationKey: ['deleteWorkspace'],
+    mutationSuccessKey: [...workspaceListQuery().queryKey],
+    mutationFn: (workspaceId: string) => deleteWorkspace(workspaceId),
   };
 };
 
