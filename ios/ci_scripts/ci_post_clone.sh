@@ -12,11 +12,13 @@ echo "🚀 =========================================="
 PODS_CACHE_DIR="$HOME/Library/Caches/CocoaPods"
 YARN_CACHE_DIR="$HOME/.yarn-cache"
 HOMEBREW_CACHE_DIR="$HOME/Library/Caches/Homebrew"
+PODS_BACKUP_DIR="$HOME/Library/Caches/PodsBackup"
 
 # 📁 캐시 디렉토리 생성
 mkdir -p "$PODS_CACHE_DIR"
 mkdir -p "$YARN_CACHE_DIR"
 mkdir -p "$HOMEBREW_CACHE_DIR"
+mkdir -p "$PODS_BACKUP_DIR"
 
 # 🍺 Homebrew 캐시 설정
 export HOMEBREW_CACHE="$HOMEBREW_CACHE_DIR"
@@ -157,9 +159,42 @@ EOF
 
 echo "🔑 환경변수 참조 GoogleService-Info.plist file 생성완료"
 
-# 📦 CocoaPods 의존성 설치 (캐시 활용)
-echo "📦 ===== Running pod install ====="
-pod install --repo-update --cache-root="$PODS_CACHE_DIR"
+# 📦 CocoaPods 캐시 전략 및 설치
+echo "📦 ===== CocoaPods 캐시 전략 시작 ====="
+
+# Podfile.lock 체크섬으로 캐시 키 생성
+if [ -f "Podfile.lock" ]; then
+    PODFILE_CHECKSUM=$(shasum Podfile.lock | cut -d' ' -f1)
+else
+    PODFILE_CHECKSUM="no-lock"
+fi
+
+CACHE_KEY="pods-$PODFILE_CHECKSUM"
+CACHED_PODS_DIR="$PODS_BACKUP_DIR/$CACHE_KEY"
+
+echo "📦 캐시 키: $CACHE_KEY"
+echo "📦 캐시 경로: $CACHED_PODS_DIR"
+
+# 캐시된 Pods 폴더 확인 및 복원
+if [ -d "$CACHED_PODS_DIR/Pods" ]; then
+    echo "📦 기존 캐시 발견! 복원 중..."
+    cp -R "$CACHED_PODS_DIR/Pods" ./
+    echo "📦 캐시 복원 완료, 빠른 검증 실행..."
+    pod install
+else
+    echo "📦 캐시 없음. 새로운 설치 및 캐시 생성..."
+    pod install --repo-update
+    
+    # 설치 완료 후 캐시 저장
+    echo "📦 Pods 폴더 캐시 저장 중..."
+    mkdir -p "$CACHED_PODS_DIR"
+    cp -R ./Pods "$CACHED_PODS_DIR/"
+    echo "📦 캐시 저장 완료: $CACHED_PODS_DIR"
+fi
+
+# 오래된 캐시 정리 (7일 이상된 캐시 삭제)
+echo "📦 오래된 캐시 정리 중..."
+find "$PODS_BACKUP_DIR" -type d -name "pods-*" -mtime +7 -exec rm -rf {} + 2>/dev/null || true
 
 echo "✅ =========================================="
 echo "✅ CI_POST_CLONE_SCRIPT 완료"
