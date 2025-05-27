@@ -9,7 +9,8 @@ import {
   memberUpdateMutationKey,
   memberAddMutationKey,
 } from '@/constants/mutationKeys';
-import {useWorkspace} from '@hooks/useWorkspace';
+import {useAtom} from 'jotai';
+import {workspaceState} from '@/atoms/workspace';
 
 /**
  * 멤버 추가 뮤테이션 훅입니다.
@@ -19,15 +20,19 @@ import {useWorkspace} from '@hooks/useWorkspace';
  * @author 홍규진
  */
 export const useAddMemberMutation = () => {
-  const {workspaceId} = useWorkspace();
+  const [workspace] = useAtom(workspaceState);
   const queryClient = useQueryClient();
   const {mutateAsync} = useMutation({
-    mutationKey: memberAddMutationKey(workspaceId!).mutationKey,
+    mutationKey: memberAddMutationKey(workspace.workspaceId).mutationKey,
     mutationFn: ({workspaceId, email}: {workspaceId: string; email: string}) =>
-      memberAddMutationKey(workspaceId!).mutationFn(workspaceId, email),
+      memberAddMutationKey(workspace.workspaceId).mutationFn(
+        workspaceId,
+        email,
+      ),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: memberAddMutationKey(workspaceId!).mutationSuccessKey,
+        queryKey: memberAddMutationKey(workspace.workspaceId)
+          .mutationSuccessKey,
       });
     },
   });
@@ -44,15 +49,16 @@ export const useAddMemberMutation = () => {
  * @author 홍규진
  */
 export const useModifyMemberRoleMutation = () => {
-  const {workspaceId} = useWorkspace();
+  const [workspace] = useAtom(workspaceState);
   const queryClient = useQueryClient();
   const {mutateAsync} = useMutation({
-    mutationKey: memberUpdateMutationKey(workspaceId!).mutationKey,
+    mutationKey: memberUpdateMutationKey(workspace.workspaceId).mutationKey,
     mutationFn: (member: TUpdateMemberRequest) =>
-      memberUpdateMutationKey(workspaceId!).mutationFn(member),
+      memberUpdateMutationKey(workspace.workspaceId).mutationFn(member),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: memberUpdateMutationKey(workspaceId!).mutationSuccessKey,
+        queryKey: memberUpdateMutationKey(workspace.workspaceId)
+          .mutationSuccessKey,
       });
     },
   });
@@ -70,16 +76,20 @@ export const useModifyMemberRoleMutation = () => {
  * @author 홍규진
  */
 export const useDeleteMemberMutation = () => {
-  const {workspaceId} = useWorkspace();
+  const [workspace] = useAtom(workspaceState);
   const queryClient = useQueryClient();
   const {setIsOpen} = useModal();
   const {mutateAsync} = useMutation({
-    mutationKey: memberDeleteMutationKey(workspaceId!).mutationKey,
+    mutationKey: memberDeleteMutationKey(workspace.workspaceId).mutationKey,
     mutationFn: ({workspaceId, memberId}: TDeleteMemberRequest) =>
-      memberDeleteMutationKey(workspaceId!).mutationFn({workspaceId, memberId}),
+      memberDeleteMutationKey(workspace.workspaceId).mutationFn({
+        workspaceId,
+        memberId,
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: memberDeleteMutationKey(workspaceId!).mutationSuccessKey,
+        queryKey: memberDeleteMutationKey(workspace.workspaceId)
+          .mutationSuccessKey,
       });
       setIsOpen(false);
     },

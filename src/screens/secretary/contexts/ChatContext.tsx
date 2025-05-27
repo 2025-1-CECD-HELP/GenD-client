@@ -2,8 +2,9 @@ import React, {createContext, useContext, useState} from 'react';
 import {ChatMessage} from '../types';
 import {useChattingMutation} from '../hooks/useChattingMutation';
 import {TPostChattingRequest} from '@/services/secretary/types';
-import {useWorkspace} from '@hooks/useWorkspace';
 import {formatTime} from '../utils/formatTime';
+import {useAtom} from 'jotai';
+import {workspaceState} from '@/atoms/workspace';
 
 /**
  * 채팅 메시지를 지역적으로 관리하는 컨텍스트 파일입니다.
@@ -25,7 +26,7 @@ const ChatContext = createContext<ChatContextType | undefined>(undefined);
 export const ChatProvider = ({children}: {children: React.ReactNode}) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const {mutate: sendChatting, isPending} = useChattingMutation();
-  const {workspaceId} = useWorkspace();
+  const [workspace] = useAtom(workspaceState);
   const addMessage = (msg: ChatMessage) => setMessages(prev => [...prev, msg]);
 
   const handleSendChatting = (request: TPostChattingRequest) => {
@@ -37,7 +38,7 @@ export const ChatProvider = ({children}: {children: React.ReactNode}) => {
     });
     sendChatting(
       {
-        workSpaceId: workspaceId!,
+        workSpaceId: workspace.workspaceId,
         request,
       },
       {

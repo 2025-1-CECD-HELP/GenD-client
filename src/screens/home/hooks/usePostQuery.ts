@@ -1,7 +1,8 @@
 import {DEFAULT_WORKSPACE_ID} from '@/atoms/workspace/types';
 import {postQuery} from '@/constants/queryKeys';
-import {useWorkspace} from '@hooks/useWorkspace';
 import {useQuery} from '@tanstack/react-query';
+import {useAtom} from 'jotai';
+import {workspaceState} from '@/atoms/workspace';
 
 /**
  * 게시글 목록 조회 훅
@@ -11,11 +12,11 @@ import {useQuery} from '@tanstack/react-query';
  */
 
 export const usePostQuery = () => {
-  const {workspaceId} = useWorkspace();
+  const [workspace] = useAtom(workspaceState);
   const {data, refetch} = useQuery({
-    queryKey: postQuery(workspaceId!).queryKey,
-    queryFn: postQuery(workspaceId!).queryFn,
-    enabled: workspaceId !== DEFAULT_WORKSPACE_ID,
+    queryKey: postQuery(workspace.workspaceId).queryKey,
+    queryFn: postQuery(workspace.workspaceId).queryFn,
+    enabled: workspace.workspaceId !== DEFAULT_WORKSPACE_ID,
   });
 
   return {

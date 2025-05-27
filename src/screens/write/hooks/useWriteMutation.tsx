@@ -5,7 +5,8 @@ import {Asset} from 'react-native-image-picker';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {useModal} from '@contexts/modal/ModalContext';
 import CommonModal from '@components/CommonModal';
-import {useWorkspace} from '@hooks/useWorkspace';
+import {useAtom} from 'jotai';
+import {workspaceState} from '@/atoms/workspace';
 
 type TWriteMutationVariables = {
   request: TPostWriteRequest;
@@ -22,12 +23,12 @@ export const useWriteMutation = () => {
   const queryClient = useQueryClient();
   const navigation = useTypeSafeNavigation();
   const {setIsOpen, setModalContent} = useModal();
-  const {workspaceId} = useWorkspace();
+  const [workspace] = useAtom(workspaceState);
 
   const mutation = useMutation({
     mutationKey: ['write'],
     mutationFn: ({request, imageFile}: TWriteMutationVariables) => {
-      return createPost(workspaceId!, request, imageFile);
+      return createPost(workspace.workspaceId, request, imageFile);
     },
 
     onSuccess: async () => {

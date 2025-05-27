@@ -13,17 +13,19 @@ import {FilePreview} from '@/components/FilePreview';
 import {FolderData} from '@/components/FolderPreview/index.type';
 import {FileData} from '@/components/FilePreview/index.type';
 import {useFile} from './hooks/useFile';
-import {useWorkspace} from '@/hooks/useWorkspace';
+
 import CommonModal from '@/components/CommonModal';
 import {useAddFileMutation} from './hooks/uesFileMutation';
 import {useModal} from '@/contexts/modal/ModalContext';
+import {useAtom} from 'jotai';
+import {workspaceState} from '@/atoms/workspace';
 
 export const FileScreen: React.FC = () => {
-  const {workspaceId, workspace: workspaceInfo, rootDirId} = useWorkspace();
+  const [workspace] = useAtom(workspaceState);
   const {setIsOpen, setModalContent} = useModal();
   const {mutate: addFileMutation} = useAddFileMutation(
-    workspaceId!,
-    parseInt(rootDirId, 10),
+    workspace.workspaceId,
+    parseInt(workspace.rootDirId, 10),
   );
 
   const {setSearch, mergedList, filteredFolders, filteredFiles} = useFile();
@@ -43,8 +45,8 @@ export const FileScreen: React.FC = () => {
                 inputPlaceholder="폴더 이름을 입력하세요"
                 onConfirm={inputValue => {
                   addFileMutation({
-                    workspaceId: workspaceId!,
-                    parentId: parseInt(rootDirId, 10),
+                    workspaceId: workspace.workspaceId,
+                    parentId: parseInt(workspace.rootDirId, 10),
                     directoryName: inputValue!,
                   });
                 }}
@@ -80,7 +82,7 @@ export const FileScreen: React.FC = () => {
               <ItemWrapper>
                 <FolderPreview
                   folder={item as FolderData}
-                  isAdmin={workspaceInfo.isAdmin}
+                  isAdmin={workspace.isAdmin}
                 />
               </ItemWrapper>
             );

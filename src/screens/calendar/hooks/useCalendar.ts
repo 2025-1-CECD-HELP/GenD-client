@@ -9,7 +9,8 @@ import {getMonth, isSameMonth} from '../utils/formatDate';
 import {TPostScheduleRequest} from '@/services/calendar/types';
 import {createSchedule} from '@/services/calendar';
 import {useCalendarQuery} from './useCalendarQuery';
-import {useWorkspace} from '@/hooks/useWorkspace';
+import {useAtom} from 'jotai';
+import {workspaceState} from '@/atoms/workspace';
 
 /**
  * 캘린더 일정을 필터링하고, 생성하는 훅입니다.
@@ -18,7 +19,7 @@ import {useWorkspace} from '@/hooks/useWorkspace';
  */
 export const useCalendar = () => {
   const {openBottomSheet, closeBottomSheet} = useBottomSheet();
-  const {workspaceId} = useWorkspace();
+  const [workspace] = useAtom(workspaceState);
   const theme = useTheme();
 
   // 선택된 달
@@ -29,7 +30,7 @@ export const useCalendar = () => {
   // 선택된 날짜
   const [focusedDate, setFocusedDate] = useState<string | null>(null);
 
-  const {data: scheduleListData = []} = useCalendarQuery(workspaceId);
+  const {data: scheduleListData = []} = useCalendarQuery(workspace.workspaceId);
 
   // markedDates 생성
   const currentMarkedDates = useMemo(() => {

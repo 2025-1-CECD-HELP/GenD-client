@@ -11,13 +11,14 @@ import {MemberProfile} from '@/components/MemberProfile';
 import {SearchBar} from '@/components/SearchBar';
 import {useMemberListQuery} from './hooks/useMemberListQuery';
 import {RefreshControl} from 'react-native';
-import {useWorkspace} from '@hooks/useWorkspace';
 import {PlusIcon} from '@/assets/images/svg/common';
 import {useTheme} from '@/contexts/theme/ThemeContext';
 import {useModal} from '@/contexts/modal/ModalContext';
 import {AddMemberModal} from './components/AddMemberModal';
 import CommonModal from '@/components/CommonModal';
 import {useAddMemberMutation} from './hooks/useMemberMutation';
+import {useAtom} from 'jotai';
+import {workspaceState} from '@/atoms/workspace';
 
 /**
  * 멤버 리스트 화면입니다.
@@ -28,9 +29,9 @@ import {useAddMemberMutation} from './hooks/useMemberMutation';
 export const MemberScreen = () => {
   const theme = useTheme();
   const [search, setSearch] = useState('');
-  const {workspaceId} = useWorkspace();
+  const [workspace] = useAtom(workspaceState);
   const {data: memberList, refetch: refetchMemberList} = useMemberListQuery(
-    workspaceId ?? '-1',
+    workspace.workspaceId,
   );
   const {mutateAsync: addMember} = useAddMemberMutation();
   const {setIsOpen, setModalContent} = useModal();
@@ -71,7 +72,7 @@ export const MemberScreen = () => {
                   <AddMemberModal
                     onAdd={email => {
                       addMember({
-                        workspaceId: workspaceId ?? '-1',
+                        workspaceId: workspace.workspaceId,
                         email,
                       });
                     }}

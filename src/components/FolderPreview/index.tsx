@@ -20,7 +20,8 @@ import {
   useDeleteDirectoryMutation,
   useRenameDirectoryMutation,
 } from '@/screens/file/hooks/uesFileMutation';
-import {useWorkspace} from '@/hooks/useWorkspace';
+import {useAtom} from 'jotai';
+import {workspaceState} from '@/atoms/workspace';
 
 export type FolderPreviewProps = {
   folder: FolderData;
@@ -38,7 +39,7 @@ export const FolderPreview = ({folder, isAdmin}: FolderPreviewProps) => {
     height: 0,
   });
   const menuRef = useRef<View>(null);
-  const {workspaceId} = useWorkspace();
+  const [workspace] = useAtom(workspaceState);
   const {mutate: patchDirectoryMutation} = useRenameDirectoryMutation();
   const {mutate: deleteDirectoryMutation} = useDeleteDirectoryMutation();
   const handleMenuPress = () => {
@@ -62,7 +63,7 @@ export const FolderPreview = ({folder, isAdmin}: FolderPreviewProps) => {
             inputPlaceholder="변경할 폴더 이름을 입력하세요"
             onConfirm={inputValue => {
               patchDirectoryMutation({
-                workspaceId: workspaceId!,
+                workspaceId: workspace.workspaceId,
                 dirId: folder.dirId,
                 directoryName: inputValue!,
               });
