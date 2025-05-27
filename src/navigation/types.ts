@@ -23,5 +23,6 @@ export type TRouteParams = {
   RECORDING: {templateId: string};
   INIT_WORKSPACE: {};
   CREATE_WORKSPACE: {};
+  EDIT_WORKSPACE: {};
   SECRETARY: {};
 };

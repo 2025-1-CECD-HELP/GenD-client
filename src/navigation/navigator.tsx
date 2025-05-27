@@ -14,6 +14,7 @@ import {
   MemberScreen,
   LoginScreen,
   CreateWorkspaceScreen,
+  EditWorkspaceScreen,
 } from '@/screens';
 import {Header} from '@/components/Header';
 import {RecordingScreen} from '@/screens/recording';
@@ -87,6 +88,11 @@ export default function AppNavigator() {
         <Stack.Screen
           name="SECRETARY"
           component={SecretaryNavigator}
+          options={{headerShown: true, header: () => <Header />}}
+        />
+        <Stack.Screen
+          name="EDIT_WORKSPACE"
+          component={EditWorkspaceScreen}
           options={{headerShown: true, header: () => <Header />}}
         />
       </Stack.Navigator>
