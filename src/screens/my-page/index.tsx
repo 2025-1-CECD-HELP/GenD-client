@@ -1,6 +1,8 @@
 import React from 'react';
+import {useAtom} from 'jotai';
 import {SettingIcon} from '@/assets/images/svg/common';
 import LogoutIcon from '@/assets/images/svg/my-page/logout.svg';
+import {signOutAtom} from '@/atoms/auth';
 
 import {
   Container,
@@ -21,6 +23,16 @@ import {useTheme} from '@/contexts/theme/ThemeContext';
  */
 export const MypageScreen = () => {
   const theme = useTheme();
+  const [, signOut] = useAtom(signOutAtom);
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+    } catch (error) {
+      console.error('로그아웃 실패:', error);
+    }
+  };
+
   return (
     <Container>
       <Title>마이페이지</Title>
@@ -56,6 +68,7 @@ export const MypageScreen = () => {
             />
           }
           text="로그아웃"
+          onPress={handleSignOut}
         />
       </SettingSection>
 

@@ -5,7 +5,6 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import BottomNavigator from '@/components/BottomNavigator';
 import {
-  HomeScreen,
   FileScreen,
   CalendarScreen,
   MypageScreen,
@@ -21,7 +20,31 @@ import {RecordingScreen} from '@/screens/recording';
 import {InitWorkspaceScreen} from '@/screens/init-workspace';
 import SecretaryScreen from '@/screens/secretary';
 import {ChatProvider} from '@/screens/secretary/contexts/ChatContext';
-import {useWorkspaceInit} from '@/hooks/useWorkspace';
+import {AuthWrappedHomeScreen} from './AuthScreen';
+import {createNavigationContainerRef} from '@react-navigation/native';
+
+export const navigationRef = createNavigationContainerRef();
+
+export function navigate(name: string, params?: any) {
+  if (navigationRef.isReady()) {
+    navigationRef.navigate(name, params);
+  }
+}
+
+export function replace(name: string, params?: any) {
+  if (navigationRef.isReady()) {
+    navigationRef.reset({
+      index: 0,
+      routes: [{name, params}],
+    });
+  }
+}
+
+export function goBack() {
+  if (navigationRef.isReady() && navigationRef.canGoBack()) {
+    navigationRef.goBack();
+  }
+}
 
 const Stack = createNativeStackNavigator<TRouteParams>();
 const Tab = createBottomTabNavigator<TRouteParams>();
@@ -33,7 +56,7 @@ const Tab = createBottomTabNavigator<TRouteParams>();
  */
 export default function AppNavigator() {
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       {/* 렌딩 페이지의 Depth 가 있을 경우 초기 라우트를 설정합니다. */}
       <Stack.Navigator
         initialRouteName="INIT_WORKSPACE"
@@ -83,7 +106,7 @@ function TabNavigator() {
     <Tab.Navigator
       tabBar={props => <BottomNavigator {...props} />}
       screenOptions={{headerShown: true, header: () => <Header />}}>
-      <Tab.Screen name="HOME" component={HomeScreen} />
+      <Tab.Screen name="HOME" component={AuthWrappedHomeScreen} />
       <Tab.Screen name="FILE" component={FileScreen} />
       <Tab.Screen
         name="MEETING"
@@ -132,7 +155,6 @@ function MemberNavigator() {
  * @author 홍규진
  */
 function WorkspaceNavigator() {
-  useWorkspaceInit(true);
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="INIT_WORKSPACE" component={InitWorkspaceScreen} />

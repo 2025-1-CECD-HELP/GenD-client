@@ -2,7 +2,6 @@
 import React, {Suspense} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import AppNavigator from '@/navigation/navigator';
-import {AuthProvider} from '@/contexts/auth/AuthContext';
 import {QueryClientProvider} from '@/contexts/query/QueryContext';
 import {ThemeProvider} from '@/contexts/theme/ThemeContext';
 import {ModalProvider} from '@/contexts/modal/ModalContext';
@@ -24,17 +23,15 @@ function App(): React.JSX.Element {
       <ErrorBoundary FallbackComponent={AdaptiveErrorFallback}>
         <QueryClientProvider>
           <SafeAreaProvider>
-            <AuthProvider>
-              <GestureHandlerRootView style={{flex: 1}}>
-                <BottomSheetProvider>
-                  <ModalProvider>
-                    <Suspense fallback={<AdaptiveLoadingFallback />}>
-                      <AppNavigator />
-                    </Suspense>
-                  </ModalProvider>
-                </BottomSheetProvider>
-              </GestureHandlerRootView>
-            </AuthProvider>
+            <GestureHandlerRootView style={{flex: 1}}>
+              <BottomSheetProvider>
+                <ModalProvider>
+                  <Suspense fallback={<AdaptiveLoadingFallback />}>
+                    <AppNavigator />
+                  </Suspense>
+                </ModalProvider>
+              </BottomSheetProvider>
+            </GestureHandlerRootView>
           </SafeAreaProvider>
         </QueryClientProvider>
       </ErrorBoundary>

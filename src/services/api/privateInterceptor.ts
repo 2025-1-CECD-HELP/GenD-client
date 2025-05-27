@@ -1,15 +1,11 @@
 import {AxiosError, AxiosResponse, AxiosInstance} from 'axios';
 import {logRequest, logResponse, logError} from '@/utils/debug';
-import {CustomAxiosRequestConfig, TAnotherToken, TAuthResponse} from './type';
-import {
-  getAccessToken,
-  getRefreshToken,
-  setAccessToken,
-  setRefreshToken,
-} from '@/utils/auth';
-import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
-import {ROUTE_NAMES} from '@/constants/routes';
+import {CustomAxiosRequestConfig} from './type';
+import {getAccessToken} from '@/utils/auth';
 import {getErrorInfo} from '@/utils/error';
+import {setAccessToken, setRefreshToken} from '@/utils/auth';
+import {replace} from '@/navigation/navigator';
+import {ROUTE_NAMES} from '@/constants/routes';
 
 /**
  * 인증이 필요한 API 인터셉터 적용
@@ -59,51 +55,34 @@ export const applyPrivateInterceptors = (instance: AxiosInstance) => {
       const errorInfo = getErrorInfo(error);
       error.message = errorInfo.message;
 
-      // 401 에러가 아니거나 이미 재시도한 경우
-      if (error.response?.status !== 401 || originalRequest._retry) {
-        return Promise.reject(error);
+      // 401 에러는 ErrorBoundary로 가지 않고 여기서 직접 처리
+      if (error.response?.status === 401) {
+        // 전역 상태 업데이트나 이벤트 발생
+        // ErrorBoundary를 거치지 않고 직접 처리
+
+        // 토큰 정리 및 로그인 페이지 이동을 여기서 처리
+        try {
+          await setAccessToken('');
+          await setRefreshToken('');
+          // 전역 네비게이션 사용
+          replace(ROUTE_NAMES.LOGIN, {});
+
+          // 에러를 throw하지 않고 빈 응답 반환하거나 특별한 응답 반환
+          return Promise.resolve({
+            data: null,
+            status: 401,
+            statusText: 'Unauthorized - Handled',
+            headers: {},
+            config: originalRequest,
+          } as AxiosResponse);
+        } catch (authError) {
+          console.error('401 에러 처리 실패:', authError);
+        }
       }
 
       // 재시도 플래그 설정
       originalRequest._retry = true;
-
-      try {
-        // 리프레시 토큰 가져오기
-        const refreshToken = await getRefreshToken();
-        if (!refreshToken) {
-          throw new Error('리프레시 토큰이 없습니다.');
-        }
-
-        // accessToken 갱신 시도
-        const response: AxiosResponse<TAuthResponse, TAnotherToken> =
-          await instance.post('/auth/reissue', {
-            refreshToken: refreshToken,
-          });
-
-        if (response.status !== 200) {
-          throw new Error('토큰 갱신에 실패했습니다.');
-        }
-
-        const {accessToken: newAccessToken, refreshToken: newRefreshToken} =
-          response.data;
-
-        // 새 토큰 저장
-        await setAccessToken(newAccessToken);
-        await setRefreshToken(newRefreshToken);
-
-        // 원래 요청 재시도
-        if (originalRequest.headers) {
-          originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-        }
-
-        return instance(originalRequest);
-      } catch (refreshError) {
-        const refreshErrorInfo = getErrorInfo(refreshError);
-        console.error('🚨Refresh Error:', refreshErrorInfo);
-
-        useTypeSafeNavigation().navigate(ROUTE_NAMES.LOGIN, {});
-        return Promise.reject(refreshError);
-      }
+      return Promise.reject(error);
     },
   );
 };

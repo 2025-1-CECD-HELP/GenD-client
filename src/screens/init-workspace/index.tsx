@@ -13,19 +13,20 @@ import enterWorkspaceImg from '@/assets/images/png/workspace/enter_workspace.png
 import LinearGradient from 'react-native-linear-gradient';
 import {useTheme} from '@/contexts/theme/ThemeContext';
 import {GenDLogoIcon} from '@/assets/images/svg/common';
-import {useWorkspaceBottomSheet} from '@/hooks/useWorkspace';
+import {useWorkspaceBottomSheet, useWorkspaceInit} from '@/hooks/useWorkspace';
 import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
 
 export const InitWorkspaceScreen = () => {
   const theme = useTheme();
+  useWorkspaceInit(true);
   const {handleOpenBottomSheet} = useWorkspaceBottomSheet();
   const navigation = useTypeSafeNavigation();
+
   return (
     <LinearGradient
       colors={theme.colors.backgroundGradient}
       start={{x: 0, y: 0}}
       end={{x: 1.5, y: 1}}
-      // eslint-disable-next-line react-native/no-inline-styles
       style={{flex: 1}}>
       <Container>
         <Title>단체라면 누구나!</Title>

@@ -23,11 +23,27 @@ import {ErrorBoundaryProps} from './types';
 const AxiosErrorFallbackUI = ({error, resetError}: ErrorBoundaryProps) => {
   const axiosError = error as AxiosError;
   const errorInfo = getErrorInfo(axiosError);
+  // 네트워크 에러인 경우
+  if (!axiosError.response) {
+    return (
+      <ErrorContainer>
+        <NetworkIcon>
+          <IconText>📡</IconText>
+        </NetworkIcon>
+        <ErrorTitle>네트워크 연결 오류</ErrorTitle>
+        <ErrorMessage>인터넷 연결을 확인해주세요.</ErrorMessage>
+        <RetryButton onPress={resetError}>
+          <ButtonText>다시 시도</ButtonText>
+        </RetryButton>
+      </ErrorContainer>
+    );
+  }
 
+  // 기타 에러
   return (
     <ErrorContainer>
       <NetworkIcon>
-        <IconText>📡</IconText>
+        <IconText>⚠️</IconText>
       </NetworkIcon>
       <ErrorTitle>{errorInfo.message}</ErrorTitle>
       {errorInfo.statusCode && (

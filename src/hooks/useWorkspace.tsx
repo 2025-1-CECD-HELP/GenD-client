@@ -41,7 +41,7 @@ export const useWorkspaceBottomSheet = () => {
   const handleOpenBottomSheet = () => {
     openBottomSheet(
       <WorkspaceBottomSheet
-        workspaceList={workspaceList}
+        workspaceList={workspaceList || []}
         onSelect={setWorkspaceInfo}
         onAdd={() => {
           navigation.replace('INIT_WORKSPACE', {});

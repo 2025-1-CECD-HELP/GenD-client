@@ -1,9 +1,9 @@
-import {ROUTE_NAMES} from '@/constants/routes';
-import {useAuth} from '@/contexts/auth/AuthContext';
 import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
 import {afterKakaoLogin, initiateKakaoLogin} from '@/services/auth';
 import {setAccessToken, setRefreshToken} from '@/utils/auth';
 import {useMutation} from '@tanstack/react-query';
+import {useAtom} from 'jotai';
+import {isSignedInAtom} from '@/atoms/auth';
 
 /**
  * 카카오 로그인 뮤테이션 훅입니다.
@@ -15,7 +15,7 @@ import {useMutation} from '@tanstack/react-query';
  */
 export const useKakaoLoginMutation = (fcmToken: string) => {
   const navigation = useTypeSafeNavigation();
-  const {handleAuthError} = useAuth();
+  const [, setIsSignedIn] = useAtom(isSignedInAtom);
 
   const mutation = useMutation({
     mutationKey: ['kakaoLogin'],
@@ -33,13 +33,15 @@ export const useKakaoLoginMutation = (fcmToken: string) => {
         console.log('accessToken', loginResponse.jwtTokenDto.accessToken);
         setRefreshToken(loginResponse.jwtTokenDto.refreshToken);
         console.log('refreshToken', loginResponse.jwtTokenDto.refreshToken);
+        setIsSignedIn(true); // 로그인 상태 업데이트
       }
       // 홈으로 리디렉션
-      navigation.navigate(ROUTE_NAMES.HOME, {});
+      navigation.replace('INIT_WORKSPACE', {});
     },
     onError: (error: Error) => {
       // 로그인 실패 시 처리
-      handleAuthError(error);
+      console.error('로그인 실패:', error);
+      setIsSignedIn(false);
     },
   });
 
