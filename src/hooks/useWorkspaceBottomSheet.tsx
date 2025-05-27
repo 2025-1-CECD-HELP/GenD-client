@@ -3,11 +3,11 @@ import {useAtom} from 'jotai';
 import {useBottomSheet} from '@/contexts/bottomSheet/BottomSheetContext';
 import {useWorkspaceListQuery} from '@/screens/home/hooks/useWorkspaceQuery';
 import {WorkspaceBottomSheet} from '@/components/WorkspaceBottomSheet';
-import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
 import {useQueryClient} from '@tanstack/react-query';
 import {postQuery} from '@/constants/queryKeys';
 import {workspaceState} from '@/atoms/workspace';
 import {TWorkspace} from '@/services/workspace/types';
+import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
 
 /**
  * 워크스페이스 바텀시트 관리 훅
@@ -40,7 +40,7 @@ export const useWorkspaceBottomSheet = () => {
   const handleOpenBottomSheet = () => {
     openBottomSheet(
       <WorkspaceBottomSheet
-        workspaceList={workspaceList || []}
+        workspaceList={workspaceList}
         onSelect={setWorkspaceInfo}
         onAdd={() => {
           navigation.replace('INIT_WORKSPACE', {});

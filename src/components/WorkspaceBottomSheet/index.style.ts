@@ -54,3 +54,28 @@ export const AddButtonText = styled.Text`
   color: ${({theme}) => theme.colors.white};
   ${({theme}) => theme.fonts.title4};
 `;
+
+export const EmptyWorkspace = styled.View`
+  padding: 16px 20px 12px 20px;
+  border-bottom-width: 1px;
+  border-bottom-color: ${({theme}) => theme.colors.divider};
+`;
+
+export const EmptyWorkspaceText = styled.Text`
+  color: ${({theme}) => theme.colors.textSecondary};
+  ${({theme}) => theme.fonts.text2};
+`;
+
+export const LoginButton = styled.TouchableOpacity`
+  margin: 20px 16px 0 16px;
+  height: 44px;
+  border-radius: 16px;
+  background-color: ${({theme}) => theme.colors.blue};
+  align-items: center;
+  justify-content: center;
+`;
+
+export const LoginButtonText = styled.Text`
+  color: ${({theme}) => theme.colors.white};
+  ${({theme}) => theme.fonts.title4};
+`;

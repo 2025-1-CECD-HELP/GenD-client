@@ -13,13 +13,12 @@ import enterWorkspaceImg from '@/assets/images/png/workspace/enter_workspace.png
 import LinearGradient from 'react-native-linear-gradient';
 import {useTheme} from '@/contexts/theme/ThemeContext';
 import {GenDLogoIcon} from '@/assets/images/svg/common';
-import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
 import {useWorkspaceBottomSheet} from '@/hooks/useWorkspaceBottomSheet';
+import {navigate} from '@/navigation/navigator';
 
 export const InitWorkspaceScreen = () => {
   const theme = useTheme();
   const {handleOpenBottomSheet} = useWorkspaceBottomSheet();
-  const navigation = useTypeSafeNavigation();
 
   return (
     <LinearGradient
@@ -31,7 +30,7 @@ export const InitWorkspaceScreen = () => {
         <Title>단체라면 누구나!</Title>
         <SubTitle>효율적인 문서 자동화 워크스페이스</SubTitle>
         <GenDLogoIcon width={100} height={100} />
-        <Card onPress={() => navigation.navigate('CREATE_WORKSPACE', {})}>
+        <Card onPress={() => navigate('CREATE_WORKSPACE', {})}>
           <CardImage source={makeWorkspaceImg} />
           <CardText>새 워크스페이스 생성하기</CardText>
         </Card>
