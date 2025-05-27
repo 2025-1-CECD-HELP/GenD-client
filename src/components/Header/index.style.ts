@@ -89,7 +89,8 @@ export const IconTwo = styled(IconWrapper)`
 
 // 세 번째 아이콘 (맨 앞)
 export const IconThree = styled(IconWrapper)`
-  background-color: ${({theme}) => theme.colors.blue};
+  background-color: ${({theme}) => theme.colors.background};
+  border: 1px solid ${({theme}) => theme.colors.divider};
   z-index: 3;
   transform: translateX(4px);
   border-radius: 12px;
