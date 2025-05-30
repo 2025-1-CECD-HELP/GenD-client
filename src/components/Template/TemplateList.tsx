@@ -19,8 +19,8 @@ import CommonModal from '../CommonModal';
  */
 
 type TemplateListProps = {
-  selectedTemplate: string | null;
-  onSelectTemplate: (title: string) => void;
+  selectedTemplate: number;
+  onSelectTemplate: (templateId: number) => void;
 };
 
 export const TemplateList = ({
@@ -38,8 +38,8 @@ export const TemplateList = ({
         <FilePreviewWrapper width={itemWidth}>
           <Template
             template={item}
-            isSelected={selectedTemplate === item.title}
-            onPressTemplate={() => onSelectTemplate(item.title)}
+            isSelected={selectedTemplate === item.id}
+            onPressTemplate={() => onSelectTemplate(item.id)}
             onPreePreview={() => {
               setModalContent(
                 <CommonModal

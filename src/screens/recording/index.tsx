@@ -77,75 +77,114 @@ export const RecordingScreen = () => {
         type: 'audio/m4a',
       };
 
+      // audioFile 업데이트
       setRecording(prev => ({
         ...prev,
         audioFile: file,
       }));
 
-      // 2. 녹음 결과를 미리 보는 API 호출
-      await submitRecord({
-        templateId: recording.templateId,
-        meetingRecord: file,
-      }).then(data => {
+      try {
+        // 2. 녹음 결과를 미리 보는 API 호출
+        const data = await submitRecord({
+          templateId: String(recording.templateId),
+          meetingRecord: file,
+        });
+
         if (data) {
-          setRecording(prev => ({
-            ...prev,
-            templateContent: data.templateContent.map(item => ({
-              objectKey: String(item.objectKey),
-              objectValue: String(item.objectValue),
-            })),
-          }));
+          console.log('2. 녹음 결과 데이터 왔어요', data);
+          const updatedContent = data.templateContent;
+
+          // templateContent 업데이트
+          setRecording(prev => {
+            const newState = {
+              ...prev,
+              templateContent: updatedContent,
+            };
+            console.log('상태 업데이트 후:', newState);
+            return newState;
+          });
+
+          // 미리보기 모달 데이터 저장
+          const previewData = {
+            templateId: recording.templateId,
+            templateContent: updatedContent,
+            title: recording.title,
+            folder: recording.folder,
+          };
+
+          const showSubmitModal = () => {
+            setModalContent(
+              <CommonModal
+                type="default"
+                title="회의록 저장하기"
+                onConfirm={() => {
+                  console.log('최종 제출 시 상태:', recording);
+                  handleFinalSubmit({
+                    templateId: previewData.templateId,
+                    templateContent: previewData.templateContent,
+                    fileName: previewData.title || '새 회의록',
+                    directoryId: previewData.folder,
+                  });
+                }}
+                onCancel={() => setIsOpen(false)}>
+                <RecordingSubmitForm initialData={previewData} />
+              </CommonModal>,
+            );
+            setIsOpen(true);
+          };
 
           setModalContent(
             <CommonModal
               type="default"
               title="회의록 미리보기"
-              onConfirm={() => handleOpenSubmitModal()}
+              onConfirm={() => {
+                console.log('미리보기 확인 시 상태:', recording);
+                setIsOpen(false);
+                setTimeout(showSubmitModal, 100);
+              }}
               onCancel={() => setIsOpen(false)}>
               <PreviewContent
-                templateContent={data.templateContent}
+                templateContent={updatedContent}
                 onChange={content => {
-                  setRecording(prev => ({
-                    ...prev,
-                    templateContent: content.map(item => ({
-                      objectKey: String(item.objectKey),
-                      objectValue: String(item.objectValue),
-                    })),
-                  }));
+                  setRecording(prev => {
+                    const newState = {
+                      ...prev,
+                      templateContent: content,
+                    };
+                    console.log('미리보기 수정 후 상태:', newState);
+                    return newState;
+                  });
                 }}
               />
             </CommonModal>,
           );
           setIsOpen(true);
         }
-      });
+      } catch (error) {
+        console.error('녹음 결과 처리 중 오류 발생:', error);
+      }
     }
   };
 
-  // 3. 최종 저장 모달 띄우는 함수
-  const handleOpenSubmitModal = () => {
-    setModalContent(
-      <CommonModal
-        type="default"
-        title="회의록 저장하기"
-        onConfirm={() => handleFinalSubmit()}
-        onCancel={() => setIsOpen(false)}>
-        <RecordingSubmitForm />
-      </CommonModal>,
-    );
-    setIsOpen(true);
-  };
-
   // 4. 최종 저장 API 호출
-  const handleFinalSubmit = async () => {
-    console.log('recording', recording);
-    finalSubmitRecord({
-      templateId: recording.templateId,
-      templateContent: recording.templateContent,
-      fileName: recording.title,
-      directoryId: recording.folder,
-    });
-    setIsOpen(false);
+  const handleFinalSubmit = async (submitData: {
+    templateId: number;
+    templateContent: Array<{objectKey: string; objectValue: string}>;
+    fileName: string;
+    directoryId: string;
+  }) => {
+    try {
+      if (!submitData.templateId || !submitData.templateContent) {
+        console.error('필수 데이터가 누락되었습니다:', submitData);
+        return;
+      }
+
+      console.log('최종 제출 데이터 확인:', submitData);
+      await finalSubmitRecord(submitData);
+      setIsOpen(false);
+    } catch (error) {
+      console.error('최종 저장 중 오류 발생:', error);
+    }
   };
 
   // 파형 바 스타일 계산 함수 (이상하게 @emotion/native 에서는 디자인이 적용이 안 됨.)

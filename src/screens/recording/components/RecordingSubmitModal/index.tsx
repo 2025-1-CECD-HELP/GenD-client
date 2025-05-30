@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SubmitFormContainer,
   SubmitInput,
@@ -9,25 +9,55 @@ import {
 import {useRecord} from '../../hooks/useRecord';
 import {useAtom} from 'jotai';
 import {recordingState} from '@/atoms/recording';
-import {getTodayMeetingTitle} from '../../utils/formatTime';
 
-export const RecordingSubmitForm = () => {
-  const [recording, setRecording] = useAtom(recordingState);
+interface RecordingSubmitFormProps {
+  initialData: {
+    templateId: number;
+    templateContent: Array<{objectKey: string; objectValue: string}>;
+    title: string;
+    folder: string;
+  };
+}
+
+export const RecordingSubmitForm = ({
+  initialData,
+}: RecordingSubmitFormProps) => {
+  const [_, setRecording] = useAtom(recordingState);
   const {directoryList} = useRecord();
+  const [formData, setFormData] = useState({
+    title: initialData.title,
+    folder: initialData.folder,
+  });
 
+  // initialData가 변경될 때 formData 업데이트
   useEffect(() => {
-    if (!recording.title) {
-      setRecording(prev => ({...prev, title: getTodayMeetingTitle()}));
-    }
-  }, [recording.title, setRecording]);
+    setFormData({
+      title: initialData.title,
+      folder: initialData.folder,
+    });
+  }, [initialData]);
+
+  const handleTitleChange = (title: string) => {
+    setFormData(prev => ({...prev, title}));
+    setRecording(prev => ({
+      ...prev,
+      title,
+    }));
+  };
+
+  const handleFolderSelect = (dirId: string) => {
+    setFormData(prev => ({...prev, folder: dirId}));
+    setRecording(prev => ({
+      ...prev,
+      folder: dirId,
+    }));
+  };
 
   return (
     <SubmitFormContainer>
       <SubmitInput
-        value={recording.title}
-        onChangeText={title => {
-          setRecording(prev => ({...prev, title}));
-        }}
+        value={formData.title}
+        onChangeText={handleTitleChange}
         placeholder="회의록 제목"
       />
       <SubmitRow>
@@ -36,13 +66,8 @@ export const RecordingSubmitForm = () => {
           {directoryList?.directoryList.map(dir => (
             <SubmitLabel
               key={dir.dirId}
-              onPress={() => {
-                setRecording(prev => ({
-                  ...prev,
-                  folder: dir.dirId.toString(),
-                }));
-              }}
-              selected={recording.folder === dir.dirId.toString()}>
+              onPress={() => handleFolderSelect(dir.dirId.toString())}
+              selected={formData.folder === dir.dirId.toString()}>
               {dir.dirName}
             </SubmitLabel>
           ))}
