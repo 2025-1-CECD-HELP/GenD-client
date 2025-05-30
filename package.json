@@ -15,6 +15,7 @@
   "dependencies": {
     "@emotion/native": "^11.11.0",
     "@emotion/react": "^11.14.0",
+    "@invertase/react-native-apple-authentication": "^2.4.1",
     "@react-native-firebase/app": "^22.2.0",
     "@react-native-firebase/messaging": "^22.2.0",
     "@react-native-picker/picker": "^2.11.0",
