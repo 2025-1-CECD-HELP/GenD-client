@@ -1,4 +1,5 @@
 import {getMemberList} from '@/services';
+import {getUser} from '@/services/auth';
 import {getScheduleList} from '@/services/calendar';
 import {getDirectoryList, getFileList} from '@/services/file';
 import {getCategoryList, getPostList} from '@/services/post';
@@ -15,6 +16,16 @@ import {getWorkspaceInfo, getWorkspaceList} from '@/services/workspace';
  * };
  * @author 홍규진
  */
+
+/**
+ * 유저 조회
+ */
+export const userQuery = (workspaceId: string) => {
+  return {
+    queryKey: ['user', {workspaceId}],
+    queryFn: () => getUser(workspaceId),
+  };
+};
 
 /** 캘린더 일정 목록 조회 */
 export const calendarQuery = (workspaceId: string) => {
