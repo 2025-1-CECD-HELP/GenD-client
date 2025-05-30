@@ -1,6 +1,11 @@
 import {useState, useEffect, useRef, useCallback} from 'react';
 // import Voice from '@react-native-voice/voice';
-import AudioRecorderPlayer from 'react-native-audio-recorder-player';
+import AudioRecorderPlayer, {
+  AudioEncoderAndroidType,
+  AudioSourceAndroidType,
+  AVEncoderAudioQualityIOSType,
+  AVEncodingOption,
+} from 'react-native-audio-recorder-player';
 import {Platform, PermissionsAndroid} from 'react-native';
 import {useDirectoryListQuery} from './useRecordQuery';
 import {useAtom} from 'jotai';
@@ -154,20 +159,41 @@ export function useRecord() {
     };
   }, [isRecording, isPaused, timer]);
 
-  // 오디오 시각화 (pause 시에는 파형 멈춤)
+  // 기존의 복잡한 파형 로직을 제거하고 첫 번째 방식으로 변경
   useEffect(() => {
     let recordBackListener: any;
+    let intervalId: ReturnType<typeof setInterval>;
+    let lastMetering = 0;
+    let lastValue = 0;
+
     if (isRecording && !isPaused && audioRecorderPlayerRef.current) {
       recordBackListener = audioRecorderPlayerRef.current.addRecordBackListener(
         e => {
-          const amplitude = e.currentMetering ?? 0;
-          setWaveform(prev => [...prev.slice(-49), amplitude]);
+          if (e.currentMetering) {
+            lastMetering = e.currentMetering;
+          }
         },
       );
+
+      // 100ms 간격으로 waveform 업데이트
+      intervalId = setInterval(() => {
+        const normalizedValue = (lastMetering + 70) * 1.2;
+        const targetValue = normalizedValue > 10 ? normalizedValue : 10;
+
+        // 이전 값과 목표 값 사이를 부드럽게 보간
+        const interpolatedValue = lastValue + (targetValue - lastValue) * 0.3;
+        lastValue = interpolatedValue;
+
+        setWaveform(prev => [...prev, interpolatedValue]);
+      }, 100);
     }
+
     return () => {
       if (audioRecorderPlayerRef.current && recordBackListener) {
         audioRecorderPlayerRef.current.removeRecordBackListener();
+      }
+      if (intervalId) {
+        clearInterval(intervalId);
       }
     };
   }, [isRecording, isPaused]);
@@ -185,10 +211,28 @@ export function useRecord() {
       setTimer(0);
       setError(null);
       setIsPaused(false);
-      const path = await audioRecorderPlayerRef.current.startRecorder();
+
+      // 오디오 설정 최적화
+      const audioSet = {
+        AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
+        AudioSourceAndroid: AudioSourceAndroidType.MIC,
+        AVEncoderAudioQualityKeyIOS: AVEncoderAudioQualityIOSType.high,
+        AVNumberOfChannelsKeyIOS: 1,
+        AVFormatIDKeyIOS: AVEncodingOption.aac,
+      };
+
+      console.log('[Audio Debug] Starting recording with settings:', audioSet);
+      const path = await audioRecorderPlayerRef.current.startRecorder(
+        undefined,
+        audioSet,
+        true, // meteringEnabled 활성화
+      );
+      console.log('[Audio Debug] Recording started at path:', path);
+
       setAudioPath(path);
       setIsRecording(true);
     } catch (err) {
+      console.error('[Audio Debug] Recording start error:', err);
       setError({
         message: '녹음 시작 중 오류가 발생했습니다.',
         type: 'recording',
@@ -235,6 +279,7 @@ export function useRecord() {
     }
     setIsRecording(false);
     setIsPaused(false);
+    setWaveform([]);
 
     const path = await audioRecorderPlayerRef.current.stopRecorder();
     setAudioPath(path);

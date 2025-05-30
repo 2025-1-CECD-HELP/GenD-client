@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect} from 'react';
 import {
   SubmitFormContainer,
   SubmitInput,
@@ -7,30 +7,26 @@ import {
   SubmitDropdown,
 } from './index.style';
 import {useRecord} from '../../hooks/useRecord';
+import {useAtom} from 'jotai';
+import {recordingState} from '@/atoms/recording';
+import {getTodayMeetingTitle} from '../../utils/formatTime';
 
-export const RecordingSubmitForm = ({
-  initialTitle = '',
-  initialFolder = '',
-  initialDropdown = '',
-  onChange,
-}: {
-  initialTitle?: string;
-  initialFolder?: string;
-  initialDropdown?: string;
-  onChange?: (data: {title: string; folder: string; dropdown: string}) => void;
-}) => {
-  const [title, setTitle] = useState(initialTitle);
-  const [folder, setFolder] = useState(initialFolder);
-  const [dropdown, _setDropdown] = useState(initialDropdown);
+export const RecordingSubmitForm = () => {
+  const [recording, setRecording] = useAtom(recordingState);
   const {directoryList} = useRecord();
+
+  useEffect(() => {
+    if (!recording.title) {
+      setRecording(prev => ({...prev, title: getTodayMeetingTitle()}));
+    }
+  }, [recording.title, setRecording]);
 
   return (
     <SubmitFormContainer>
       <SubmitInput
-        value={title}
-        onChangeText={t => {
-          setTitle(t);
-          onChange?.({title: t, folder, dropdown});
+        value={recording.title}
+        onChangeText={title => {
+          setRecording(prev => ({...prev, title}));
         }}
         placeholder="회의록 제목"
       />
@@ -41,10 +37,12 @@ export const RecordingSubmitForm = ({
             <SubmitLabel
               key={dir.dirId}
               onPress={() => {
-                setFolder(dir.dirName);
-                onChange?.({title, folder: dir.dirId.toString(), dropdown});
+                setRecording(prev => ({
+                  ...prev,
+                  folder: dir.dirId.toString(),
+                }));
               }}
-              selected={folder === dir.dirId.toString()}>
+              selected={recording.folder === dir.dirId.toString()}>
               {dir.dirName}
             </SubmitLabel>
           ))}

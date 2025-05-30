@@ -11,3 +11,9 @@ export const columnWrapperStyle = (gap: number): ViewStyle => ({
 export const FilePreviewWrapper = styled.View<{width: number}>`
   width: ${props => props.width}px;
 `;
+
+export const TemplatePreview = styled.Image`
+  width: 100%;
+  height: 100%;
+  resize-mode: contain;
+`;

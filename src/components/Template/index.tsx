@@ -39,7 +39,7 @@ export const Template = ({
       isSelected={isSelected}>
       <Icon fill={textPrimary} width={30} height={30} />
       <ContentContainer>
-        <Title>{title} 템플릿</Title>
+        <Title>{title}</Title>
         <Description>{description}</Description>
       </ContentContainer>
       <Button onPress={onPreePreview} activeOpacity={0.8}>
