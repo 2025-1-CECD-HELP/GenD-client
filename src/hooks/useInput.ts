@@ -23,10 +23,8 @@ export const useInput = ({onSubmit, isDebouncing = false}: UseInputProps) => {
 
   // 제출 버튼을 누르면 해당 함수를 호출합니다.
   const handleSubmit = () => {
-    if (text) {
-      onSubmit(text);
-      setText(''); // 제출 후 입력 필드 초기화
-    }
+    onSubmit(text);
+    setText(''); // 제출 후 입력 필드 초기화
   };
 
   const handleChangeText = (value: string) => {
