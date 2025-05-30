@@ -7,7 +7,6 @@ import {
   PlusButtonWrapper,
   TopBarContainer,
 } from './index.style';
-import {MemberProfile} from '@/components/MemberProfile';
 import {SearchBar} from '@/components/SearchBar';
 import {useMemberListQuery} from './hooks/useMemberListQuery';
 import {RefreshControl} from 'react-native';
@@ -19,6 +18,7 @@ import CommonModal from '@/components/CommonModal';
 import {useAddMemberMutation} from './hooks/useMemberMutation';
 import {useAtom} from 'jotai';
 import {workspaceState} from '@/atoms/workspace';
+import MemberSetting from '@/components/MemberSetting';
 
 /**
  * 멤버 리스트 화면입니다.
@@ -88,8 +88,8 @@ export const MemberScreen = () => {
       <MemberList>
         {filtered.map(member => (
           <MemberItem key={member.memberId}>
-            <MemberProfile
-              memberId={Number(member.memberId)}
+            <MemberSetting
+              memberId={member.memberId}
               memberRole={member.memberRole}
               memberName={member.memberName}
               memberImage={member.memberImage}
