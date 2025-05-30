@@ -19,10 +19,10 @@ type Story = StoryObj<typeof meta>;
 
 const handlerExamples = {
   onPressFile: (file: FileData) => {
-    console.log('파일 열기:', file.title);
+    console.log('파일 열기:', file.documentTitle);
   },
   onPressAction: (file: FileData) => {
-    console.log('다운로드 or 더보기 클릭:', file.title);
+    console.log('다운로드 or 더보기 클릭:', file.documentTitle);
   },
 };
 
@@ -30,7 +30,7 @@ const handlerExamples = {
 export const mp3ViewdByMember: Story = {
   args: {
     file: {
-      title: 'mp3 파일',
+      documentTitle: 'mp3 파일',
       extension: 'mp3',
       url: 'example.mp3',
     },
@@ -42,7 +42,7 @@ export const mp3ViewdByMember: Story = {
 export const mp3ViewdByManager: Story = {
   args: {
     file: {
-      title: 'mp3 파일',
+      documentTitle: 'mp3 파일',
       extension: 'mp3',
       url: 'example.mp3',
     },
@@ -55,7 +55,7 @@ export const mp3ViewdByManager: Story = {
 export const docViewedByMember: Story = {
   args: {
     file: {
-      title: 'docx 파일',
+      documentTitle: 'docx 파일',
       extension: 'docx',
       url: 'example.docx',
     },
@@ -68,7 +68,7 @@ export const docViewedByMember: Story = {
 export const docViewedByManager: Story = {
   args: {
     file: {
-      title: 'docx 파일',
+      documentTitle: 'docx 파일',
       extension: 'docx',
       url: 'example.docx',
     },

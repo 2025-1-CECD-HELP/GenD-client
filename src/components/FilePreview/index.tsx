@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef} from 'react';
 import {
   FormatPreview,
   ContentContainer,
@@ -17,15 +17,11 @@ import {Shadow} from 'react-native-shadow-2';
 import {useThemeColors} from '@/contexts/theme/ThemeContext';
 import {OptionsBox} from '@/components/OptionsBox';
 import {View} from 'react-native';
-
-import {
-  useDeleteFileMutation,
-  useRenameFileMutation,
-} from '@/screens/file/hooks/uesFileMutation';
-import {useModal} from '@/contexts/modal/ModalContext';
-import {CommonModal} from '../CommonModal';
 import {useAtom} from 'jotai';
 import {workspaceState} from '@/atoms/workspace';
+import {useFileActions} from '@/screens/file/hooks/useFileActions';
+import {useModal} from '@/contexts/modal/ModalContext';
+import CommonModal from '@/components/CommonModal';
 
 /**
  * 자료 관리 페이지에 사용될 파일 프리뷰 컴포넌트 입니다.
@@ -38,74 +34,44 @@ import {workspaceState} from '@/atoms/workspace';
 export const FilePreview = (file: FileData) => {
   const {blue, textDisabled, shadow, red, textPrimary} = useThemeColors();
   const [workspace] = useAtom(workspaceState);
-  console.log('workspace', workspace);
-  const [isOptionsVisible, setIsOptionsVisible] = useState(false);
-  const {mutate: renameFileMutation} = useRenameFileMutation();
-  const {mutate: deleteFileMutation} = useDeleteFileMutation();
-  const {setIsOpen, setModalContent} = useModal();
-
   const menuRef = useRef<View>(null);
 
-  const FormatIcon = file.docuementType === 'mp3' ? AudioFormat : DocFormat;
+  const {downloadFile, shareFile, handleRename, handleDelete} =
+    useFileActions(file);
 
+  const FormatIcon = file.docuementType === 'mp3' ? AudioFormat : DocFormat;
   const MenuIcon = workspace.isAdmin ? MoreIcon : DownLoadIcon;
 
+  const {setModalContent, setIsOpen} = useModal();
+
   const handleMenuPress = () => {
-    setIsOptionsVisible(true);
+    setIsOpen(true);
+    setModalContent(
+      <CommonModal title="파일 관리" type="confirm">
+        <OptionsBox options={options} />
+      </CommonModal>,
+    );
   };
 
   const options = [
     {
       label: '다운로드',
-      onPress: () => setIsOptionsVisible(false),
+      onPress: downloadFile,
       color: blue,
     },
     {
       label: '공유하기',
-      onPress: () => setIsOptionsVisible(false),
+      onPress: shareFile,
       color: textPrimary,
     },
     {
       label: '이름 변경',
-      onPress: () => {
-        setIsOptionsVisible(false);
-        setIsOpen(true);
-        setModalContent(
-          <CommonModal
-            title="파일 이름 변경"
-            type="input"
-            inputPlaceholder="파일 이름을 입력하세요"
-            onConfirm={inputValue => {
-              if (inputValue) {
-                renameFileMutation({
-                  documentId: file.documentId,
-                  documentTitle: inputValue,
-                });
-              }
-            }}
-          />,
-        );
-      },
+      onPress: handleRename,
       color: textPrimary,
     },
     {
       label: '삭제하기',
-      onPress: () => {
-        setIsOptionsVisible(false);
-        setIsOpen(true);
-        setModalContent(
-          <CommonModal
-            title="파일 삭제"
-            type="default"
-            content="파일을 삭제하시겠습니까?"
-            onConfirm={() => {
-              deleteFileMutation({
-                documentId: file.documentId,
-              });
-            }}
-          />,
-        );
-      },
+      onPress: handleDelete,
       color: red,
     },
   ];
@@ -133,13 +99,6 @@ export const FilePreview = (file: FileData) => {
           </View>
         </ContentContainer>
       </Container>
-      <OptionsBox
-        visible={isOptionsVisible}
-        onClose={() => setIsOptionsVisible(false)}
-        options={options}
-        menuRef={menuRef}
-        isFile={true}
-      />
     </Shadow>
   );
 };

@@ -1,5 +1,4 @@
 import React, {useRef} from 'react';
-import {useState} from 'react';
 import {FolderData} from './index.type';
 import {FolderIcon} from '@/assets/images/svg/file';
 import {Shadow} from 'react-native-shadow-2';
@@ -13,9 +12,9 @@ import {
 } from './index.style';
 import {MoreIcon} from '@/assets/images/svg/file';
 import {View} from 'react-native';
-import {OptionsBox} from '../OptionsBox';
 import {useModal} from '@/contexts/modal/ModalContext';
 import CommonModal from '../CommonModal';
+import {OptionsBox} from '../OptionsBox';
 import {
   useDeleteDirectoryMutation,
   useRenameDirectoryMutation,
@@ -36,15 +35,18 @@ export const FolderPreview = ({
 }: FolderPreviewProps) => {
   const {shadow, textDisabled, red, textPrimary} = useThemeColors();
   const {setModalContent, setIsOpen} = useModal();
-  const [isOptionsVisible, setIsOptionsVisible] = useState(false);
   const menuRef = useRef<View>(null);
   const [workspace] = useAtom(workspaceState);
   const {mutate: patchDirectoryMutation} = useRenameDirectoryMutation();
   const {mutate: deleteDirectoryMutation} = useDeleteDirectoryMutation();
 
   const handleMenuPress = () => {
-    console.log('[menuPress] menuRef.current', menuRef.current);
-    setIsOptionsVisible(true);
+    setIsOpen(true);
+    setModalContent(
+      <CommonModal title="폴더 관리" type="confirm">
+        <OptionsBox options={options} />
+      </CommonModal>,
+    );
   };
 
   const options = [
@@ -52,8 +54,6 @@ export const FolderPreview = ({
       label: '이름 변경',
       onPress: () => {
         setIsOpen(true);
-        setIsOptionsVisible(false);
-
         setModalContent(
           <CommonModal
             title="폴더 이름 변경"
@@ -123,13 +123,6 @@ export const FolderPreview = ({
           )}
         </ContentContainer>
       </Container>
-      <OptionsBox
-        visible={isOptionsVisible}
-        onClose={() => setIsOptionsVisible(false)}
-        options={options}
-        menuRef={menuRef}
-        isFile={false}
-      />
     </Shadow>
   );
 };

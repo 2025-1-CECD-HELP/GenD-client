@@ -89,7 +89,9 @@ export const FileScreen: React.FC = () => {
         <FileList
           data={mergedList}
           numColumns={2}
-          scrollEnabled={false}
+          scrollEnabled={true}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{paddingBottom: 20}}
           columnWrapperStyle={columnWrapperStyle}
           renderItem={({item}: {item: FileData | FolderData}) => {
             if ('dirId' in item) {
