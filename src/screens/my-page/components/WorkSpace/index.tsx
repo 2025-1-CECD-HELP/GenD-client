@@ -11,19 +11,23 @@ import {PlusIcon} from '@/assets/images/svg/common';
 import {useTheme} from '@contexts/theme/ThemeContext';
 import {useModal} from '@contexts/modal/ModalContext';
 import {AlarmSettingModal} from '../AlarmSettingModal';
+import defaultMemberImage from '@/assets/images/png/defaultProfile.png';
+import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
 
 interface WorkSpaceProps {
-  name: string;
-  color: string;
+  workspaceName: string;
+  imageUrl?: string;
 }
 
-export const WorkSpace: React.FC<WorkSpaceProps> = ({name, color}) => {
+export const WorkSpace: React.FC<WorkSpaceProps> = ({
+  workspaceName,
+  imageUrl,
+}) => {
   const {setModalContent, setIsOpen} = useModal();
-
   const handleAlarmSetting = () => {
     setModalContent(
       <AlarmSettingModal
-        workspaceName={name}
+        workspaceName={workspaceName}
         visible={true}
         onClose={() => setIsOpen(false)}
         onConfirm={() => setIsOpen(false)}
@@ -34,8 +38,11 @@ export const WorkSpace: React.FC<WorkSpaceProps> = ({name, color}) => {
 
   return (
     <WorkspaceColumn>
-      <WorkspaceCircle color={color} />
-      <WorkspaceName>{name}</WorkspaceName>
+      <WorkspaceCircle
+        source={imageUrl ? {uri: imageUrl} : defaultMemberImage}
+        defaultSource={defaultMemberImage}
+      />
+      <WorkspaceName>{workspaceName}</WorkspaceName>
       <WorkspaceAlarmButton onPress={handleAlarmSetting}>
         <WorkspaceAlarmText>알림 설정</WorkspaceAlarmText>
       </WorkspaceAlarmButton>
@@ -45,8 +52,14 @@ export const WorkSpace: React.FC<WorkSpaceProps> = ({name, color}) => {
 
 export const CreateWorkspace = () => {
   const theme = useTheme();
+  const navigation = useTypeSafeNavigation();
+  const handleCreateWorkspace = () => {
+    navigation.navigate('INIT_WORKSPACE', {
+      screen: 'CREATE_WORKSPACE',
+    });
+  };
   return (
-    <CreateWorkspaceBox>
+    <CreateWorkspaceBox onPress={handleCreateWorkspace}>
       <PlusIcon
         width={24}
         height={24}

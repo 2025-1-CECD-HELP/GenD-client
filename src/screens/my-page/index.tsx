@@ -1,64 +1,72 @@
 import React from 'react';
-import {useAtom} from 'jotai';
-import {SettingIcon} from '@/assets/images/svg/common';
 import LogoutIcon from '@/assets/images/svg/my-page/logout.svg';
-import {signOutAtom} from '@/atoms/auth';
+import {FlatList} from 'react-native';
 
 import {
   Container,
   Title,
-  WorkspaceList,
   SectionTitle,
   WithdrawText,
   Divider,
   SettingSection,
   WorkspaceSection,
 } from './index.style';
-import {workspaces} from './constants/dummy';
 import {WorkSpace, CreateWorkspace, IconButton, Profile} from './components';
 import {useTheme} from '@/contexts/theme/ThemeContext';
+import {useMypage} from './hooks/useMypage';
+import {defaultState} from '@/atoms/user';
+type WorkspaceItem = {
+  workspaceId: string;
+  workspaceName: string;
+  imageUrl: string;
+  isCreate?: boolean;
+};
+
 /**
  * 마이페이지 페이지입니다.
  * @author 홍규진
  */
 export const MypageScreen = () => {
   const theme = useTheme();
-  const [, signOut] = useAtom(signOutAtom);
-
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-    } catch (error) {
-      console.error('로그아웃 실패:', error);
-    }
-  };
-
+  const {workspaceList, handleSignOut, user, handleWithdraw} = useMypage();
   return (
     <Container>
       <Title>마이페이지</Title>
-      <Profile name="홍규진" workspaceCount={workspaces.length} />
+      <Profile
+        user={user || defaultState}
+        workspaceCount={workspaceList?.workspaceList.length || 0}
+      />
       <WorkspaceSection>
         <SectionTitle>참여 워크스페이스</SectionTitle>
-        <WorkspaceList horizontal showsHorizontalScrollIndicator={false}>
-          {workspaces.map(ws => (
-            <WorkSpace key={ws.id} name={ws.name} color={ws.color} />
-          ))}
-          <CreateWorkspace />
-        </WorkspaceList>
+        <FlatList
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          data={[
+            ...(workspaceList?.workspaceList || []),
+            {
+              isCreate: true,
+              workspaceId: 'create',
+              workspaceName: '',
+              imageUrl: '',
+            },
+          ]}
+          renderItem={({item}: {item: WorkspaceItem}) =>
+            item.isCreate ? (
+              <CreateWorkspace />
+            ) : (
+              <WorkSpace
+                workspaceName={item.workspaceName}
+                imageUrl={item.imageUrl}
+              />
+            )
+          }
+          keyExtractor={item => item.workspaceId}
+          contentContainerStyle={{paddingRight: 16}}
+        />
       </WorkspaceSection>
 
       <Divider />
       <SettingSection>
-        <IconButton
-          icon={
-            <SettingIcon
-              color={theme.colors.textPrimary}
-              width={24}
-              height={24}
-            />
-          }
-          text="화면 설정"
-        />
         <IconButton
           icon={
             <LogoutIcon
@@ -72,7 +80,7 @@ export const MypageScreen = () => {
         />
       </SettingSection>
 
-      <WithdrawText>회원 탈퇴</WithdrawText>
+      <WithdrawText onPress={handleWithdraw}>회원 탈퇴</WithdrawText>
     </Container>
   );
 };

@@ -7,11 +7,10 @@ export const WorkspaceColumn = styled.View`
   margin-right: 16px;
 `;
 
-export const WorkspaceCircle = styled.View<{color: string}>`
+export const WorkspaceCircle = styled.Image`
   width: 80px;
   height: 80px;
   border-radius: 40px;
-  background-color: ${({color}) => color};
   align-items: center;
   justify-content: center;
   margin-right: 8px;
@@ -36,7 +35,7 @@ export const WorkspaceAlarmText = styled.Text`
   margin-top: 4px;
 `;
 
-export const CreateWorkspaceBox = styled.View`
+export const CreateWorkspaceBox = styled.TouchableOpacity`
   width: 100px;
   border-radius: 20px;
   background-color: ${({theme}) => theme.colors.background};
