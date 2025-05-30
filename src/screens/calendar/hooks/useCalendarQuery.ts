@@ -9,12 +9,13 @@ import {useSuspenseQuery} from '@tanstack/react-query';
  */
 
 export const useCalendarQuery = (workspaceId: string) => {
-  const {data} = useSuspenseQuery({
+  const {data, refetch} = useSuspenseQuery({
     queryKey: calendarQuery(workspaceId).queryKey,
     queryFn: calendarQuery(workspaceId).queryFn,
   });
 
   return {
     data,
+    refetch,
   };
 };

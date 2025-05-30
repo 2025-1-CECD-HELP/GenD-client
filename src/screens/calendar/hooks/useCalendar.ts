@@ -6,8 +6,6 @@ import {DayPressEventData, Month} from '../types';
 import {useTheme} from '@/contexts/theme/ThemeContext';
 import {TYPE_COLORS} from '../constants/calendar';
 import {getMonth, isSameMonth} from '../utils/formatDate';
-import {TPostScheduleRequest} from '@/services/calendar/types';
-import {createSchedule} from '@/services/calendar';
 import {useCalendarQuery} from './useCalendarQuery';
 import {useAtom} from 'jotai';
 import {workspaceState} from '@/atoms/workspace';
@@ -18,7 +16,7 @@ import {workspaceState} from '@/atoms/workspace';
  * @author 홍규진
  */
 export const useCalendar = () => {
-  const {openBottomSheet, closeBottomSheet} = useBottomSheet();
+  const {openBottomSheet} = useBottomSheet();
   const [workspace] = useAtom(workspaceState);
   const theme = useTheme();
 
@@ -123,23 +121,8 @@ export const useCalendar = () => {
     setFocusedDate(null);
   };
 
-  const addSchedule = async (newSchedule: TPostScheduleRequest) => {
-    //일정 추가 API 구현
-    //TODO-[규진] workSpace 관련 로직 끝나면 이걸로 맞게 추가
-    await createSchedule({
-      ...newSchedule,
-    });
-  };
-
   const handleOpenAddSchedule = () => {
-    openBottomSheet(
-      React.createElement(AddScheduleSheet, {
-        onSubmit: (newSchedule: TPostScheduleRequest) => {
-          addSchedule(newSchedule);
-          closeBottomSheet();
-        },
-      }),
-    );
+    openBottomSheet(React.createElement(AddScheduleSheet, {}));
   };
 
   const calendarKey = React.useMemo(
