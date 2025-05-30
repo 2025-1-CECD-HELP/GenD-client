@@ -12,6 +12,7 @@ import {Post} from '@/services/post/types';
 export type TRouteParams = {
   LANDING: {};
   HOME: {};
+  ALERT_LIST: {};
   FILE: {};
   CALENDAR: {};
   MYPAGE: {};

@@ -20,6 +20,9 @@ import {Divider} from '../my-page/index.style';
 import Markdown from 'react-native-markdown-display';
 import React, {useState} from 'react';
 import OptionsBox from './components/OptionsBox';
+import {useAtom} from 'jotai';
+import {workspaceState} from '@/atoms/workspace';
+import {createMarkdownStyles} from '@/components/PostPreview/markdownStyles';
 
 /**
  * PostDetailScreen 입니다.
@@ -31,12 +34,9 @@ import OptionsBox from './components/OptionsBox';
 export const PostDetailScreen = () => {
   const route = useRoute<RouteProp<any, any>>();
   const post: Post = route.params?.post;
-  const {blue} = useThemeColors();
+  const {blue, textPrimary, background} = useThemeColors();
   const [showOptions, setShowOptions] = useState(false);
-
-  //TODO: 어드민 여부 판별 로직 추가
-  const isAdmin = true;
-
+  const [workspace] = useAtom(workspaceState);
   if (!post) {
     return (
       <EmptyPostView>
@@ -56,9 +56,8 @@ export const PostDetailScreen = () => {
           onPress={() => setShowOptions(prev => !prev)}
         />
         {showOptions && (
-          //TODO-실제 어드민 여부 판별 로직 추가
           <OptionsBox
-            isAdmin={isAdmin}
+            isAdmin={workspace.isAdmin}
             post={post}
             onClose={() => setShowOptions(false)}
           />
@@ -78,7 +77,9 @@ export const PostDetailScreen = () => {
       </WriterRow>
       <Divider />
 
-      <Markdown>{post.postDescription}</Markdown>
+      <Markdown style={createMarkdownStyles({textPrimary, blue, background})}>
+        {post.postDescription}
+      </Markdown>
 
       {post.postImageUrl ? (
         <PostImage source={{uri: post.postImageUrl}} resizeMode="contain" />
