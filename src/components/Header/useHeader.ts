@@ -21,8 +21,8 @@ export const useHeader = () => {
   }, [handleOpenBottomSheet]);
 
   const handleNotificationPress = useCallback(() => {
-    console.log('notification');
-  }, []);
+    navigation.navigate('ALERT_LIST', {});
+  }, [navigation]);
 
   const handleLogoPress = useCallback(() => {
     navigation.navigate('LANDING', {isInit: false});

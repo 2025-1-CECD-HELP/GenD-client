@@ -26,27 +26,25 @@ import {workspaceState} from '@/atoms/workspace';
 export type FolderPreviewProps = {
   folder: FolderData;
   isAdmin: boolean;
+  onPress: () => void;
 };
 
-export const FolderPreview = ({folder, isAdmin}: FolderPreviewProps) => {
+export const FolderPreview = ({
+  folder,
+  isAdmin,
+  onPress,
+}: FolderPreviewProps) => {
   const {shadow, textDisabled, red, textPrimary} = useThemeColors();
   const {setModalContent, setIsOpen} = useModal();
   const [isOptionsVisible, setIsOptionsVisible] = useState(false);
-  const [menuPosition, setMenuPosition] = useState({
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0,
-  });
   const menuRef = useRef<View>(null);
   const [workspace] = useAtom(workspaceState);
   const {mutate: patchDirectoryMutation} = useRenameDirectoryMutation();
   const {mutate: deleteDirectoryMutation} = useDeleteDirectoryMutation();
+
   const handleMenuPress = () => {
-    menuRef.current?.measureInWindow((x, y, width, height) => {
-      setMenuPosition({x, y, width, height});
-      setIsOptionsVisible(true);
-    });
+    console.log('[menuPress] menuRef.current', menuRef.current);
+    setIsOptionsVisible(true);
   };
 
   const options = [
@@ -103,18 +101,18 @@ export const FolderPreview = ({folder, isAdmin}: FolderPreviewProps) => {
   return (
     <Shadow
       distance={5}
-      style={{borderRadius: 13, width: '100%'}}
+      style={{borderRadius: 13, width: '100%', position: 'relative'}}
       offset={[0, 0]}
       startColor={shadow}>
-      <Container onPress={() => {}}>
-        <FormatPreview activeOpacity={0.8}>
+      <Container ref={menuRef}>
+        <FormatPreview activeOpacity={0.8} onPress={onPress}>
           <FolderIcon width={48} height={48} />
         </FormatPreview>
         <Divider />
         <ContentContainer>
           <Title>{folder.dirName}</Title>
           {isAdmin && (
-            <View ref={menuRef}>
+            <View>
               <MoreIcon
                 onPress={handleMenuPress}
                 fill={textDisabled}
@@ -129,7 +127,8 @@ export const FolderPreview = ({folder, isAdmin}: FolderPreviewProps) => {
         visible={isOptionsVisible}
         onClose={() => setIsOptionsVisible(false)}
         options={options}
-        position={menuPosition}
+        menuRef={menuRef}
+        isFile={false}
       />
     </Shadow>
   );

@@ -14,12 +14,7 @@ import {
   DarkLightLogoContainer,
 } from './index.style';
 
-import {
-  AppLogo,
-  AlertIcon,
-  DarkLogo,
-  LightLogo,
-} from '@assets/images/svg/header';
+import {AppLogo, AlertIcon, LightLogo} from '@assets/images/svg/header';
 import {useHeader} from './useHeader';
 
 /**
@@ -55,7 +50,11 @@ export const Header: React.FC = () => {
     <HeaderContainer>
       <LeftContainer>
         <DarkLightLogoContainer onPress={handleDarkLightLogoPress}>
-          {isDarkMode ? <LightLogo /> : <DarkLogo />}
+          {isDarkMode ? (
+            <LightLogo fill={colors.yellow} />
+          ) : (
+            <LightLogo fill={colors.white} />
+          )}
         </DarkLightLogoContainer>
         <LogoContainer onPress={handleLogoPress}>
           <AppLogo fill={colors.textPrimary} width={58} height={23} />
@@ -88,10 +87,7 @@ export const Header: React.FC = () => {
 
         <IconButton onPress={handleNotificationPress}>
           <AlertIcon
-            fill={colors.textPrimary}
-            stroke={colors.textPrimary}
-            strokeOpacity={1}
-            strokeWidth={1.6335}
+            fill={isDarkMode ? colors.yellow : colors.textPrimary}
             width={21}
             height={21}
           />

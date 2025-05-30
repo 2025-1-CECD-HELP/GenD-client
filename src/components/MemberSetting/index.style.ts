@@ -1,5 +1,4 @@
 import styled from '@emotion/native';
-import {ActiveMemberPosition} from './index.type';
 
 export const Container = styled.View`
   background-color: ${({theme}) => theme.colors.backgroundBase};

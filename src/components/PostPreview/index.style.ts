@@ -1,5 +1,4 @@
 import styled from '@emotion/native';
-import Markdown from 'react-native-markdown-display';
 
 export const Container = styled.TouchableOpacity`
   width: 100%;
@@ -34,14 +33,7 @@ export const PostContent = styled.View`
   margin-left: 12px;
 `;
 
-export const StyledMarkdown = styled(Markdown)`
-  font-size: 12px;
-  line-height: 16px;
-  font-family: ${({theme}) => theme.fonts.text4};
-  color: ${({theme}) => theme.colors.textSecondary};
-`;
-
 export const Writer = styled.Text`
   ${({theme}) => theme.fonts.text4};
-  color: ${({theme}) => theme.colors.textSecondary};
+  color: ${({theme}) => theme.colors.textPrimary};
 `;

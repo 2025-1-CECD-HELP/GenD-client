@@ -1,22 +1,25 @@
 // src/components/OptionsBox/index.style.ts
 import styled from '@emotion/native';
+import {LayoutRectangle} from 'react-native';
 
-export const Wrapper = styled.TouchableOpacity`
+export const Wrapper = styled.TouchableOpacity<{
+  menuLayout: LayoutRectangle;
+  isFile: boolean;
+}>`
   flex: 1;
   width: 100%;
   height: 100%;
   justify-content: flex-end;
   background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  z-index: 1000;
+  left: ${({menuLayout}) => menuLayout.x}px;
 `;
 
-export const Container = styled.View<{
-  position: {x: number; y: number; width: number; height: number};
-}>`
+export const Container = styled.View<{isFile: boolean}>`
   position: absolute;
-  top: ${({position}) => position.y + position.height + 4}px;
-  left: ${({position}) => position.x}px;
+  bottom: ${({isFile}) => (isFile ? 130 : 250)}px;
   min-width: 140px;
-  z-index: 100;
   background-color: ${({theme}) => theme.colors.background};
   border-radius: 12px;
   padding: 12px 0;

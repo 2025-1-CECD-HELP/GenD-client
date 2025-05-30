@@ -1,10 +1,10 @@
 import React, {useRef, useState} from 'react';
 import {
-  Container,
   FormatPreview,
   ContentContainer,
   Title,
   Divider,
+  Container,
 } from './index.style';
 import {FileData} from './index.type';
 import {
@@ -43,12 +43,7 @@ export const FilePreview = (file: FileData) => {
   const {mutate: renameFileMutation} = useRenameFileMutation();
   const {mutate: deleteFileMutation} = useDeleteFileMutation();
   const {setIsOpen, setModalContent} = useModal();
-  const [menuPosition, setMenuPosition] = useState({
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0,
-  });
+
   const menuRef = useRef<View>(null);
 
   const FormatIcon = file.docuementType === 'mp3' ? AudioFormat : DocFormat;
@@ -56,10 +51,7 @@ export const FilePreview = (file: FileData) => {
   const MenuIcon = workspace.isAdmin ? MoreIcon : DownLoadIcon;
 
   const handleMenuPress = () => {
-    menuRef.current?.measureInWindow((x, y, width, height) => {
-      setMenuPosition({x, y, width, height});
-      setIsOptionsVisible(true);
-    });
+    setIsOptionsVisible(true);
   };
 
   const options = [
@@ -119,36 +111,35 @@ export const FilePreview = (file: FileData) => {
   ];
 
   return (
-    <>
-      <Shadow
-        distance={5}
-        style={{borderRadius: 13, width: '100%'}}
-        offset={[0, 0]}
-        startColor={shadow}>
-        <Container>
-          <FormatPreview activeOpacity={0.8} onPress={() => {}}>
-            <FormatIcon width={48} height={48} />
-          </FormatPreview>
-          <Divider />
-          <ContentContainer>
-            <Title>{file.documentTitle}</Title>
-            <View ref={menuRef}>
-              <MenuIcon
-                onPress={handleMenuPress}
-                fill={textDisabled}
-                width={20}
-                height={20}
-              />
-            </View>
-          </ContentContainer>
-        </Container>
-      </Shadow>
+    <Shadow
+      distance={5}
+      style={{borderRadius: 13, width: '100%', position: 'relative'}}
+      offset={[0, 0]}
+      startColor={shadow}>
+      <Container ref={menuRef} isFile={true}>
+        <FormatPreview activeOpacity={0.8} onPress={() => {}}>
+          <FormatIcon width={48} height={48} />
+        </FormatPreview>
+        <Divider />
+        <ContentContainer>
+          <Title>{file.documentTitle}</Title>
+          <View>
+            <MenuIcon
+              onPress={handleMenuPress}
+              fill={textDisabled}
+              width={20}
+              height={20}
+            />
+          </View>
+        </ContentContainer>
+      </Container>
       <OptionsBox
         visible={isOptionsVisible}
         onClose={() => setIsOptionsVisible(false)}
         options={options}
-        position={menuPosition}
+        menuRef={menuRef}
+        isFile={true}
       />
-    </>
+    </Shadow>
   );
 };

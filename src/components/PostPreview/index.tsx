@@ -6,8 +6,6 @@ import {
   PostTitle,
   PostContent,
   Writer,
-  PostContainer,
-  StyledMarkdown,
 } from './index.style';
 import {useThemeColors} from '@/contexts/theme/ThemeContext';
 import {PinIcon} from '@/assets/images/svg/home';
@@ -15,6 +13,7 @@ import {Shadow} from 'react-native-shadow-2';
 import {Post} from '@/services/post/types';
 import {TouchableOpacity} from 'react-native';
 import Markdown from 'react-native-markdown-display';
+import {createMarkdownStyles} from './markdownStyles';
 
 /**
  * 워크스페이스 메인 홈화면의 게시글 프리뷰 컴포넌트 입니다.
@@ -34,8 +33,14 @@ export const PostPreview = ({
   onTogglePin,
   onPostPress,
 }: PostPreviewProps) => {
-  const {shadow, blue} = useThemeColors();
+  const {textPrimary, blue, background, shadow} = useThemeColors();
   const {postTitle, postDescription, postImageUrl, postWriter, isPin} = post;
+  const markdownStyles = createMarkdownStyles({
+    textPrimary: textPrimary,
+    background: background,
+    blue: blue,
+  });
+
   return (
     <Shadow
       distance={10}
@@ -50,7 +55,7 @@ export const PostPreview = ({
         <ContentContainer>
           <PostTitle>{postTitle}</PostTitle>
           <PostContent>
-            <StyledMarkdown>{postDescription}</StyledMarkdown>
+            <Markdown style={markdownStyles}>{postDescription}</Markdown>
           </PostContent>
           <Writer>{postWriter}</Writer>
           {isAdmin ? (
