@@ -13,44 +13,17 @@ import 'dayjs/locale/ko';
 import AdaptiveLoadingFallback from '@/components/FallBackUI/Loading/AdaptiveLoadingFallbackUI';
 import {AdaptiveErrorFallback} from '@/components/FallBackUI/Error/AdaptiveErrorFallbackUI';
 import ErrorBoundary from 'react-native-error-boundary';
-import messaging from '@react-native-firebase/messaging';
-import {useAtom} from 'jotai';
-import {alertState} from '@/atoms/alert';
-import {Alert} from 'react-native';
+import {useFCM} from '@/screens/login/hooks/useFCM';
 
 dayjs.extend(relativeTime);
 dayjs.locale('ko');
 
 function App(): React.JSX.Element {
-  const [_, setAlerts] = useAtom(alertState);
+  const {requestUserPermission} = useFCM();
 
   useEffect(() => {
-    // 포그라운드 메시지 핸들러
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      if (remoteMessage.notification) {
-        Alert.alert(
-          remoteMessage.notification.title || '새로운 알림',
-          remoteMessage.notification.body,
-        );
-      }
-    });
-
-    // 백그라운드 메시지 핸들러
-    messaging().setBackgroundMessageHandler(async remoteMessage => {
-      if (remoteMessage.notification) {
-        const newAlert = {
-          id: Date.now().toString(),
-          title: remoteMessage.notification.title || '새로운 알림',
-          content: remoteMessage.notification.body || '',
-          timestamp: Date.now(),
-          isRead: false,
-        };
-        setAlerts(prev => [newAlert, ...prev]);
-      }
-    });
-
-    return unsubscribe;
-  }, [setAlerts]);
+    requestUserPermission();
+  }, [requestUserPermission]);
 
   return (
     <ThemeProvider>

@@ -33,7 +33,7 @@ export const MeetingScreen = () => {
       <TemplateList
         selectedTemplate={recording.templateId}
         onSelectTemplate={templateId => {
-          setRecording(prev => ({...prev, templateId}));
+          setRecording(prev => ({...prev, templateId: templateId}));
         }}
       />
       <ButtonContainer>
