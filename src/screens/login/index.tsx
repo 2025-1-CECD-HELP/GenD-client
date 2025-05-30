@@ -12,13 +12,19 @@ import {
 } from './indes.style';
 import LinearGradient from 'react-native-linear-gradient';
 import {useTheme} from '@emotion/react';
-import {useKakaoLoginMutation} from './hooks/useOauthLoginMutation';
+import {
+  useAppleLoginMutation,
+  useKakaoLoginMutation,
+} from './hooks/useOauthLoginMutation';
 import {useFCM} from '@/screens/login/hooks/useFCM';
 
 export const LoginScreen = () => {
   const theme = useTheme();
   const {fcmToken, requestUserPermission} = useFCM();
   const {mutate: kakaoLogin, isPending} = useKakaoLoginMutation(fcmToken || '');
+  const {mutate: appleLogin, isPending: isApplePending} = useAppleLoginMutation(
+    fcmToken || '',
+  );
 
   useEffect(() => {
     requestUserPermission();
@@ -49,7 +55,10 @@ export const LoginScreen = () => {
               {isPending ? '로그인 중...' : '카카오톡으로 시작하기'}
             </SocialText>
           </SocialButton>
-          <SocialButton activeOpacity={0.8}>
+          <SocialButton
+            activeOpacity={0.8}
+            onPress={() => appleLogin()}
+            disabled={isApplePending || !fcmToken}>
             <AppleIcon width={24} height={24} />
             <SocialText>Apple로 시작하기</SocialText>
           </SocialButton>
