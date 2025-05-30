@@ -1,3 +1,5 @@
+import {FileData} from '@/components/FilePreview/index.type';
+import {FolderData} from '@/components/FolderPreview/index.type';
 import styled from '@emotion/native';
 import {FlatList} from 'react-native';
 
@@ -13,13 +15,15 @@ export const SearchBarWrapper = styled.View`
 export const EmptyView = styled.Text`
   text-align: center;
   margin-top: 20px;
+  color: ${({theme}) => theme.colors.textDisabled};
 `;
 
-export const FileList = styled(FlatList)`
+export const FileList = styled(FlatList<FileData | FolderData>)`
   flex: 1;
 `;
 
 export const ItemWrapper = styled.View`
+  position: relative;
   width: 48%;
   margin-bottom: 16px;
 `;
@@ -44,6 +48,11 @@ export const BreadcrumbText = styled.Text`
 export const BreadcrumbArrow = styled.Text`
   color: ${({theme}) => theme.colors.textDisabled};
   margin: 0 6px;
+`;
+
+export const BreadcrumbItem = styled.View`
+  flex-direction: row;
+  align-items: center;
 `;
 
 export const FileGrid = styled.View`

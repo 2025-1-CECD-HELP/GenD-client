@@ -9,12 +9,13 @@ import {useSuspenseQuery} from '@tanstack/react-query';
  */
 
 export const useFileQuery = (workspaceId: string, dirId: number) => {
-  const {data} = useSuspenseQuery({
+  const {data, refetch} = useSuspenseQuery({
     queryKey: fileQuery(workspaceId, dirId).queryKey,
     queryFn: fileQuery(workspaceId, dirId).queryFn,
   });
 
   return {
     data,
+    refetch,
   };
 };
