@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   Container,
   Title,
@@ -10,9 +10,8 @@ import {
   LoadingText,
   ButtonsContainer,
   WaveformContainer,
-  WaveformBar,
 } from './index.style';
-import {formatTime, getTodayMeetingTitle} from './utils/formatTime';
+import {formatTime} from './utils/formatTime';
 import {useRecord} from './hooks/useRecord';
 import {
   MicIcon,
@@ -21,17 +20,19 @@ import {
   StopIcon,
 } from '../../assets/images/svg/meeting';
 import {PulseRing} from './components/Pursering';
-import {Platform} from 'react-native';
 import {useThemeColors} from '@/contexts/theme/ThemeContext';
 import {useModal} from '@/contexts/modal/ModalContext';
 import {CommonModal} from '@/components/CommonModal';
 import {PreviewContent} from './components/RecordingPreviewModal';
-import {TPostFinalTemplateContent} from '@/services/meeting/types';
 import {RecordingSubmitForm} from './components/RecordingSubmitModal';
 import {
   useFinalRecordMutation,
   useRecordMutation,
 } from './hooks/useRecordMutation';
+import {View} from 'react-native';
+import {useAtom} from 'jotai';
+import {recordingState} from '@/atoms/recording';
+
 export const RecordingScreen = () => {
   const {
     isRecording,
@@ -50,7 +51,8 @@ export const RecordingScreen = () => {
   const {setModalContent, setIsOpen} = useModal();
   const {mutateAsync: finalSubmitRecord} = useFinalRecordMutation();
   const {mutateAsync: submitRecord} = useRecordMutation();
-  const [finalContent, setFinalContent] = useState<any[]>([]);
+  const [recording, setRecording] = useAtom(recordingState);
+
   // 0. 녹음 기능 초기화 중
   if (!isReady) {
     return (
@@ -75,64 +77,125 @@ export const RecordingScreen = () => {
         type: 'audio/m4a',
       };
 
-      console.log('path', path);
+      // audioFile 업데이트
+      setRecording(prev => ({
+        ...prev,
+        audioFile: file,
+      }));
 
-      // 2. 녹음 결과를 미리 보는 API 호출
-      await submitRecord({
-        templateId: '1',
-        meetingRecord: file,
-      }).then(data => {
+      try {
+        // 2. 녹음 결과를 미리 보는 API 호출
+        const data = await submitRecord({
+          templateId: String(recording.templateId),
+          meetingRecord: file,
+        });
+
         if (data) {
+          console.log('2. 녹음 결과 데이터 왔어요', data);
+          const updatedContent = data.templateContent;
+
+          // templateContent 업데이트
+          setRecording(prev => {
+            const newState = {
+              ...prev,
+              templateContent: updatedContent,
+            };
+            console.log('상태 업데이트 후:', newState);
+            return newState;
+          });
+
+          // 미리보기 모달 데이터 저장
+          const previewData = {
+            templateId: recording.templateId,
+            templateContent: updatedContent,
+            title: recording.title,
+            folder: recording.folder,
+          };
+
+          const showSubmitModal = () => {
+            setModalContent(
+              <CommonModal
+                type="default"
+                title="회의록 저장하기"
+                onConfirm={() => {
+                  console.log('최종 제출 시 상태:', recording);
+                  handleFinalSubmit({
+                    templateId: previewData.templateId,
+                    templateContent: previewData.templateContent,
+                    fileName: previewData.title || '새 회의록',
+                    directoryId: previewData.folder,
+                  });
+                }}
+                onCancel={() => setIsOpen(false)}>
+                <RecordingSubmitForm initialData={previewData} />
+              </CommonModal>,
+            );
+            setIsOpen(true);
+          };
+
           setModalContent(
             <CommonModal
               type="default"
               title="회의록 미리보기"
-              onConfirm={() => handleOpenSubmitModal(data)}
+              onConfirm={() => {
+                console.log('미리보기 확인 시 상태:', recording);
+                setIsOpen(false);
+                setTimeout(showSubmitModal, 100);
+              }}
               onCancel={() => setIsOpen(false)}>
               <PreviewContent
-                templateContent={data.templateContent}
-                onChange={setFinalContent}
+                templateContent={updatedContent}
+                onChange={content => {
+                  setRecording(prev => {
+                    const newState = {
+                      ...prev,
+                      templateContent: content,
+                    };
+                    console.log('미리보기 수정 후 상태:', newState);
+                    return newState;
+                  });
+                }}
               />
             </CommonModal>,
           );
           setIsOpen(true);
         }
-      });
+      } catch (error) {
+        console.error('녹음 결과 처리 중 오류 발생:', error);
+      }
     }
   };
 
-  // 3. 최종 저장 모달 띄우는 함수
-  const handleOpenSubmitModal = (data: TPostFinalTemplateContent) => {
-    const initialContent = data.templateContent.map(item => ({
-      objectKey: String(item.objectKey),
-      objectValue: String(item.objectValue),
-    }));
-    setFinalContent(initialContent);
-    setModalContent(
-      <CommonModal
-        type="default"
-        title="회의록 저장하기"
-        onConfirm={() => handleFinalSubmit()}
-        onCancel={() => setIsOpen(false)}
-        isCenter>
-        <RecordingSubmitForm initialTitle={getTodayMeetingTitle()} />
-      </CommonModal>,
-    );
-    setIsOpen(true);
+  // 4. 최종 저장 API 호출
+  const handleFinalSubmit = async (submitData: {
+    templateId: number;
+    templateContent: Array<{objectKey: string; objectValue: string}>;
+    fileName: string;
+    directoryId: string;
+  }) => {
+    try {
+      if (!submitData.templateId || !submitData.templateContent) {
+        console.error('필수 데이터가 누락되었습니다:', submitData);
+        return;
+      }
+
+      console.log('최종 제출 데이터 확인:', submitData);
+      await finalSubmitRecord(submitData);
+      setIsOpen(false);
+    } catch (error) {
+      console.error('최종 저장 중 오류 발생:', error);
+    }
   };
 
-  // 4. 최종 저장 API 호출
-  const handleFinalSubmit = async () => {
-    //TODO-폴더 저장 기능 추가 필요
-    finalSubmitRecord({
-      templateId: '1',
-      templateContent: finalContent.map(item => ({
-        objectKey: String(item.objectKey),
-        objectValue: String(item.objectValue),
-      })),
-    });
-    setIsOpen(false);
-  };
+  // 파형 바 스타일 계산 함수 (이상하게 @emotion/native 에서는 디자인이 적용이 안 됨.)
+  const getBarStyle = (amp: number) => ({
+    width: 3,
+    height: Math.min(100, Math.max(10, amp)),
+    backgroundColor: textPrimary,
+    marginHorizontal: 1,
+    borderRadius: 2,
+    opacity: 0.4 + 0.6 * (amp / 100),
+  });
 
   return (
     <Container>
@@ -147,14 +210,15 @@ export const RecordingScreen = () => {
           ? '녹음이 진행 중입니다. 버튼을 누르면 녹음이 종료됩니다.'
           : '버튼을 누르면 회의 녹음이 시작됩니다.'}
       </Guide>
-      {/* 실시간 오디오 파형 (iOS만 정상 동작) */}
-      {Platform.OS === 'ios' && (
+
+      {isRecording && (
         <WaveformContainer>
-          {waveform.map((amp, idx) => (
-            <WaveformBar key={idx} amp={amp} />
+          {waveform.slice(-50).map((amp, idx) => (
+            <View key={idx} style={getBarStyle(amp)} />
           ))}
         </WaveformContainer>
       )}
+
       <ButtonsContainer isRecording={isRecording}>
         {isRecording && !isPaused && (
           <PauseIcon color={textPrimary} onPress={pauseRecording} />

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {TemplateList} from '@/components/Template/TemplateList';
 import {
   Container,
@@ -9,6 +9,8 @@ import {
 } from './index.style';
 import {Button} from '@/components/Button';
 import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
+import {useAtom} from 'jotai';
+import {recordingState} from '@/atoms/recording';
 /**
  * 미팅 페이지입니다. 향후에는 이 미팅 페이지를 들어갔을 때 워크 스페이스 여부를 확인해야합니다.
  * 현재는 템플릿 선택 후 회의록 작성 페이지로 이동합니다.
@@ -17,7 +19,7 @@ import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
 
 export const MeetingScreen = () => {
   const navigation = useTypeSafeNavigation();
-  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
+  const [recording, setRecording] = useAtom(recordingState);
 
   return (
     <Container>
@@ -29,17 +31,17 @@ export const MeetingScreen = () => {
         템플릿에 맞추어 회의록을 작성해드려요
       </GuideText>
       <TemplateList
-        selectedTemplate={selectedTemplate}
-        onSelectTemplate={setSelectedTemplate}
+        selectedTemplate={recording.templateId}
+        onSelectTemplate={templateId => {
+          setRecording(prev => ({...prev, templateId: templateId}));
+        }}
       />
       <ButtonContainer>
         <Button
           onPress={() => {
-            // 선택된 템플릿 활용
-            if (selectedTemplate) {
-              // 예: 다음 화면 이동 등
+            if (recording.templateId) {
               navigation.navigate('RECORDING', {
-                templateId: selectedTemplate,
+                templateId: recording.templateId,
               });
             }
           }}

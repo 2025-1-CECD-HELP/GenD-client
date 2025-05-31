@@ -2,7 +2,13 @@ import {
   TCreateWorkspaceRequest,
   TEditWorkspaceRequest,
 } from '@/services/workspace/types';
-import {memberListQuery, workspaceListQuery, workspaceQuery} from './queryKeys';
+import {
+  calendarQuery,
+  memberListQuery,
+  userQuery,
+  workspaceListQuery,
+  workspaceQuery,
+} from './queryKeys';
 import {
   createWorkspace,
   deleteWorkspace,
@@ -41,6 +47,10 @@ import {
   TPatchFileRequest,
 } from '@/services/file/types';
 import {fileQuery} from './queryKeys';
+import {TUpdateUserAlarmRequest} from '@/services/auth/types';
+import {updateUserAlarm} from '@/services/auth';
+import {TPostScheduleRequest} from '@/services/calendar/types';
+import {createSchedule} from '@/services/calendar';
 
 /**
  * Tanstack Query 중 useMutation 사용시 편의성을 위해 키와 함수를 한 군데가 모아두는 파일입니다.
@@ -265,5 +275,28 @@ export const patchFileMutationKey = () => {
     mutationKey: ['patchFile'],
     mutationSuccessKey: [],
     mutationFn: (request: TPatchFileRequest) => patchFile(request),
+  };
+};
+
+/**
+ * 유저 알람 설정 수정 뮤테이션 키
+ */
+export const userAlarmMutationKey = (workspaceId: string) => {
+  return {
+    mutationKey: ['userAlarm'],
+    mutationSuccessKey: [...userQuery(workspaceId).queryKey],
+    mutationFn: (request: TUpdateUserAlarmRequest) => updateUserAlarm(request),
+  };
+};
+
+/**
+ * 일정 생성 뮤테이션 키
+ * @author 홍규진
+ */
+export const createScheduleMutationKey = (workspaceId: string) => {
+  return {
+    mutationKey: ['createSchedule'],
+    mutationSuccessKey: [...calendarQuery(workspaceId).queryKey],
+    mutationFn: (request: TPostScheduleRequest) => createSchedule(request),
   };
 };

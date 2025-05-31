@@ -23,6 +23,8 @@ export const ContentContainer = styled.View`
   display: flex;
   flex-direction: row;
   align-items: center;
+  width: 80%;
+  justify-content: space-between;
   gap: 10px;
 `;
 
@@ -37,6 +39,11 @@ export const MemberName = styled.Text`
   color: ${({theme}) => theme.colors.textPrimary};
 `;
 
+export const MemberEmail = styled.Text`
+  ${({theme}) => theme.fonts.text3};
+  color: ${({theme}) => theme.colors.textPrimary};
+`;
+
 export const PositionTag = styled.View<{position: ActiveMemberPosition}>`
   border-radius: 50px;
   background-color: ${({theme, position}) =>
@@ -48,4 +55,11 @@ export const PositionText = styled.Text<{position: ActiveMemberPosition}>`
   color: ${({theme, position}) =>
     position === 'manager' ? theme.colors.white : theme.colors.textPrimary};
   ${({theme}) => theme.fonts.text5};
+`;
+
+export const ProviderIcon = styled.View`
+  width: 16px;
+  height: 16px;
+  justify-content: center;
+  align-items: center;
 `;

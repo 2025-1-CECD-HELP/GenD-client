@@ -12,6 +12,7 @@ import {Post} from '@/services/post/types';
 export type TRouteParams = {
   LANDING: {};
   HOME: {};
+  ALERT_LIST: {};
   FILE: {};
   CALENDAR: {};
   MYPAGE: {};
@@ -20,7 +21,7 @@ export type TRouteParams = {
   WRITE: {};
   MEMBER: {};
   POST_DETAIL: {post: Post};
-  RECORDING: {templateId: string};
+  RECORDING: {templateId: number};
   INIT_WORKSPACE: {};
   CREATE_WORKSPACE: {};
   EDIT_WORKSPACE: {};

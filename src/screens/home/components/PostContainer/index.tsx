@@ -32,6 +32,8 @@ import {useCategoryListQuery} from '../../hooks/useCategoryListQuery';
 import {Post} from '@/services/post/types';
 import {useCategoryMutation} from '../../hooks/useCategoryMutation';
 import {usePatchPostPinMutation} from '../../hooks/usePostMutation';
+import {useAtom} from 'jotai';
+import {workspaceState} from '@/atoms/workspace';
 
 /**
  * 홈 화면 하단의 게시글 컨테이너입니다.
@@ -39,7 +41,7 @@ import {usePatchPostPinMutation} from '../../hooks/usePostMutation';
  * - 유저의 역할에 따라 게시글 작성 버튼 및 카테고리 추가 버튼이 조건부로 표시됩니다.
  * - props로 받은 innerScrollEnabled에 따라 내부 ScrollView의 스크롤 활성화 여부를 제어합니다.
  * - profileHeight를 바탕으로 최대 높이를 계산해 리스트 영역을 화면에 맞게 제한합니다.
- * @author 이정선
+ * @author 이정선, 홍규진
  */
 
 interface PostContainerProps {
@@ -73,7 +75,7 @@ export const PostContainer = ({
   const containerMinHeight = screenHeight - HEADER_HEIGHT - BOTTOMTAB_HEIGHT;
   const {data: postList} = usePostQuery();
   const [newCategoryName, setNewCategoryName] = useState('');
-
+  const [workspace] = useAtom(workspaceState);
   let filteredData: Post[] = [];
   if (postList) {
     filteredData = postList.filter(
@@ -139,6 +141,11 @@ export const PostContainer = ({
           horizontal
           showsHorizontalScrollIndicator={false}>
           <PostCategoryListContent>
+            <PostCategory
+              category="전체"
+              isActive={postCategoryState === '전체'}
+              onPress={() => handleCategoryClick('전체')}
+            />
             {categoryList?.map(category => (
               <PostCategory
                 key={category.categoryId}
@@ -156,7 +163,6 @@ export const PostContainer = ({
       <PostList
         maxHeight={POSTLIST_HEIGHT}
         nestedScrollEnabled
-        pointerEvents={innerScrollEnabled ? 'auto' : 'none'}
         scrollEnabled={innerScrollEnabled}
         onScroll={onInnerScroll}
         scrollEventThrottle={16}
@@ -178,7 +184,7 @@ export const PostContainer = ({
           <PostPreview
             post={item}
             key={index}
-            isAdmin={workspaceRole === 'eAdmin'}
+            isAdmin={workspace.isAdmin}
             onTogglePin={handleTogglePin}
             onPostPress={() =>
               navigation.navigate(ROUTE_NAMES.POST_DETAIL, {post: item})

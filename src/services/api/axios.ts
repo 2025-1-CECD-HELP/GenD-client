@@ -27,6 +27,7 @@ export const privateServerInstance: AxiosInstance = axios.create({
 
 /**
  * AI API 인스턴스 설정
+ * AI API 요청에 사용
  * @author 홍규진
  */
 export const privateAIInstance: AxiosInstance = axios.create({

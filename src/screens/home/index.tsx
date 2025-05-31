@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Dimensions, RefreshControl} from 'react-native';
+import {Dimensions, RefreshControl, View} from 'react-native';
 import {ChattingIconContainer, ScrollContainer} from './index.style';
 import {WorkspaceProfile, PostContainer} from './components';
 import {useNestedScroll} from './hooks/useNestedScroll';
@@ -48,32 +48,34 @@ export const HomeScreen = () => {
   }, [refetchWorkspace, refetchPosts, refetchCategories]);
 
   return (
-    <ScrollContainer
-      scrollEnabled={outerScrollEnabled}
-      onScroll={handleOuterScroll}
-      scrollEventThrottle={16}
-      keyboardShouldPersistTaps="handled"
-      contentContainerStyle={{
-        minHeight: screenHeight,
-      }}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }>
-      <WorkspaceProfile
-        onLayout={handleProfileLayout}
-        name={workspaceInfo?.workspaceName ?? ''}
-        description={workspaceInfo?.workspaceDescription ?? ''}
-        imageUrl={workspaceInfo?.imageUrl ?? ''}
-      />
-      <PostContainer
-        profileHeight={profileHeight}
-        workspaceRole={workspaceInfo?.workspaceRole ?? ''}
-        innerScrollEnabled={innerScrollEnabled}
-        onInnerScroll={handleInnerScroll}
-      />
+    <View style={{flex: 1}}>
+      <ScrollContainer
+        scrollEnabled={outerScrollEnabled}
+        onScroll={handleOuterScroll}
+        scrollEventThrottle={16}
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{
+          minHeight: screenHeight,
+        }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
+        <WorkspaceProfile
+          onLayout={handleProfileLayout}
+          name={workspaceInfo?.workspaceName ?? ''}
+          description={workspaceInfo?.workspaceDescription ?? ''}
+          imageUrl={workspaceInfo?.imageUrl ?? ''}
+        />
+        <PostContainer
+          profileHeight={profileHeight}
+          workspaceRole={workspaceInfo?.workspaceRole ?? ''}
+          innerScrollEnabled={innerScrollEnabled}
+          onInnerScroll={handleInnerScroll}
+        />
+      </ScrollContainer>
       <ChattingIconContainer>
         <ChattingIcon onPress={() => navigation.navigate('SECRETARY', {})} />
       </ChattingIconContainer>
-    </ScrollContainer>
+    </View>
   );
 };

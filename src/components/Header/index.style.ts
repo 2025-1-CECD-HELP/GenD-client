@@ -1,4 +1,5 @@
 import styled from '@emotion/native';
+import {View} from 'react-native';
 
 // 헤더 컨테이너
 export const HeaderContainer = styled.View`

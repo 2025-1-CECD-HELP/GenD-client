@@ -8,6 +8,9 @@ import {
   SwitchLabel,
 } from './index.style';
 import {useThemeColors} from '@/contexts/theme/ThemeContext';
+import {useUserAlarmMutation} from '../../hooks/useMypageMutation';
+import {useAtom} from 'jotai';
+import {userState} from '@/atoms/user';
 
 interface AlarmSettingModalProps {
   workspaceName: string;
@@ -20,8 +23,9 @@ export const AlarmSettingModal: React.FC<AlarmSettingModalProps> = ({
   workspaceName,
   visible,
   onClose,
-  onConfirm,
 }) => {
+  const [user] = useAtom(userState);
+  const {mutateAsync: updateUserAlarm} = useUserAlarmMutation();
   const [scheduleAlarm, setScheduleAlarm] = useState(true);
   const [postAlarm, setPostAlarm] = useState(true);
   const {blue, textSecondary} = useThemeColors();
@@ -33,7 +37,13 @@ export const AlarmSettingModal: React.FC<AlarmSettingModalProps> = ({
       type="default"
       title="알림 설정"
       onCancel={onClose}
-      onConfirm={() => onConfirm(scheduleAlarm, postAlarm)}
+      onConfirm={() => {
+        updateUserAlarm({
+          memberId: user?.memberId || -1,
+          isPost: postAlarm,
+          isSchedule: scheduleAlarm,
+        });
+      }}
       isCenter
       children={
         <>

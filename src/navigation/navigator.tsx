@@ -23,11 +23,16 @@ import SecretaryScreen from '@/screens/secretary';
 import {ChatProvider} from '@/screens/secretary/contexts/ChatContext';
 import {AuthWrappedHomeScreen} from './AuthScreen';
 import {createNavigationContainerRef} from '@react-navigation/native';
+import {AlertListScreen} from '@/screens/alert-list';
 
-export const navigationRef = createNavigationContainerRef();
+export const navigationRef = createNavigationContainerRef<TRouteParams>();
 
-export function navigate(name: string, params?: any) {
+export function navigate<T extends keyof TRouteParams>(
+  name: T,
+  params?: TRouteParams[T],
+) {
   if (navigationRef.isReady()) {
+    // @ts-ignore
     navigationRef.navigate(name, params);
   }
 }
@@ -94,6 +99,14 @@ export default function AppNavigator() {
           name="EDIT_WORKSPACE"
           component={EditWorkspaceScreen}
           options={{headerShown: true, header: () => <Header />}}
+        />
+        <Stack.Screen
+          name="ALERT_LIST"
+          component={AlertListScreen}
+          options={{
+            headerShown: true,
+            header: () => <Header />,
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

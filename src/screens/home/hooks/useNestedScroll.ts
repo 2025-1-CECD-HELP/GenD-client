@@ -18,21 +18,36 @@ export function useNestedScroll() {
   const [innerScrollEnabled, setInnerScrollEnabled] = useState<boolean>(false);
   const [profileHeight, setProfileHeight] = useState<number>(0);
   const lastInnerY = useRef<number>(0);
+  const isTransitioning = useRef<boolean>(false);
 
   const handleOuterScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const y = e.nativeEvent.contentOffset.y;
-    if (y >= profileHeight && outerScrollEnabled && !innerScrollEnabled) {
+    if (
+      y >= profileHeight &&
+      outerScrollEnabled &&
+      !innerScrollEnabled &&
+      !isTransitioning.current
+    ) {
+      isTransitioning.current = true;
       setOuterScrollEnabled(false);
       setInnerScrollEnabled(true);
+      setTimeout(() => {
+        isTransitioning.current = false;
+      }, 100);
     }
   };
 
   const handleInnerScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const y = e.nativeEvent.contentOffset.y;
     const delta = y - lastInnerY.current;
-    if (y <= 5 && delta < 0) {
+
+    if (y <= 0 && delta < 0 && !isTransitioning.current) {
+      isTransitioning.current = true;
       setOuterScrollEnabled(true);
       setInnerScrollEnabled(false);
+      setTimeout(() => {
+        isTransitioning.current = false;
+      }, 100);
     }
     lastInnerY.current = y;
   };

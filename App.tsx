@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {Suspense} from 'react';
+import React, {Suspense, useEffect} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import AppNavigator from '@/navigation/navigator';
 import {QueryClientProvider} from '@/contexts/query/QueryContext';
@@ -13,11 +13,18 @@ import 'dayjs/locale/ko';
 import AdaptiveLoadingFallback from '@/components/FallBackUI/Loading/AdaptiveLoadingFallbackUI';
 import {AdaptiveErrorFallback} from '@/components/FallBackUI/Error/AdaptiveErrorFallbackUI';
 import ErrorBoundary from 'react-native-error-boundary';
+import {useFCM} from '@/screens/login/hooks/useFCM';
 
 dayjs.extend(relativeTime);
 dayjs.locale('ko');
 
 function App(): React.JSX.Element {
+  const {requestUserPermission} = useFCM();
+
+  useEffect(() => {
+    requestUserPermission();
+  }, [requestUserPermission]);
+
   return (
     <ThemeProvider>
       <ErrorBoundary FallbackComponent={AdaptiveErrorFallback}>

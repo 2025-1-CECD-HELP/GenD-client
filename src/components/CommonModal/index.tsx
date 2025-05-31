@@ -43,12 +43,14 @@ interface ICommonModalProps {
   inputPlaceholder?: string;
   inputValue?: string;
   onInputChange?: (text: string) => void;
+  height?: number;
 }
 
 export const CommonModal: React.FC<ICommonModalProps> = ({
   type,
   title,
   content,
+  height,
   onConfirm,
   onCancel,
   isCenter,
@@ -100,7 +102,9 @@ export const CommonModal: React.FC<ICommonModalProps> = ({
 
   return (
     <CommonModalContainer>
-      <ModalContent isCenter={type === 'check' || isCenter}>
+      <ModalContent
+        isCenter={type === 'check' || isCenter}
+        style={{height: height}}>
         {type === 'check' ? (
           <View
             style={{

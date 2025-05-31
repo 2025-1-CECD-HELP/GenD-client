@@ -34,6 +34,8 @@ export type TTemplateContent = {
  * @author 홍규진
  */
 export type TPostFinalTemplateContent = {
-  templateId: string;
+  templateId: number;
+  fileName: string;
+  directoryId: string;
   templateContent: TTemplateContent[];
 };

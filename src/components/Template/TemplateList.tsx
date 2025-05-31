@@ -1,9 +1,15 @@
 import React from 'react';
 import {FlatList} from 'react-native';
 import {Template} from '.';
-import {columnWrapperStyle, FilePreviewWrapper} from './TemplateList.style';
+import {
+  columnWrapperStyle,
+  FilePreviewWrapper,
+  TemplatePreview,
+} from './TemplateList.style';
 import {useTemplateList} from '@/components/Template/useTemplateList';
 import {templates} from './index.const';
+import {useModal} from '@/contexts/modal/ModalContext';
+import CommonModal from '../CommonModal';
 
 /**
  * 여러 개의 템플릿을 2열 그리드의 형태로 보여주는 TemplateList 컴포넌트입니다.
@@ -13,8 +19,8 @@ import {templates} from './index.const';
  */
 
 type TemplateListProps = {
-  selectedTemplate: string | null;
-  onSelectTemplate: (title: string) => void;
+  selectedTemplate: number;
+  onSelectTemplate: (templateId: number) => void;
 };
 
 export const TemplateList = ({
@@ -22,6 +28,7 @@ export const TemplateList = ({
   onSelectTemplate,
 }: TemplateListProps) => {
   const {itemWidth, onLayout, numColumns, gap} = useTemplateList();
+  const {setIsOpen, setModalContent} = useModal();
   return (
     <FlatList
       data={templates}
@@ -31,9 +38,21 @@ export const TemplateList = ({
         <FilePreviewWrapper width={itemWidth}>
           <Template
             template={item}
-            isSelected={selectedTemplate === item.title}
-            onPressTemplate={() => onSelectTemplate(item.title)}
-            onPreePreview={() => console.log('프리뷰 보기')}
+            isSelected={selectedTemplate === item.id}
+            onPressTemplate={() => onSelectTemplate(item.id)}
+            onPreePreview={() => {
+              setModalContent(
+                <CommonModal
+                  type="default"
+                  title="템플릿 미리보기"
+                  onConfirm={() => setIsOpen(false)}
+                  onCancel={() => setIsOpen(false)}
+                  height={900}
+                  children={<TemplatePreview source={item.previewImage} />}
+                />,
+              );
+              setIsOpen(true);
+            }}
           />
         </FilePreviewWrapper>
       )}

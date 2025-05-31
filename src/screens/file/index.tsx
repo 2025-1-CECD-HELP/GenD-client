@@ -6,6 +6,10 @@ import {
   FileList,
   ItemWrapper,
   columnWrapperStyle,
+  Breadcrumb,
+  BreadcrumbText,
+  BreadcrumbArrow,
+  BreadcrumbItem,
 } from './index.style';
 import {SearchBar} from '@/components/SearchBar';
 import {FolderPreview} from '@/components/FolderPreview';
@@ -13,22 +17,33 @@ import {FilePreview} from '@/components/FilePreview';
 import {FolderData} from '@/components/FolderPreview/index.type';
 import {FileData} from '@/components/FilePreview/index.type';
 import {useFile} from './hooks/useFile';
-
 import CommonModal from '@/components/CommonModal';
-import {useAddFileMutation} from './hooks/uesFileMutation';
 import {useModal} from '@/contexts/modal/ModalContext';
 import {useAtom} from 'jotai';
 import {workspaceState} from '@/atoms/workspace';
+import {ActivityIndicator} from 'react-native';
 
 export const FileScreen: React.FC = () => {
   const [workspace] = useAtom(workspaceState);
   const {setIsOpen, setModalContent} = useModal();
-  const {mutate: addFileMutation} = useAddFileMutation(
-    workspace.workspaceId,
-    parseInt(workspace.rootDirId, 10),
-  );
+  const {
+    setSearch,
+    mergedList,
+    filteredFolders,
+    filteredFiles,
+    handleClickFolder,
+    addFileMutation,
+    breadcrumbStack,
+    handleClickBreadcrumb,
+  } = useFile();
 
-  const {setSearch, mergedList, filteredFolders, filteredFiles} = useFile();
+  if (!mergedList) {
+    return (
+      <Container>
+        <ActivityIndicator size="large" />
+      </Container>
+    );
+  }
 
   return (
     <Container>
@@ -58,45 +73,56 @@ export const FileScreen: React.FC = () => {
           }}
         />
       </SearchBarWrapper>
-      {filteredFolders.length === 0 && filteredFiles.length === 0 && (
-        <EmptyView>폴더나 파일이 없습니다.</EmptyView>
-      )}
-      {/* <Breadcrumb>
-        {breadcrumbs.map((name, idx) => (
-          <View key={idx} style={{flexDirection: 'row', alignItems: 'center'}}>
+      <Breadcrumb>
+        {breadcrumbStack.map(({name}, idx) => (
+          <BreadcrumbItem
+            key={idx}
+            onTouchEnd={() => handleClickBreadcrumb(idx)}>
             <BreadcrumbText>{name}</BreadcrumbText>
-            {idx < breadcrumbs.length - 1 && (
+            {idx < breadcrumbStack.length - 1 && (
               <BreadcrumbArrow>›</BreadcrumbArrow>
             )}
-          </View>
+          </BreadcrumbItem>
         ))}
-      </Breadcrumb> */}
-      <FileList
-        data={mergedList}
-        numColumns={2}
-        scrollEnabled={false}
-        columnWrapperStyle={columnWrapperStyle}
-        renderItem={({item}) => {
-          if ((item as {type: string}).type === 'folder') {
+      </Breadcrumb>
+      {filteredFolders.length > 0 || filteredFiles.length > 0 ? (
+        <FileList
+          data={mergedList}
+          numColumns={2}
+          scrollEnabled={true}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{paddingBottom: 20}}
+          columnWrapperStyle={columnWrapperStyle}
+          renderItem={({item}: {item: FileData | FolderData}) => {
+            if ('dirId' in item) {
+              return (
+                <ItemWrapper>
+                  <FolderPreview
+                    folder={item as FolderData}
+                    isAdmin={workspace.isAdmin}
+                    onPress={() =>
+                      handleClickFolder(
+                        (item as FolderData).dirId.toString(),
+                        (item as FolderData).dirName,
+                      )
+                    }
+                  />
+                </ItemWrapper>
+              );
+            }
             return (
               <ItemWrapper>
-                <FolderPreview
-                  folder={item as FolderData}
-                  isAdmin={workspace.isAdmin}
-                />
+                <FilePreview {...(item as FileData)} />
               </ItemWrapper>
             );
+          }}
+          keyExtractor={(item, index) =>
+            `${item as FileData | FolderData}-${index}`
           }
-          return (
-            <ItemWrapper>
-              <FilePreview {...(item as FileData)} />
-            </ItemWrapper>
-          );
-        }}
-        keyExtractor={(item, index) =>
-          `${item as FileData | FolderData}-${index}`
-        }
-      />
+        />
+      ) : (
+        <EmptyView>폴더나 파일이 없습니다.</EmptyView>
+      )}
     </Container>
   );
 };

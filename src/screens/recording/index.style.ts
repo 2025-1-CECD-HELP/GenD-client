@@ -98,20 +98,22 @@ export const ErrorText = styled.Text`
 export const WaveformContainer = styled.View`
   flex-direction: row;
   align-items: flex-end;
-  height: 60px;
-  margin-vertical: 16px;
+  justify-content: center;
+  height: 100px;
   width: 90%;
-  align-self: center;
   background-color: ${({theme}) => theme.colors.backgroundElevated};
   border-radius: 10px;
-  overflow: hidden;
+  padding: 10px;
+  margin-top: 20px;
+  border: 1px solid ${({theme}) => theme.colors.blue};
+  position: relative;
 `;
 
 export const WaveformBar = styled.View<{amp: number}>`
   width: 3px;
-  height: ${({amp}) => Math.max(10, Math.min(50, 30 + amp))}px;
-  background-color: ${({theme}) => theme.colors.textPrimary};
+  height: 10px;
+  background-color: ${({theme}) => theme.colors.blue};
   margin-horizontal: 1px;
   border-radius: 2px;
-  opacity: ${({amp}) => 0.7 + 0.3 * (amp / 100)};
+  opacity: ${({amp}) => 0.4 + 0.6 * (amp / 100)};
 `;
