@@ -1,4 +1,4 @@
-import {useMutation} from '@tanstack/react-query';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
 import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
 import {useModal} from '@/contexts/modal/ModalContext';
 import {CommonModal} from '@/components/CommonModal';
@@ -6,6 +6,8 @@ import {
   finalSubmitRecordMutationKey,
   submitRecordMutationKey,
 } from '@/constants/mutationKeys';
+import {useAtomValue} from 'jotai';
+import {workspaceState} from '@/atoms/workspace';
 
 /**
  * 회의록 저장(제출) 뮤테이션 훅입니다.
@@ -27,11 +29,20 @@ export const useRecordMutation = () => {
  * @author 홍규진
  */
 export const useFinalRecordMutation = () => {
+  const workspace = useAtomValue(workspaceState);
+
   const {setModalContent, setIsOpen} = useModal();
   const navigation = useTypeSafeNavigation();
+  const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationKey: finalSubmitRecordMutationKey().mutationKey,
-    mutationFn: finalSubmitRecordMutationKey().mutationFn,
+    mutationKey: finalSubmitRecordMutationKey(
+      workspace.workspaceId,
+      workspace.rootDirId,
+    ).mutationKey,
+    mutationFn: finalSubmitRecordMutationKey(
+      workspace.workspaceId,
+      workspace.rootDirId,
+    ).mutationFn,
     onSuccess: () => {
       setIsOpen(true);
       setModalContent(
@@ -44,6 +55,12 @@ export const useFinalRecordMutation = () => {
           }}
         />,
       );
+      queryClient.invalidateQueries({
+        queryKey: finalSubmitRecordMutationKey(
+          workspace.workspaceId,
+          workspace.rootDirId,
+        ).mutationSuccessKey,
+      });
     },
     onError: error => {
       throw new Error(error.message);

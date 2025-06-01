@@ -10,6 +10,7 @@ export const Container = styled.View`
 `;
 export const LoadingText = styled.Text`
   ${({theme}) => theme.fonts.title1};
+  color: ${({theme}) => theme.colors.textPrimary};
 `;
 export const Title = styled.Text`
   ${({theme}) => theme.fonts.title2};

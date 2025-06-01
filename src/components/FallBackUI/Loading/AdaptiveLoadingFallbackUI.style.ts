@@ -11,13 +11,13 @@ export const PulsingContainer = styled.View`
 export const Title = styled.Text`
   font-size: 18px;
   font-weight: bold;
-  color: #333;
+  color: ${({theme}) => theme.colors.textPrimary};
   margin-top: 16px;
 `;
 
 export const Subtitle = styled.Text`
   font-size: 14px;
-  color: #666;
+  color: ${({theme}) => theme.colors.textPrimary};
   margin-top: 8px;
   text-align: center;
 `;
@@ -31,6 +31,6 @@ export const LoadingContainer = styled.View`
 
 export const LoadingText = styled.Text`
   font-size: 16px;
-  color: #333;
+  color: ${({theme}) => theme.colors.textPrimary};
   margin-top: 12px;
 `;

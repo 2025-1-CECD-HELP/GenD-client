@@ -21,7 +21,12 @@ import CommonModal from '@/components/CommonModal';
 import {useModal} from '@/contexts/modal/ModalContext';
 import {useAtom} from 'jotai';
 import {workspaceState} from '@/atoms/workspace';
-import {ActivityIndicator} from 'react-native';
+import {
+  ActivityIndicator,
+  RefreshControl,
+  ScrollView,
+  Text,
+} from 'react-native';
 
 export const FileScreen: React.FC = () => {
   const [workspace] = useAtom(workspaceState);
@@ -35,6 +40,7 @@ export const FileScreen: React.FC = () => {
     addFileMutation,
     breadcrumbStack,
     handleClickBreadcrumb,
+    refetch,
   } = useFile();
 
   if (!mergedList) {
@@ -93,6 +99,9 @@ export const FileScreen: React.FC = () => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 20}}
           columnWrapperStyle={columnWrapperStyle}
+          refreshControl={
+            <RefreshControl refreshing={false} onRefresh={refetch} />
+          }
           renderItem={({item}: {item: FileData | FolderData}) => {
             if ('dirId' in item) {
               return (
@@ -121,7 +130,15 @@ export const FileScreen: React.FC = () => {
           }
         />
       ) : (
-        <EmptyView>폴더나 파일이 없습니다.</EmptyView>
+        <ScrollView
+          contentContainerStyle={{flex: 1}}
+          refreshControl={
+            <RefreshControl refreshing={false} onRefresh={refetch} />
+          }>
+          <EmptyView>
+            <Text>폴더나 파일이 없습니다.</Text>
+          </EmptyView>
+        </ScrollView>
       )}
     </Container>
   );

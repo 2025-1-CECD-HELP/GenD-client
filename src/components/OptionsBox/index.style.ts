@@ -28,11 +28,13 @@ export const Container = styled.View`
   border-radius: 8px;
   padding: 8px 0;
   min-width: 120px;
+  background-color: ${({theme}) => theme.colors.background};
 `;
 
 export const OptionItem = styled.TouchableOpacity<{disabled?: boolean}>`
   padding: 12px 0px;
   opacity: ${props => (props.disabled ? 0.5 : 1)};
+  background-color: ${({theme}) => theme.colors.background};
 `;
 
 export const OptionText = styled.Text`

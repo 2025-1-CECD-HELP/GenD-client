@@ -19,7 +19,7 @@ import {
 } from './index.style';
 import {TopBar} from '@/components/TopBar';
 import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
-import {Image} from 'react-native';
+import {Image, KeyboardAvoidingView, Platform} from 'react-native';
 
 import {useCreateWorkspace} from './hooks/useCreateWorkspace';
 import {useTheme} from '@emotion/react';
@@ -62,26 +62,34 @@ export const CreateWorkspaceScreen = () => {
       </ImageWrapper>
 
       <Label>워크스페이스 이름</Label>
-      <Input
-        placeholder="워크스페이스 이름을 입력하세요"
-        placeholderTextColor={theme.colors.textDisabled}
-        value={name}
-        onChangeText={setName}
-        maxLength={20}
-      />
-      <InputCount>{name.length}/20</InputCount>
-
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{flex: 1}}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}>
+        <Input
+          placeholder="워크스페이스 이름을 입력하세요"
+          placeholderTextColor={theme.colors.textDisabled}
+          value={name}
+          onChangeText={setName}
+          maxLength={20}
+        />
+        <InputCount>{name.length}/20</InputCount>
+      </KeyboardAvoidingView>
       <Label>워크스페이스 소개</Label>
-      <Input
-        placeholder="워크스페이스 소개를 입력하세요"
-        placeholderTextColor={theme.colors.textDisabled}
-        value={desc}
-        onChangeText={setDesc}
-        maxLength={200}
-        multiline
-      />
-      <InputCount>{desc.length}/200</InputCount>
-
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{flex: 1}}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}>
+        <Input
+          placeholder="워크스페이스 소개를 입력하세요"
+          placeholderTextColor={theme.colors.textDisabled}
+          value={desc}
+          onChangeText={setDesc}
+          maxLength={200}
+          multiline
+        />
+        <InputCount>{desc.length}/200</InputCount>
+      </KeyboardAvoidingView>
       <InviteRow>
         <Label>워크스페이스 멤버 추가</Label>
         <InviteButton onPress={handleAddMember}>
