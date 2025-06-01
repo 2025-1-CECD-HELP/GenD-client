@@ -5,6 +5,7 @@ import React, {
   useRef,
   useState,
   ReactNode,
+  useEffect,
 } from 'react';
 import BottomSheet, {
   BottomSheetBackdrop,
@@ -12,6 +13,7 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet';
 import {useTheme} from '../theme/ThemeContext';
 import BottomSheetContainer from '@/components/BottomSheetContainer';
+import {Keyboard, KeyboardEvent} from 'react-native';
 /**
  * 이 컴포넌트는 BottomSheet를 관리하는 Context입니다.
  * BottomSheetProvider로 감싸진 컴포넌트에서 useBottomSheet를 사용하여 BottomSheet를 열고 닫을 수 있습니다.
@@ -33,26 +35,69 @@ const BottomSheetContext = createContext<BottomSheetContextType | null>(null);
 export const BottomSheetProvider = ({children}: {children: ReactNode}) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [content, setContent] = useState<ReactNode>(null);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const theme = useTheme();
 
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      (event: KeyboardEvent) => {
+        console.log('keyboardDidShow', event.endCoordinates.height);
+        setKeyboardHeight(event.endCoordinates.height);
+
+        // BottomSheet가 열려있을 때만 처리
+        if (isBottomSheetOpen) {
+          // 키보드 높이만큼 추가 공간 확보를 위해 다시 expand
+          bottomSheetRef.current?.expand();
+          // 키보드 높이에 따라 추가 확장
+          if (event.endCoordinates.height > 0) {
+            bottomSheetRef.current?.expand();
+          }
+        }
+      },
+    );
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        console.log('keyboardDidHide');
+        setKeyboardHeight(0);
+      },
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, [isBottomSheetOpen]);
+
   const openBottomSheet = (bottomSheetComponent: ReactNode) => {
-    setTimeout(() => {
-      bottomSheetRef.current?.expand();
-      bottomSheetRef.current?.snapToIndex(0);
-    }, 200);
     setContent(bottomSheetComponent);
+    setIsBottomSheetOpen(true);
+    bottomSheetRef.current?.expand();
+    bottomSheetRef.current?.snapToIndex(0);
   };
 
   const closeBottomSheet = () => {
     bottomSheetRef.current?.close();
+    setIsBottomSheetOpen(false);
+    setKeyboardHeight(0); // 키보드 높이 초기화
+  };
+
+  const handleSheetChanges = (index: number) => {
+    setIsBottomSheetOpen(index >= 0);
+    if (index < 0) {
+      setKeyboardHeight(0); // BottomSheet가 닫히면 키보드 높이 초기화
+    }
   };
 
   const renderBackdrop = (props: any) => (
     <BottomSheetBackdrop
       {...props}
-      disappearsOnIndex={-1} // index가 -1일 때 backdrop 사라짐
-      appearsOnIndex={0} // index가 0 이상일 때 backdrop 나타남
-      pressBehavior="close" // backdrop을 누르면 BottomSheet 닫힘
+      disappearsOnIndex={-1}
+      appearsOnIndex={0}
+      pressBehavior="close"
     />
   );
 
@@ -64,15 +109,22 @@ export const BottomSheetProvider = ({children}: {children: ReactNode}) => {
         ref={bottomSheetRef}
         enablePanDownToClose={true}
         enableDynamicSizing={true}
-        maxDynamicContentSize={600}
         index={-1}
-        // eslint-disable-next-line react-native/no-inline-styles
+        keyboardBehavior="fillParent"
+        keyboardBlurBehavior="restore"
+        onChange={handleSheetChanges}
         backgroundStyle={{
           backgroundColor: theme.colors.background,
           borderRadius: 32,
         }}
         backdropComponent={renderBackdrop}>
-        <BottomSheetScrollView>
+        <BottomSheetScrollView
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+          contentInsetAdjustmentBehavior="automatic"
+          contentContainerStyle={{
+            paddingBottom: keyboardHeight > 0 ? keyboardHeight + 40 : 20,
+          }}>
           <BottomSheetContainer>{content}</BottomSheetContainer>
         </BottomSheetScrollView>
       </BottomSheet>
