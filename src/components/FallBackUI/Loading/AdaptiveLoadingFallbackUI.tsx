@@ -7,6 +7,7 @@ import {
   Title,
   LoadingText,
 } from './AdaptiveLoadingFallbackUI.style';
+import {useThemeColors} from '@/contexts/theme/ThemeContext';
 
 /**
  * 로딩 시간에 따른 다양한 LoadingFallback 컴포넌트
@@ -16,17 +17,21 @@ import {
  * @author 홍규진
  */
 
-const ShortLoadingFallback = () => (
-  <LoadingContainer>
-    <ActivityIndicator size="small" color="#0066cc" />
-    <LoadingText>잠시만 기다려주세요...</LoadingText>
-  </LoadingContainer>
-);
+const ShortLoadingFallback = () => {
+  const {textPrimary} = useThemeColors();
+  return (
+    <LoadingContainer>
+      <ActivityIndicator size="small" color={textPrimary} />
+      <LoadingText>잠시만 기다려주세요...</LoadingText>
+    </LoadingContainer>
+  );
+};
 
 const LongLoadingFallback = () => {
+  const {textPrimary} = useThemeColors();
   return (
     <PulsingContainer>
-      <ActivityIndicator size="large" color="#0066cc" />
+      <ActivityIndicator size="large" color={textPrimary} />
       <Title>데이터를 불러오는 중입니다</Title>
       <Subtitle>조금 시간이 걸릴 수 있습니다. 잠시만 기다려주세요.</Subtitle>
     </PulsingContainer>
