@@ -2,7 +2,6 @@ import styled from '@emotion/native';
 
 export const Container = styled.View`
   height: 58px;
-  padding: 0 16px;
   background-color: ${({theme}) => theme.colors.background};
   display: flex;
   flex-direction: row;

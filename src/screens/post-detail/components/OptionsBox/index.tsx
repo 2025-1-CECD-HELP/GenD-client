@@ -4,6 +4,7 @@ import {OptionItem, OptionBox, OptionText} from './index.style';
 import {Divider} from '@/screens/write/index.style';
 import {Post} from '@/services/post/types';
 import {useDeletePostMutation} from '@/screens/home/hooks/usePostMutation';
+import {useReportBottomSheet} from '../../hooks/useReportBottomSheet';
 
 interface OptionsBoxProps {
   isAdmin: boolean;
@@ -13,6 +14,7 @@ interface OptionsBoxProps {
 
 const OptionsBox: React.FC<OptionsBoxProps> = ({post, isAdmin, onClose}) => {
   const {deletePostMutation} = useDeletePostMutation();
+  const {openReportSheet} = useReportBottomSheet();
 
   const handleShare = async () => {
     try {
@@ -36,6 +38,13 @@ const OptionsBox: React.FC<OptionsBoxProps> = ({post, isAdmin, onClose}) => {
       console.error('공유 중 오류 발생:', error);
     }
     onClose();
+  };
+
+  const handleReport = () => {
+    onClose();
+    openReportSheet(reason => {
+      console.log(`"${reason}"로 ${post.postId} 신고`);
+    });
   };
 
   return (
@@ -69,12 +78,7 @@ const OptionsBox: React.FC<OptionsBoxProps> = ({post, isAdmin, onClose}) => {
             <OptionText>공유하기</OptionText>
           </OptionItem>
           <Divider />
-          <OptionItem
-            onPress={() => {
-              //TODO-신고하기 로직 구현 필요
-              console.log('신고하기', post.postId);
-              onClose();
-            }}>
+          <OptionItem onPress={handleReport}>
             <OptionText>신고하기</OptionText>
           </OptionItem>
         </>
