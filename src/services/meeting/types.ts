@@ -36,6 +36,6 @@ export type TTemplateContent = {
 export type TPostFinalTemplateContent = {
   templateId: number;
   fileName: string;
-  directoryId: string;
+  directoryId: number;
   templateContent: TTemplateContent[];
 };

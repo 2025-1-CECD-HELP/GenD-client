@@ -5,6 +5,7 @@ import {TextEditor, CategoryDropdown} from './components';
 import {useWrite} from './hooks/useWrite';
 import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
 import {useCategoryListQuery} from '../home/hooks/useCategoryListQuery';
+import {KeyboardAvoidingView, Platform} from 'react-native';
 
 /**
  * 글쓰기 페이지입니다.
@@ -48,19 +49,24 @@ export const WriteScreen = () => {
       />
 
       <Divider />
-      <TitleInputContainer
-        placeholder="제목을 입력하세요"
-        value={title}
-        onChangeText={setTitle}
-        placeholderTextColor={textDisabled}
-      />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{flex: 1}}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}>
+        <TitleInputContainer
+          placeholder="제목을 입력하세요"
+          value={title}
+          onChangeText={setTitle}
+          placeholderTextColor={textDisabled}
+        />
 
-      <Divider />
-      <TextEditor
-        onChangeMarkdown={setMarkdownContent}
-        onImageInsert={handleImageInsert}
-        imageAsset={imageFile}
-      />
+        <Divider />
+        <TextEditor
+          onChangeMarkdown={setMarkdownContent}
+          onImageInsert={handleImageInsert}
+          imageAsset={imageFile}
+        />
+      </KeyboardAvoidingView>
     </Container>
   );
 };
