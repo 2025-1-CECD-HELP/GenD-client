@@ -16,10 +16,18 @@ export type ButtonProps = {
   text: string;
   variant: 'filled' | 'outline' | 'disabled';
   shape: 'square' | 'round';
+  disabled?: boolean;
 };
 
-export const Button = ({text, onPress, variant, shape}: ButtonProps) => (
+export const Button = ({
+  text,
+  onPress,
+  variant,
+  shape,
+  disabled = false,
+}: ButtonProps) => (
   <ButtonContainer
+    disabled={disabled}
     activeOpacity={0.9}
     variant={variant}
     shape={shape}

@@ -11,6 +11,7 @@ import {
   BreadcrumbArrow,
   BreadcrumbItem,
 } from './index.style';
+import {TopBar} from '@/components';
 import {SearchBar} from '@/components/SearchBar';
 import {FolderPreview} from '@/components/FolderPreview';
 import {FilePreview} from '@/components/FilePreview';
@@ -53,6 +54,7 @@ export const FileScreen: React.FC = () => {
 
   return (
     <Container>
+      <TopBar title="자료 관리" />
       <SearchBarWrapper>
         <SearchBar
           placeholder="이름으로 검색하세요"

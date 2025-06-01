@@ -4,13 +4,13 @@ import {FlatList} from 'react-native';
 
 import {
   Container,
-  Title,
   SectionTitle,
   WithdrawText,
   Divider,
   SettingSection,
   WorkspaceSection,
 } from './index.style';
+import {TopBar} from '@/components';
 import {WorkSpace, CreateWorkspace, IconButton, Profile} from './components';
 import {useTheme} from '@/contexts/theme/ThemeContext';
 import {useMypage} from './hooks/useMypage';
@@ -31,7 +31,7 @@ export const MypageScreen = () => {
   const {workspaceList, handleSignOut, user, handleWithdraw} = useMypage();
   return (
     <Container>
-      <Title>마이페이지</Title>
+      <TopBar title="마이페이지" />
       <Profile
         user={user || defaultState}
         workspaceCount={workspaceList?.workspaceList.length || 0}

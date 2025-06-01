@@ -6,13 +6,6 @@ export const Container = styled.ScrollView`
   padding: 0 0 32px 0;
 `;
 
-export const Title = styled.Text`
-  ${({theme}) => theme.fonts.title3};
-  color: ${({theme}) => theme.colors.textPrimary};
-  text-align: center;
-  margin: 24px 0 16px 0;
-`;
-
 export const SectionTitle = styled.Text`
   ${({theme}) => theme.fonts.title4};
   color: ${({theme}) => theme.colors.textPrimary};
