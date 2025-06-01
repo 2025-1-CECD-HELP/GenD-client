@@ -124,10 +124,15 @@ export const submitRecordMutationKey = () => {
  * //TODO-[규진] 최종 저장 후 회의록 목록 조회 캐시를 무효화합니다.
  * @author 홍규진
  */
-export const finalSubmitRecordMutationKey = () => {
+export const finalSubmitRecordMutationKey = (
+  workspaceId: string,
+  dirId: string,
+) => {
   return {
     mutationKey: ['finalSubmitRecord'],
-    mutationSuccessKey: [],
+    mutationSuccessKey: [
+      ...fileQuery(workspaceId, parseInt(dirId, 10)).queryKey,
+    ],
     mutationFn: (request: TPostFinalTemplateContent) =>
       finalSubmitRecord(request),
   };
