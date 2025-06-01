@@ -80,5 +80,6 @@ export const useFile = () => {
     handleClickBreadcrumb,
     breadcrumbStack,
     addFileMutation,
+    refetch,
   };
 };
