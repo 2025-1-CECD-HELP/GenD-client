@@ -8,6 +8,7 @@ import {
 import {ArrowIcon} from '@assets/images/svg/chatting-input';
 import {useInput} from '@hooks/useInput';
 import {useThemeColors} from '@/contexts/theme/ThemeContext';
+import {KeyboardAvoidingView, Platform} from 'react-native';
 /**
  * 채팅 입력 컴포넌트입니다.
  * 이는 placeholder를 받을 수 있습니다.
@@ -27,7 +28,6 @@ const ChattingInput: React.FC<ChattingInputProps> = ({
     console.log('onSubmit를 추가해주세요');
   },
   placeholder = 'AI 비서에게 질문하세요',
-
   isDebouncing = false,
 }) => {
   const {text, handleChangeText, handleSubmit} = useInput({
@@ -36,20 +36,24 @@ const ChattingInput: React.FC<ChattingInputProps> = ({
   });
   const {textDisabled} = useThemeColors();
   return (
-    <Container>
-      <InputContainer>
-        <InputField
-          placeholder={placeholder}
-          value={text}
-          onChangeText={handleChangeText}
-          onSubmitEditing={handleSubmit}
-          placeholderTextColor={textDisabled}
-        />
-      </InputContainer>
-      <IconContainer onPress={handleSubmit}>
-        <ArrowIcon width={20} height={20} />
-      </IconContainer>
-    </Container>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}>
+      <Container>
+        <InputContainer>
+          <InputField
+            placeholder={placeholder}
+            value={text}
+            onChangeText={handleChangeText}
+            onSubmitEditing={handleSubmit}
+            placeholderTextColor={textDisabled}
+          />
+        </InputContainer>
+        <IconContainer onPress={handleSubmit}>
+          <ArrowIcon width={20} height={20} />
+        </IconContainer>
+      </Container>
+    </KeyboardAvoidingView>
   );
 };
 
