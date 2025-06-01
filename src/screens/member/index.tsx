@@ -7,6 +7,7 @@ import {
   PlusButtonWrapper,
   TopBarContainer,
 } from './index.style';
+import {TopBar} from '@/components';
 import {SearchBar} from '@/components/SearchBar';
 import {useMemberListQuery} from './hooks/useMemberListQuery';
 import {RefreshControl} from 'react-native';
@@ -19,6 +20,7 @@ import {useAddMemberMutation} from './hooks/useMemberMutation';
 import {useAtom} from 'jotai';
 import {workspaceState} from '@/atoms/workspace';
 import MemberSetting from '@/components/MemberSetting';
+import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
 
 /**
  * 멤버 리스트 화면입니다.
@@ -36,6 +38,7 @@ export const MemberScreen = () => {
   const {mutateAsync: addMember} = useAddMemberMutation();
   const {setIsOpen, setModalContent} = useModal();
   const [refreshing, setRefreshing] = useState(false);
+  const navigation = useTypeSafeNavigation();
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
@@ -53,6 +56,11 @@ export const MemberScreen = () => {
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }>
+      <TopBar
+        title="멤버"
+        showBackButton={true}
+        onPressBack={() => navigation.navigate('LANDING', {})}
+      />
       <TopBarContainer>
         <SearchBarWrapper>
           <SearchBar
