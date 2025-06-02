@@ -5,6 +5,7 @@ import {useUserQuery} from './useMypageQuery';
 import {userState} from '@/atoms/user';
 import {useModal} from '@/contexts/modal/ModalContext';
 import {CommonModal} from '@/components/CommonModal';
+import {Linking} from 'react-native';
 
 export const useMypage = () => {
   const {data: workspaceList} = useWorkspaceListQuery();
@@ -34,10 +35,22 @@ export const useMypage = () => {
     );
   };
 
+  const handleShowTerms = async () => {
+    const url = 'https://boiled-raisin-b3b.notion.site/gend';
+    const supported = await Linking.canOpenURL(url);
+
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      console.warn("Don't know how to open URI: " + url);
+    }
+  };
+
   return {
     handleSignOut,
     handleWithdraw,
     workspaceList,
     user: userAtomState,
+    handleShowTerms,
   };
 };
