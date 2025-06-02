@@ -8,15 +8,22 @@ import {
   AlertTime,
   EmptyView,
 } from './index.style';
+import {TopBar} from '@/components';
 import {useAtom} from 'jotai';
 import {Alert, alertState} from '@/atoms/alert';
 import dayjs from 'dayjs';
+import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
 
 export const AlertListScreen = () => {
   const [alerts] = useAtom(alertState);
-
+  const navigation = useTypeSafeNavigation();
   return (
     <Container>
+      <TopBar
+        title="알림"
+        showBackButton={true}
+        onPressBack={() => navigation.navigate('LANDING', {})}
+      />
       {alerts.length > 0 ? (
         <AlertList
           data={alerts}

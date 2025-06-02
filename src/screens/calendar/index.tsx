@@ -12,6 +12,7 @@ import {
   NoScheduleText,
   ScheduleMemo,
 } from './index.style';
+import {TopBar} from '@/components';
 import {AddScheduleButton} from './components/AddScheduleButton';
 import {formatDateTime, getModeIcon} from './utils/formatDate';
 // import {DUMMY_SCHEDULES} from './constants/calendar';
@@ -38,6 +39,7 @@ export const CalendarScreen = () => {
 
   return (
     <Container>
+      <TopBar title="일정 관리" />
       <CalendarContainer>
         <Calendar
           key={calendarKey}

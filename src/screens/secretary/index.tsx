@@ -7,6 +7,7 @@ import {SecretaryProfile} from './components/ScretaryProfile';
 import {SecretaryChatList} from './components/SecretaryChatList';
 import {useChat} from './contexts/ChatContext';
 import {useThemeColors} from '@/contexts/theme/ThemeContext';
+import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
 
 /**
  * 비서 화면입니다.
@@ -16,9 +17,15 @@ import {useThemeColors} from '@/contexts/theme/ThemeContext';
 const SecretaryScreen = () => {
   const {sendChatting} = useChat();
   const {textPrimary} = useThemeColors();
+  const navigation = useTypeSafeNavigation();
+
   return (
     <Container>
-      <TopBar title="AI 비서" />
+      <TopBar
+        title="AI 비서"
+        showBackButton={true}
+        onPressBack={() => navigation.navigate('LANDING', {})}
+      />
       <SecretaryProfile />
       <SecretaryChatList />
       <ChattingInput

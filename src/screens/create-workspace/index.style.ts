@@ -1,9 +1,14 @@
 import styled from '@emotion/native';
 
-export const Container = styled.ScrollView`
+export const Container = styled.View`
   flex: 1;
   background-color: ${({theme}) => theme.colors.background};
-  padding: 80px 24px;
+  padding: 80px 0;
+`;
+
+export const ContentContainer = styled.ScrollView`
+  padding: 0 24px;
+  flex: 1;
 `;
 
 export const Title = styled.Text`
