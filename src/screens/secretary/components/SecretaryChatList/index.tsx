@@ -15,8 +15,8 @@ import {
   RowContainer,
   ColumnContainer,
 } from './index.style';
-import {useChat} from '../../contexts/ChatContext';
-import {formatTime} from '../../utils/formatTime';
+import {useChat} from '@/screens/secretary/hooks/useChat';
+import {formatTime} from '@/screens/secretary/utils/formatTime';
 import {TFile} from '@/services/secretary/types';
 import FileDownloadIcon from '@/assets/images/svg/chatting/FileDownload.svg';
 import {useThemeColors} from '@/contexts/theme/ThemeContext';
@@ -34,14 +34,18 @@ export const SecretaryChatList = () => {
   const {messages, isPending} = useChat();
   const flatListRef = useRef<FlatList>(null);
   const {textSecondary} = useThemeColors();
+
   useEffect(() => {
     if (flatListRef.current && messages.length > 0) {
-      const lastMsg = messages[messages.length - 1];
-      if (lastMsg.sender === 'ai') {
-        flatListRef.current.scrollToEnd({animated: true});
-      }
+      flatListRef.current.scrollToEnd({animated: true});
     }
   }, [messages]);
+
+  useEffect(() => {
+    if (flatListRef.current) {
+      flatListRef.current.scrollToEnd({animated: true});
+    }
+  }, [isPending]);
 
   return (
     <ChatListContainer>
@@ -50,6 +54,10 @@ export const SecretaryChatList = () => {
         ref={flatListRef}
         data={messages}
         keyExtractor={item => item.id}
+        onContentSizeChange={() =>
+          flatListRef.current?.scrollToEnd({animated: true})
+        }
+        onLayout={() => flatListRef.current?.scrollToEnd({animated: true})}
         renderItem={({item, index}) => {
           const isUser = item.sender === 'user';
           const prev = messages[index - 1];
