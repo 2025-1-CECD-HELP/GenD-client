@@ -9,7 +9,7 @@ export const Container = styled.View`
 `;
 
 export const SearchBarWrapper = styled.View`
-  padding: 16px;
+  padding: 0px 16px;
 `;
 
 export const EmptyView = styled.Text`

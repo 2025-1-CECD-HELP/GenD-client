@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {useThemeColors} from '@/contexts/theme/ThemeContext';
 import {
   Container,
@@ -16,12 +16,6 @@ import {Member} from '@/screens/member/types';
 import {useModal} from '@/contexts/modal/ModalContext';
 import {MemberSettingModal} from '@/screens/member/components/MemberSettingModal';
 import CommonModal from '../CommonModal';
-import {
-  useDeleteMemberMutation,
-  useModifyMemberRoleMutation,
-} from '@/screens/member/hooks/useMemberMutation';
-import {useAtom} from 'jotai';
-import {workspaceState} from '@/atoms/workspace';
 
 /**
  * 멤버 페이지 혹은 멤버 추가 모달에 보여지는 멤버 프로필 컴포넌트입니다.
@@ -50,39 +44,22 @@ export const MemberSetting: React.FC<MemberSettingProps> = ({
   };
   const positionText = positionTextMap[memberRole];
   const {textSecondary} = useThemeColors();
-  const [isAdmin, setIsAdmin] = useState(memberRole === 'eAdmin');
   const {setIsOpen, setModalContent} = useModal();
-  const {mutateAsync: deleteMember} = useDeleteMemberMutation();
-  const {mutateAsync: modifyMemberRole} = useModifyMemberRoleMutation();
-  const [workspace] = useAtom(workspaceState);
 
   const handleSettingPress = () => {
     setModalContent(
       <CommonModal
         isCenter={true}
-        title=""
+        title="멤버 관리"
         children={
           <MemberSettingModal
             memberId={memberId}
             memberRole={memberRole}
             memberName={memberName}
             memberImage={memberImage}
-            onAdminChange={setIsAdmin}
-            onDelete={() => {
-              deleteMember({workspaceId: workspace.workspaceId, memberId});
-            }}
           />
         }
-        onConfirm={() => {
-          modifyMemberRole({
-            memberId,
-            memberRole: isAdmin ? 'eAdmin' : 'eMember',
-          });
-        }}
-        onCancel={() => {
-          console.log('cancel');
-        }}
-        type="default"
+        type="confirm"
       />,
     );
     setIsOpen(true);

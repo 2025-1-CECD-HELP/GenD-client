@@ -13,6 +13,7 @@ import {useAtom} from 'jotai';
 import {userState} from '@/atoms/user';
 
 interface AlarmSettingModalProps {
+  workspaceImage: string;
   workspaceName: string;
   visible: boolean;
   onClose: () => void;
@@ -20,6 +21,7 @@ interface AlarmSettingModalProps {
 }
 
 export const AlarmSettingModal: React.FC<AlarmSettingModalProps> = ({
+  workspaceImage,
   workspaceName,
   visible,
   onClose,
@@ -47,7 +49,7 @@ export const AlarmSettingModal: React.FC<AlarmSettingModalProps> = ({
       isCenter
       children={
         <>
-          <ProfileCircle />
+          <ProfileCircle source={{uri: workspaceImage}} />
           <WorkspaceName>{workspaceName}</WorkspaceName>
           <SwitchRow>
             <SwitchLabel>일정 알림</SwitchLabel>
@@ -55,7 +57,7 @@ export const AlarmSettingModal: React.FC<AlarmSettingModalProps> = ({
               value={scheduleAlarm}
               onValueChange={setScheduleAlarm}
               trackColor={{false: textSecondary, true: blue}}
-              thumbColor={scheduleAlarm ? textSecondary : blue}
+              thumbColor={scheduleAlarm ? 'white' : blue}
             />
           </SwitchRow>
           <SwitchRow>
@@ -64,7 +66,7 @@ export const AlarmSettingModal: React.FC<AlarmSettingModalProps> = ({
               value={postAlarm}
               onValueChange={setPostAlarm}
               trackColor={{false: textSecondary, true: blue}}
-              thumbColor={postAlarm ? textSecondary : blue}
+              thumbColor={postAlarm ? 'white' : blue}
             />
           </SwitchRow>
         </>

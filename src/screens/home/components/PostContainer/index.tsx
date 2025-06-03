@@ -32,8 +32,10 @@ import {useCategoryListQuery} from '../../hooks/useCategoryListQuery';
 import {Post} from '@/services/post/types';
 import {useCategoryMutation} from '../../hooks/useCategoryMutation';
 import {usePatchPostPinMutation} from '../../hooks/usePostMutation';
-import {useAtom} from 'jotai';
+import {useAtom, useSetAtom} from 'jotai';
 import {workspaceState} from '@/atoms/workspace';
+import {useUserQuery} from '@/screens/my-page/hooks/useMypageQuery';
+import {userState} from '@/atoms/user';
 
 /**
  * 홈 화면 하단의 게시글 컨테이너입니다.
@@ -74,16 +76,33 @@ export const PostContainer = ({
     screenHeight - profileHeight - HEADER_HEIGHT - POSTCONTAINER_PADDING;
   const containerMinHeight = screenHeight - HEADER_HEIGHT - BOTTOMTAB_HEIGHT;
   const {data: postList} = usePostQuery();
+  const {data: user} = useUserQuery();
   const [newCategoryName, setNewCategoryName] = useState('');
+  const setUser = useSetAtom(userState);
   const [workspace] = useAtom(workspaceState);
   let filteredData: Post[] = [];
+
+  setUser(user);
+
   if (postList) {
-    filteredData = postList.filter(
+    // 카테고리로 1차적인 필터링
+    const categoryFiltered = postList.filter(
       post =>
-        (postTabState === 'all' || post.postWriter === '작성자') &&
-        (postCategoryState === '전체' ||
-          post.postCategory === postCategoryState),
+        postCategoryState === '전체' || post.postCategory === postCategoryState,
     );
+
+    // 작성자로 2차적인 필터링
+    const writerFiltered =
+      postTabState === 'all'
+        ? categoryFiltered
+        : categoryFiltered.filter(
+            post =>
+              user?.memberName &&
+              post.postWriter === user.memberName &&
+              post.postWriter !== '작성자',
+          );
+
+    filteredData = writerFiltered;
   }
   const sortedData = [...filteredData].sort((a, b) => {
     if (a.isPin === b.isPin) return 0;

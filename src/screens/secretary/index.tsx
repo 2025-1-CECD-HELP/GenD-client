@@ -5,7 +5,7 @@ import {TopBar} from '@/components/TopBar';
 import ChattingInput from '@/components/ChattingInput';
 import {SecretaryProfile} from './components/ScretaryProfile';
 import {SecretaryChatList} from './components/SecretaryChatList';
-import {useChat} from './contexts/ChatContext';
+import {useChat} from './hooks/useChat';
 import {useThemeColors} from '@/contexts/theme/ThemeContext';
 import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
 

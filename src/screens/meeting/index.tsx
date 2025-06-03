@@ -8,9 +8,7 @@ import {
   ButtonContainer,
 } from './index.style';
 import {Button} from '@/components/Button';
-import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
-import {useAtom} from 'jotai';
-import {recordingState} from '@/atoms/recording';
+import {useMeeting} from './hooks/useMeeting';
 /**
  * 미팅 페이지입니다. 향후에는 이 미팅 페이지를 들어갔을 때 워크 스페이스 여부를 확인해야합니다.
  * 현재는 템플릿 선택 후 회의록 작성 페이지로 이동합니다.
@@ -18,8 +16,7 @@ import {recordingState} from '@/atoms/recording';
  */
 
 export const MeetingScreen = () => {
-  const navigation = useTypeSafeNavigation();
-  const [recording, setRecording] = useAtom(recordingState);
+  const {handleTemplateSelection, setRecording, recording} = useMeeting();
 
   return (
     <Container>
@@ -38,13 +35,7 @@ export const MeetingScreen = () => {
       />
       <ButtonContainer>
         <Button
-          onPress={() => {
-            if (recording.templateId) {
-              navigation.navigate('RECORDING', {
-                templateId: recording.templateId,
-              });
-            }
-          }}
+          onPress={handleTemplateSelection}
           text="회의록 선택"
           variant="filled"
           shape="round"

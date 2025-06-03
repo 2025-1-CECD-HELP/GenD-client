@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {
   ModalContainer,
-  Title,
   ProfileImage,
   MemberName,
   Label,
@@ -11,6 +10,10 @@ import {
 import {Switch} from 'react-native';
 import {Member} from '../../types';
 import defaultProfileImage from '@/assets/images/png/defaultProfile.png';
+import {useModifyMemberRoleMutation} from '../../hooks/useMemberMutation';
+import {useDeleteMemberMutation} from '../../hooks/useMemberMutation';
+import {useAtom} from 'jotai';
+import {workspaceState} from '@/atoms/workspace';
 
 /**
  * 멤버 설정 모달입니다.
@@ -18,28 +21,31 @@ import defaultProfileImage from '@/assets/images/png/defaultProfile.png';
  * @author 홍규진
  */
 
-interface MemberSettingModalProps extends Member {
-  onAdminChange: (isAdmin: boolean) => void;
-  onDelete: () => void;
-}
+interface MemberSettingModalProps extends Member {}
 
 export const MemberSettingModal: React.FC<MemberSettingModalProps> = ({
   memberRole,
   memberName,
   memberImage,
-  onAdminChange,
-  onDelete,
+  memberId,
 }) => {
   const [admin, setAdmin] = useState(memberRole === 'eAdmin');
-
+  const {mutateAsync: modifyMemberRole} = useModifyMemberRoleMutation();
+  const {mutateAsync: deleteMember} = useDeleteMemberMutation();
+  const [workspace] = useAtom(workspaceState);
   const handleSwitch = (value: boolean) => {
     setAdmin(value);
-    onAdminChange(value);
+    modifyMemberRole({
+      memberId,
+      memberRole: value ? 'eAdmin' : 'eMember',
+    });
+  };
+  const handleDelete = () => {
+    deleteMember({workspaceId: workspace.workspaceId, memberId});
   };
 
   return (
     <ModalContainer>
-      <Title>멤버 관리</Title>
       <ProfileImage
         source={memberImage ? {uri: memberImage} : defaultProfileImage}
       />
@@ -50,7 +56,7 @@ export const MemberSettingModal: React.FC<MemberSettingModalProps> = ({
         <Switch value={admin} onValueChange={handleSwitch} />
       </SwitchRow>
 
-      <DangerText onPress={onDelete}>강제 탈퇴</DangerText>
+      <DangerText onPress={handleDelete}>강제 탈퇴</DangerText>
     </ModalContainer>
   );
 };

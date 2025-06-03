@@ -12,9 +12,10 @@ import {
   NoScheduleText,
   ScheduleMemo,
 } from './index.style';
-import {TopBar} from '@/components';
 import {AddScheduleButton} from './components/AddScheduleButton';
 import {formatDateTime, getModeIcon} from './utils/formatDate';
+import {useAtomValue} from 'jotai';
+import {workspaceState} from '@/atoms/workspace';
 // import {DUMMY_SCHEDULES} from './constants/calendar';
 
 /**
@@ -26,6 +27,7 @@ import {formatDateTime, getModeIcon} from './utils/formatDate';
  */
 
 export const CalendarScreen = () => {
+  const workspace = useAtomValue(workspaceState);
   const {
     handleOpenAddSchedule,
     calendarTheme,
@@ -39,7 +41,6 @@ export const CalendarScreen = () => {
 
   return (
     <Container>
-      <TopBar title="일정 관리" />
       <CalendarContainer>
         <Calendar
           key={calendarKey}
@@ -77,7 +78,9 @@ export const CalendarScreen = () => {
           <NoScheduleText>등록된 일정이 없습니다.</NoScheduleText>
         )}
       </ScheduleContainer>
-      <AddScheduleButton handleOpenAddSchedule={handleOpenAddSchedule} />
+      {workspace.isAdmin && (
+        <AddScheduleButton handleOpenAddSchedule={handleOpenAddSchedule} />
+      )}
     </Container>
   );
 };

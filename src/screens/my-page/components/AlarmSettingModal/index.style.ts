@@ -12,11 +12,10 @@ export const ModalOverlay = styled.View`
   z-index: 100;
 `;
 
-export const ProfileCircle = styled.View`
+export const ProfileCircle = styled.Image`
   width: 56px;
   height: 56px;
   border-radius: 28px;
-  background-color: #888;
   align-self: center;
   margin: 24px 0 8px 0;
 `;

@@ -6,6 +6,7 @@ import {useFileQuery} from './useFileQuery';
 import {useAtom} from 'jotai';
 import {workspaceState} from '@/atoms/workspace';
 import {useAddFileMutation} from '@/screens/file/hooks/uesFileMutation';
+import {breadcrumbStackState} from '@/atoms/file';
 
 // import {useFileQuery} from './useFileQuery';
 /**
@@ -24,11 +25,12 @@ const initialData = {
 export const useFile = () => {
   const [search, setSearch] = useState('');
   const [workspace, setWorkspace] = useAtom(workspaceState);
+  const [breadcrumbStack, setBreadcrumbStack] = useAtom(breadcrumbStackState);
 
-  // breadcrumb 스택: [{id, name}]
-  const [breadcrumbStack, setBreadcrumbStack] = useState([
-    {id: workspace.rootDirId, name: '최상위'},
-  ]);
+  // 초기 breadcrumb 설정
+  if (breadcrumbStack.length === 0) {
+    setBreadcrumbStack([{id: workspace.rootDirId, name: '최상위'}]);
+  }
 
   const {data, refetch} = useFileQuery(
     workspace.workspaceId,

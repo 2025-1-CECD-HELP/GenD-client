@@ -44,7 +44,7 @@ export const CategoryDropdown = ({
   return (
     <Container>
       <CategoryContainer visible={visible} onPress={() => setVisible(!visible)}>
-        <CategoryIcon width={20} height={20} />
+        <CategoryIcon width={20} height={20} fill={textSecondary} />
         <CategoryText>
           {selectedCategory.categoryName || '카테고리 선택'}
         </CategoryText>
