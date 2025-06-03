@@ -16,7 +16,7 @@ import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
 
 interface WorkSpaceProps {
   workspaceName: string;
-  imageUrl?: string;
+  imageUrl: string;
 }
 
 export const WorkSpace: React.FC<WorkSpaceProps> = ({
@@ -27,6 +27,7 @@ export const WorkSpace: React.FC<WorkSpaceProps> = ({
   const handleAlarmSetting = () => {
     setModalContent(
       <AlarmSettingModal
+        workspaceImage={imageUrl}
         workspaceName={workspaceName}
         visible={true}
         onClose={() => setIsOpen(false)}

@@ -1,27 +1,33 @@
 import {useWorkspaceListQuery} from '@/screens/home/hooks/useWorkspaceQuery';
 import {signOutAtom} from '@/atoms/auth';
-import {useAtom} from 'jotai';
-import {useUserQuery} from './useMypageQuery';
+import {useAtom, useAtomValue} from 'jotai';
 import {userState} from '@/atoms/user';
 import {useModal} from '@/contexts/modal/ModalContext';
 import {CommonModal} from '@/components/CommonModal';
 import {Linking} from 'react-native';
+import {useQueryClient} from '@tanstack/react-query';
 
+/**
+ * 마이페이지 내에서 사용하는 custom-hook입니다.
+ * 로그아웃, 탈퇴시에 쿼리 캐시를 모두 초기화 합니다.
+ * @author 홍규진
+ */
 export const useMypage = () => {
+  const queryClient = useQueryClient();
   const {data: workspaceList} = useWorkspaceListQuery();
   const {setModalContent, setIsOpen} = useModal();
   const [, signOut] = useAtom(signOutAtom);
-  const {data: user} = useUserQuery();
-  const [userAtomState, setUserAtomState] = useAtom(userState);
-  setUserAtomState(user);
-
+  const userAtomState = useAtomValue(userState);
   const handleSignOut = async () => {
+    // 모든 쿼리 캐시 초기화
+    queryClient.clear();
+    // 로그아웃 실행
     await signOut();
   };
 
   const handleWithdraw = async () => {
     setIsOpen(true);
-
+    queryClient.clear();
     setModalContent(
       <CommonModal
         type="default"
