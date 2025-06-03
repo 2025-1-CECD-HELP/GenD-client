@@ -7,17 +7,21 @@ import {
   AddButtonText,
 } from './index.style';
 import {useThemeColors} from '@/contexts/theme/ThemeContext';
+import {useAtom} from 'jotai';
+import {workspaceState} from '@/atoms/workspace';
+import {useAddMemberMutation} from '../../hooks/useMemberMutation';
 
-interface AddMemberModalProps {
-  onAdd: (email: string) => void;
-}
-
-export const AddMemberModal: React.FC<AddMemberModalProps> = ({onAdd}) => {
+export const AddMemberModal = () => {
   const [email, setEmail] = useState('');
   const {textDisabled} = useThemeColors();
+  const [workspace] = useAtom(workspaceState);
+  const {mutateAsync: addMember} = useAddMemberMutation();
   const handleAdd = () => {
-    onAdd(email);
     setEmail('');
+    addMember({
+      workspaceId: workspace.workspaceId,
+      email,
+    });
   };
   return (
     <ModalContainer>

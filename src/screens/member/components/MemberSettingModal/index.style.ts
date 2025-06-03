@@ -1,16 +1,11 @@
 import styled from '@emotion/native';
 
 export const ModalContainer = styled.View`
+  margin-top: 20px;
   background-color: ${({theme}) => theme.colors.background};
   border-radius: 20px;
   padding: 0px 24px 24px 24px;
   align-items: center;
-`;
-
-export const Title = styled.Text`
-  ${({theme}) => theme.fonts.title2};
-  margin-bottom: 24px;
-  color: ${({theme}) => theme.colors.textPrimary};
 `;
 
 export const ProfileImage = styled.Image`
