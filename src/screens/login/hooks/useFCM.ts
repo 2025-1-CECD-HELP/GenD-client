@@ -71,10 +71,10 @@ export const useFCM = () => {
         try {
           const existingAlerts = await AsyncStorage.getItem('alerts');
           const alerts = existingAlerts ? JSON.parse(existingAlerts) : [];
-          await AsyncStorage.setItem(
-            'alerts',
-            JSON.stringify([newAlert, ...alerts]),
-          );
+          const updatedAlerts = [newAlert, ...alerts];
+          await AsyncStorage.setItem('alerts', JSON.stringify(updatedAlerts));
+          // 백그라운드에서도 상태 업데이트
+          setAlerts(updatedAlerts);
         } catch (error) {
           console.error('알림 저장 실패:', error);
         }
@@ -84,7 +84,7 @@ export const useFCM = () => {
     // 앱이 종료된 상태에서 알림을 탭했을 때 처리
     messaging()
       .getInitialNotification()
-      .then(remoteMessage => {
+      .then(async remoteMessage => {
         if (remoteMessage) {
           console.log('종료 상태 알림 탭:', remoteMessage);
           if (remoteMessage.notification) {
@@ -95,7 +95,20 @@ export const useFCM = () => {
               timestamp: Date.now(),
               isRead: false,
             };
-            setAlerts(prev => [newAlert, ...prev]);
+            try {
+              // 기존 알림 로드
+              const existingAlerts = await AsyncStorage.getItem('alerts');
+              const alerts = existingAlerts ? JSON.parse(existingAlerts) : [];
+              const updatedAlerts = [newAlert, ...alerts];
+              // 새로운 알림 추가
+              await AsyncStorage.setItem(
+                'alerts',
+                JSON.stringify(updatedAlerts),
+              );
+              setAlerts(updatedAlerts);
+            } catch (error) {
+              console.error('종료 상태 알림 저장 실패:', error);
+            }
           }
         }
       });
