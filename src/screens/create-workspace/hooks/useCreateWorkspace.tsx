@@ -4,6 +4,7 @@ import {InviteMemberModal} from '../components/InviteMemberModal';
 import {useModal} from '@/contexts/modal/ModalContext';
 import CommonModal from '@/components/CommonModal';
 import {useCreateWorkspaceMutation} from './useCreateWorkspaceMutation';
+import {Alert} from 'react-native';
 
 /**
  * 워크스페이스 생성 훅입니다.
@@ -43,7 +44,26 @@ export function useCreateWorkspace() {
     );
   };
 
+  const validateInputs = () => {
+    if (!name.trim()) {
+      Alert.alert('입력 오류', '워크스페이스 이름을 입력해주세요.');
+      return false;
+    }
+    if (!desc.trim()) {
+      Alert.alert('입력 오류', '워크스페이스 설명을 입력해주세요.');
+      return false;
+    }
+    if (!image) {
+      Alert.alert('입력 오류', '워크스페이스 이미지를 선택해주세요.');
+      return false;
+    }
+    return true;
+  };
+
   const handleCreateWorkspace = () => {
+    if (!validateInputs()) {
+      return;
+    }
     createWorkspace({
       workspaceName: name,
       workspaceDescription: desc,
