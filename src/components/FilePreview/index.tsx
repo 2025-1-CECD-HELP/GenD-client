@@ -48,12 +48,14 @@ export const FilePreview = (file: FileData) => {
     setIsOpen(true);
     setModalContent(
       <CommonModal title="파일 관리" type="confirm">
-        <OptionsBox options={options} />
+        <OptionsBox
+          options={workspace.isAdmin ? adminOptions : memberOptions}
+        />
       </CommonModal>,
     );
   };
 
-  const options = [
+  const adminOptions = [
     {
       label: '다운로드',
       onPress: downloadFile,
@@ -73,6 +75,18 @@ export const FilePreview = (file: FileData) => {
       label: '삭제하기',
       onPress: handleDelete,
       color: red,
+    },
+  ];
+  const memberOptions = [
+    {
+      label: '다운로드',
+      onPress: downloadFile,
+      color: blue,
+    },
+    {
+      label: '공유하기',
+      onPress: shareFile,
+      color: textPrimary,
     },
   ];
 

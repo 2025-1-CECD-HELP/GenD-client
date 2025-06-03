@@ -60,6 +60,7 @@ export const FileScreen: React.FC = () => {
           placeholder="이름으로 검색하세요"
           onSearchSubmit={setSearch}
           onPlusPress={() => {
+            if (!workspace.isAdmin) return;
             setIsOpen(true);
             setModalContent(
               <CommonModal
