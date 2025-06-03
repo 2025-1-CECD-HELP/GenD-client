@@ -20,7 +20,6 @@ import {Header} from '@/components/Header';
 import {RecordingScreen} from '@/screens/recording';
 import {InitWorkspaceScreen} from '@/screens/init-workspace';
 import SecretaryScreen from '@/screens/secretary';
-import {ChatProvider} from '@/screens/secretary/contexts/ChatContext';
 import {AuthWrappedHomeScreen} from './AuthScreen';
 import {createNavigationContainerRef} from '@react-navigation/native';
 import {AlertListScreen} from '@/screens/alert-list';
@@ -203,14 +202,7 @@ function LoginNavigator() {
 function SecretaryNavigator() {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen
-        name="SECRETARY"
-        component={() => (
-          <ChatProvider>
-            <SecretaryScreen />
-          </ChatProvider>
-        )}
-      />
+      <Stack.Screen name="SECRETARY" component={SecretaryScreen} />
     </Stack.Navigator>
   );
 }
