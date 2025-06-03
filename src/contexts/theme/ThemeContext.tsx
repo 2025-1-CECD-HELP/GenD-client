@@ -6,6 +6,7 @@ import {
 import {darkTheme, lightTheme, themeFonts} from '@/theme';
 import {useColorScheme} from 'react-native';
 import {Theme} from '@emotion/react/dist/declarations/src';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /**
  * 테마 컨텍스트 타입 정의
@@ -13,6 +14,8 @@ import {Theme} from '@emotion/react/dist/declarations/src';
  * useTheme 훅을 통해 테마 정보를 전역적으로 변경할 수 있습니다.
  * @author 홍규진, 이정선
  */
+const THEME_STORAGE_KEY = '@theme_mode';
+
 interface ThemeContextProps {
   isDarkMode: boolean;
   toggleTheme: () => void;
@@ -22,21 +25,43 @@ interface ThemeContextProps {
 const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
 
 export const ThemeProvider = ({children}: {children: React.ReactNode}) => {
-  // 시스템 테마 감지
   const systemColorScheme = useColorScheme();
   const [isDarkMode, setIsDarkMode] = useState(systemColorScheme === 'dark');
 
-  // 시스템 테마 변경 감지
+  // 앱 시작 시 저장된 테마 설정 불러오기
   useEffect(() => {
-    setIsDarkMode(systemColorScheme === 'dark');
+    const loadSavedTheme = async () => {
+      try {
+        const savedTheme = await AsyncStorage.getItem(THEME_STORAGE_KEY);
+        if (savedTheme !== null) {
+          setIsDarkMode(savedTheme === 'dark');
+        } else {
+          // 저장된 설정이 없으면 시스템 테마 사용
+          setIsDarkMode(systemColorScheme === 'dark');
+        }
+      } catch (error) {
+        console.error('테마 설정을 불러오는데 실패했습니다:', error);
+        setIsDarkMode(systemColorScheme === 'dark');
+      }
+    };
+
+    loadSavedTheme();
   }, [systemColorScheme]);
 
-  const toggleTheme = () => setIsDarkMode(prev => !prev);
+  const toggleTheme = async () => {
+    const newThemeMode = !isDarkMode;
+    setIsDarkMode(newThemeMode);
+    try {
+      await AsyncStorage.setItem(
+        THEME_STORAGE_KEY,
+        newThemeMode ? 'dark' : 'light',
+      );
+    } catch (error) {
+      console.error('테마 설정을 저장하는데 실패했습니다:', error);
+    }
+  };
 
-  // 현재 테마의 colors 객체
   const currentTheme = isDarkMode ? darkTheme : lightTheme;
-
-  // font, color theme
   const mergedTheme = {
     ...currentTheme,
     fonts: themeFonts,
