@@ -3,7 +3,6 @@ import {Container, Divider, TitleInputContainer} from './index.style';
 import {useThemeColors} from '@/contexts/theme/ThemeContext';
 import {TextEditor, CategoryDropdown} from './components';
 import {useWrite} from './hooks/useWrite';
-import useTypeSafeNavigation from '@/hooks/useTypeSafeNavigaion';
 import {useCategoryListQuery} from '../home/hooks/useCategoryListQuery';
 import {KeyboardAvoidingView, Platform} from 'react-native';
 
@@ -22,13 +21,14 @@ export const WriteScreen = () => {
     setTitle,
     handleImageInsert,
     setMarkdownContent,
-    handleSubmit,
+    handleSubmitPress,
+    handleBackPress,
     imageFile,
   } = useWrite();
 
   const {textDisabled} = useThemeColors();
-  const navigation = useTypeSafeNavigation();
   const {data: categoryList} = useCategoryListQuery();
+
   return (
     <Container
       keyboardShouldPersistTaps="handled"
@@ -37,10 +37,8 @@ export const WriteScreen = () => {
         title="글쓰기"
         showBackButton={true}
         showSubmitButton={true}
-        onPressSubmit={handleSubmit}
-        onPressBack={() => {
-          navigation.navigate('LANDING', {});
-        }}
+        onPressSubmit={handleSubmitPress}
+        onPressBack={handleBackPress}
       />
       <CategoryDropdown
         categories={categoryList || []}
