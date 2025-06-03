@@ -41,7 +41,6 @@ export const AddScheduleSheet: React.FC = () => {
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
   const [showAlarmDropdown, setShowAlarmDropdown] = useState(false);
-  const [selectedAlarmTime, setSelectedAlarmTime] = useState<Date | null>(null);
   const [selectedAlarmOffset, setSelectedAlarmOffset] = useState<number | null>(
     null,
   );
@@ -63,7 +62,9 @@ export const AddScheduleSheet: React.FC = () => {
     handleMemoChange,
     toggleCategoryDropdown,
     showCategoryDropdown,
+    setAlarmTimeFromOffset,
     resetForm,
+    getKoreanSchedule,
   } = useSchedule();
 
   const {mutate} = useCreateScheduleMutation();
@@ -81,15 +82,19 @@ export const AddScheduleSheet: React.FC = () => {
   };
 
   const handleSubmit = () => {
-    // 부모로부터 받은 함수를 호출하여 일정 추가
+    const {
+      startDate: koreanStartDate,
+      endDate: koreanEndDate,
+      alarmTime: koreanAlarmTime,
+    } = getKoreanSchedule();
     mutate({
       scheduleTitle: title,
-      startSchedule: startDate,
-      endSchedule: endDate,
+      startSchedule: koreanStartDate,
+      endSchedule: koreanEndDate,
       type: category,
       scheduleDescription: memo,
       isAlarm: isAlarm,
-      startAlarm: selectedAlarmTime ?? undefined,
+      startAlarm: koreanAlarmTime,
       workspaceId: workspace.workspaceId,
     });
     resetForm();
@@ -101,8 +106,7 @@ export const AddScheduleSheet: React.FC = () => {
 
   const handleAlarmTimeSelect = (minutesBefore: number) => {
     setSelectedAlarmOffset(minutesBefore);
-    const alarmDate = new Date(startDate.getTime() - minutesBefore * 60 * 1000);
-    setSelectedAlarmTime(alarmDate);
+    setAlarmTimeFromOffset(minutesBefore);
     setShowAlarmDropdown(false);
   };
 

@@ -1,6 +1,10 @@
 import {useState} from 'react';
 import {ScheduleType} from '../types';
 
+const convertToKoreanTime = (date: Date) => {
+  return new Date(date.getTime() + 9 * 60 * 60 * 1000);
+};
+
 export const useSchedule = () => {
   const [category, setCategory] = useState<ScheduleType>('Meeting');
   const [title, setTitle] = useState('');
@@ -9,6 +13,7 @@ export const useSchedule = () => {
   const [isAlarm, setIsAlarm] = useState(false);
   const [memo, setMemo] = useState('');
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
+  const [alarmTime, setAlarmTime] = useState<Date | null>(null);
 
   const handleCategoryChange = (newCategory: ScheduleType) => {
     setCategory(newCategory);
@@ -39,6 +44,13 @@ export const useSchedule = () => {
     setShowCategoryDropdown(prev => !prev);
   };
 
+  const setAlarmTimeFromOffset = (minutesBefore: number) => {
+    const newAlarmTime = new Date(
+      startDate.getTime() - minutesBefore * 60 * 1000,
+    );
+    setAlarmTime(newAlarmTime);
+  };
+
   const resetForm = () => {
     setCategory('Meeting');
     setTitle('');
@@ -47,6 +59,15 @@ export const useSchedule = () => {
     setIsAlarm(false);
     setMemo('');
     setShowCategoryDropdown(false);
+    setAlarmTime(null);
+  };
+
+  const getKoreanSchedule = () => {
+    return {
+      startDate: convertToKoreanTime(startDate),
+      endDate: convertToKoreanTime(endDate),
+      alarmTime: alarmTime ? convertToKoreanTime(alarmTime) : undefined,
+    };
   };
 
   return {
@@ -57,6 +78,7 @@ export const useSchedule = () => {
     isAlarm,
     memo,
     showCategoryDropdown,
+    alarmTime,
     handleCategoryChange,
     handleTitleChange,
     handleStartDateChange,
@@ -64,6 +86,8 @@ export const useSchedule = () => {
     handleToggleAlarm,
     handleMemoChange,
     toggleCategoryDropdown,
+    setAlarmTimeFromOffset,
     resetForm,
+    getKoreanSchedule,
   };
 };
