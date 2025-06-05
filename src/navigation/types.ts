@@ -17,6 +17,7 @@ export type TRouteParams = {
   CALENDAR: {};
   MYPAGE: {};
   LOGIN: {};
+  EMAIL_SIGN_IN: {mode: 'login' | 'signup'};
   MEETING: {};
   WRITE: {};
   MEMBER: {};

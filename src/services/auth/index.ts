@@ -10,7 +10,11 @@ import {
 import appleAuth, {
   AppleRequestResponse,
 } from '@invertase/react-native-apple-authentication';
-import {} from './types';
+import {
+  TEmailSigninRequest,
+  TEmailSigninResponse,
+  TEmailSignupRequest,
+} from './types';
 
 /**
  * 소셜 로그인 링크 열기
@@ -110,6 +114,46 @@ export const afterAppleLogin = async (
     console.error('애플 로그인 에러:', err);
     return null;
   }
+};
+
+/**
+ * 이메일 로그인
+ * @author 홍규진
+ */
+export const emailLogin = async (
+  request: TEmailSigninRequest,
+): Promise<TEmailSigninResponse | null> => {
+  const response = await publicServerInstance.post<
+    TGetResponse<TEmailSigninResponse>
+  >('/oauth/login/email', {
+    loginId: request.email,
+    password: request.password,
+    fcmToken: request.fcmToken,
+  });
+  if (response.data.success) {
+    return response.data.data;
+  }
+  throw new Error('이메일 로그인 실패');
+};
+
+/**
+ * 이메일 회원가입
+ * @author 홍규진
+ */
+export const emailSignup = async (
+  request: TEmailSignupRequest,
+): Promise<TEmailSigninResponse | null> => {
+  const response = await publicServerInstance.post<
+    TGetResponse<TEmailSigninResponse>
+  >('/oauth/login/email/register', {
+    loginId: request.email,
+    password: request.password,
+    nickname: request.name,
+  });
+  if (response.data.success) {
+    return response.data.data;
+  }
+  throw new Error('이메일 회원가입 실패');
 };
 
 /**

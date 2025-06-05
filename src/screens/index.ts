@@ -21,3 +21,4 @@ export * from './member';
 export * from './init-workspace';
 export * from './create-workspace';
 export * from './edit-workspace';
+export * from './email-signIn';

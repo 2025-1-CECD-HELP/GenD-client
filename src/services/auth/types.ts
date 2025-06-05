@@ -16,3 +16,20 @@ export interface TUpdateUserAlarmRequest {
   isPost: boolean;
   isSchedule: boolean;
 }
+
+export interface TEmailSignupRequest {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface TEmailSigninRequest {
+  email: string;
+  password: string;
+  fcmToken: string;
+}
+
+export interface TEmailSigninResponse {
+  accessToken: string;
+  refreshToken: string;
+}
