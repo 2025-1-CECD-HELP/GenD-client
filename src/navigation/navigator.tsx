@@ -15,6 +15,7 @@ import {
   LoginScreen,
   CreateWorkspaceScreen,
   EditWorkspaceScreen,
+  EmailSignInScreen,
 } from '@/screens';
 import {Header} from '@/components/Header';
 import {RecordingScreen} from '@/screens/recording';
@@ -190,6 +191,7 @@ function LoginNavigator() {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="LOGIN" component={LoginScreen} />
+      <Stack.Screen name="EMAIL_SIGN_IN" component={EmailSignInScreen} />
     </Stack.Navigator>
   );
 }
