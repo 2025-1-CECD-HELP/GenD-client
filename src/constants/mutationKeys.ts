@@ -47,10 +47,15 @@ import {
   TPatchFileRequest,
 } from '@/services/file/types';
 import {fileQuery} from './queryKeys';
-import {TUpdateUserAlarmRequest} from '@/services/auth/types';
-import {updateUserAlarm} from '@/services/auth';
+import {
+  TEmailSignupRequest,
+  TUpdateUserAlarmRequest,
+} from '@/services/auth/types';
+import {emailSignup, updateUserAlarm} from '@/services/auth';
 import {TPostScheduleRequest} from '@/services/calendar/types';
 import {createSchedule} from '@/services/calendar';
+import {TEmailSigninRequest} from '@/services/auth/types';
+import {emailLogin} from '@/services/auth';
 
 /**
  * Tanstack Query 중 useMutation 사용시 편의성을 위해 키와 함수를 한 군데가 모아두는 파일입니다.
@@ -303,5 +308,29 @@ export const createScheduleMutationKey = (workspaceId: string) => {
     mutationKey: ['createSchedule'],
     mutationSuccessKey: [...calendarQuery(workspaceId).queryKey],
     mutationFn: (request: TPostScheduleRequest) => createSchedule(request),
+  };
+};
+
+/**
+ * 이메일 로그인 뮤테이션 키
+ * @author 홍규진
+ */
+export const emailSigninMutationKey = () => {
+  return {
+    mutationKey: ['emailSignin'],
+    mutationSuccessKey: [],
+    mutationFn: (request: TEmailSigninRequest) => emailLogin(request),
+  };
+};
+
+/**
+ * 이메일 회원가입 뮤테이션 키
+ * @author 홍규진
+ */
+export const emailSignupMutationKey = () => {
+  return {
+    mutationKey: ['emailSignup'],
+    mutationSuccessKey: [],
+    mutationFn: (request: TEmailSignupRequest) => emailSignup(request),
   };
 };
