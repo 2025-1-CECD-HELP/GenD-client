@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {KakaoIcon, AppleIcon} from '@/assets/images/svg/login';
+import React from 'react';
+import {KakaoIcon, AppleIcon, EmailIcon} from '@/assets/images/svg/login';
 import {LogoIcon} from '@/assets/images/svg/common/index';
 import {
   Container,
@@ -12,66 +12,11 @@ import {
 } from './indes.style';
 import LinearGradient from 'react-native-linear-gradient';
 import {useTheme} from '@emotion/react';
-import {useFCM} from '@/screens/login/hooks/useFCM';
-import {useModal} from '@/contexts/modal/ModalContext';
-import {WebView} from 'react-native-webview';
-import {CommonModal} from '@/components';
-import {
-  useAppleLoginMutation,
-  useKakaoLoginMutation,
-} from './hooks/useOauthLoginMutation';
-import {View} from 'react-native';
+import {useLogin} from './hooks/useLogin';
 
 export const LoginScreen = () => {
   const theme = useTheme();
-  const {fcmToken, requestUserPermission} = useFCM();
-  const {setModalContent, setIsOpen} = useModal();
-  const {mutate: kakaoLogin} = useKakaoLoginMutation(fcmToken || '');
-  const {mutate: appleLogin} = useAppleLoginMutation(fcmToken || '');
-
-  useEffect(() => {
-    requestUserPermission();
-  }, [requestUserPermission]);
-
-  const handleLogin = (provider: 'kakao' | 'apple') => {
-    console.log('handleLogin');
-    setModalContent(
-      <CommonModal
-        title="GenD 이용약관"
-        type="default"
-        height={650}
-        children={
-          <View style={{flex: 1, width: '100%'}}>
-            <WebView
-              source={{uri: 'https://boiled-raisin-b3b.notion.site/gend'}}
-              style={{
-                width: '100%',
-                height: 600,
-              }}
-              javaScriptEnabled={true}
-              domStorageEnabled={true}
-              startInLoadingState={true}
-              onLoadEnd={() => {
-                console.log('WebView loaded successfully');
-              }}
-              onError={syntheticEvent => {
-                const {nativeEvent} = syntheticEvent;
-                console.warn('WebView error: ', nativeEvent);
-              }}
-            />
-          </View>
-        }
-        onConfirm={() => {
-          if (provider === 'kakao') {
-            kakaoLogin();
-          } else {
-            appleLogin();
-          }
-        }}
-      />,
-    );
-    setIsOpen(true);
-  };
+  const {fcmToken, kakaoLogin, appleLogin, goToEmailLogin} = useLogin();
 
   return (
     <LinearGradient
@@ -89,19 +34,29 @@ export const LoginScreen = () => {
         </TopSection>
         <BottomSection>
           <SocialButton
-            kakao
+            provider="kakao"
             activeOpacity={0.8}
-            onPress={() => handleLogin('kakao')}
+            onPress={() => kakaoLogin()}
             disabled={!fcmToken}>
             <KakaoIcon width={24} height={24} />
-            <SocialText kakao>카카오톡으로 시작하기</SocialText>
+            <SocialText provider="kakao">카카오톡으로 시작하기</SocialText>
           </SocialButton>
           <SocialButton
+            provider="apple"
             activeOpacity={0.8}
-            onPress={() => handleLogin('apple')}
+            onPress={() => appleLogin()}
             disabled={!fcmToken}>
             <AppleIcon width={24} height={24} />
-            <SocialText>Apple로 시작하기</SocialText>
+            <SocialText provider="apple">Apple로 시작하기</SocialText>
+          </SocialButton>
+          <SocialButton activeOpacity={0.8} onPress={goToEmailLogin}>
+            <EmailIcon
+              width={20}
+              height={20}
+              fill={theme.colors.white}
+              stroke={theme.colors.white}
+            />
+            <SocialText provider="email">이메일로 로그인하기</SocialText>
           </SocialButton>
         </BottomSection>
       </Container>

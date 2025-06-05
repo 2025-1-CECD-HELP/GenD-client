@@ -43,19 +43,31 @@ export const BottomSection = styled.View`
   margin-bottom: 32px;
 `;
 
-export const SocialButton = styled.TouchableOpacity<{kakao?: boolean}>`
+export const SocialButton = styled.TouchableOpacity<{
+  provider?: 'kakao' | 'apple' | 'email';
+}>`
   flex-direction: row;
   align-items: center;
   justify-content: center;
   width: 90%;
   height: 48px;
   border-radius: 12px;
-  background-color: ${({kakao}) => (kakao ? '#FEE500' : '#fff')};
+  background-color: ${({provider}) =>
+    provider === 'kakao'
+      ? '#FEE500'
+      : provider === 'apple'
+      ? '#ffffff'
+      : '#000000'};
   margin-bottom: 16px;
 `;
 
-export const SocialText = styled.Text<{kakao?: boolean}>`
-  color: ${({kakao}) => (kakao ? '#191600' : '#222')};
+export const SocialText = styled.Text<{provider?: 'kakao' | 'apple' | 'email'}>`
+  color: ${({provider}) =>
+    provider === 'kakao'
+      ? '#191600'
+      : provider === 'apple'
+      ? '#000000'
+      : '#ffffff'};
   font-size: 16px;
   font-weight: 600;
   margin-left: 8px;
