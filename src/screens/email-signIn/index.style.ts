@@ -52,7 +52,7 @@ export const Button = styled.TouchableOpacity`
   width: 80%;
   max-width: 320px;
   padding: 16px 0;
-  background-color: ${({theme}) => theme.colors.textPrimary};
+  background-color: ${({theme}) => theme.colors.black};
   border-radius: 12px;
   align-items: center;
   margin-bottom: 12px;
@@ -68,7 +68,6 @@ export const SwitchButton = styled.TouchableOpacity`
   width: 80%;
   max-width: 320px;
   padding: 14px 0;
-
   border-radius: 12px;
   align-items: center;
   margin-bottom: 12px;
@@ -76,7 +75,7 @@ export const SwitchButton = styled.TouchableOpacity`
 `;
 
 export const SwitchButtonText = styled.Text`
-  color: ${({theme}) => theme.colors.textPrimary};
+  color: ${({theme}) => theme.colors.black};
   font-size: 16px;
   font-weight: 600;
 `;
