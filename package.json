@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "ios": "react-native run-ios --scheme 'GenD Debug Scheme'",
+    "ios:debug": "react-native run-ios --scheme 'GenD Debug Scheme'",
+    "ios:release": "react-native run-ios --scheme 'GenD Release Scheme'",
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
