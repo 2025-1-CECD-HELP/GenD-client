@@ -16,7 +16,7 @@ import {useLogin} from './hooks/useLogin';
 
 export const LoginScreen = () => {
   const theme = useTheme();
-  const {fcmToken, kakaoLogin, appleLogin, goToEmailLogin} = useLogin();
+  const {kakaoLogin, appleLogin, goToEmailLogin} = useLogin();
 
   return (
     <LinearGradient
@@ -36,16 +36,14 @@ export const LoginScreen = () => {
           <SocialButton
             provider="kakao"
             activeOpacity={0.8}
-            onPress={() => kakaoLogin()}
-            disabled={!fcmToken}>
+            onPress={() => kakaoLogin()}>
             <KakaoIcon width={24} height={24} />
             <SocialText provider="kakao">카카오톡으로 시작하기</SocialText>
           </SocialButton>
           <SocialButton
             provider="apple"
             activeOpacity={0.8}
-            onPress={() => appleLogin()}
-            disabled={!fcmToken}>
+            onPress={() => appleLogin()}>
             <AppleIcon width={24} height={24} />
             <SocialText provider="apple">Apple로 시작하기</SocialText>
           </SocialButton>
