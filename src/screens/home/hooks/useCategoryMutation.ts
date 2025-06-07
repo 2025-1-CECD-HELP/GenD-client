@@ -1,6 +1,8 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {createCategory} from '@/services/post';
 import {TCreateCategoryRequest} from '@/services/post/types';
+import {useAtomValue} from 'jotai';
+import {workspaceState} from '@/atoms/workspace';
 
 /**
  * 카테고리 생성 뮤테이션 훅입니다.
@@ -11,11 +13,11 @@ import {TCreateCategoryRequest} from '@/services/post/types';
  */
 export const useCategoryMutation = () => {
   const queryClient = useQueryClient();
+  const {workspaceId} = useAtomValue(workspaceState);
   const {mutate} = useMutation({
     mutationKey: ['category'],
     mutationFn: (category: TCreateCategoryRequest) =>
-      //TODO-[규진] 워크스페이스 아이디 받아오기
-      createCategory('1', category),
+      createCategory(workspaceId, category),
     onSuccess: () => {
       queryClient.invalidateQueries({queryKey: ['category']});
     },

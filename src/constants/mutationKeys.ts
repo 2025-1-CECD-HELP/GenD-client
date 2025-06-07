@@ -51,7 +51,7 @@ import {
   TEmailSignupRequest,
   TUpdateUserAlarmRequest,
 } from '@/services/auth/types';
-import {emailSignup, updateUserAlarm} from '@/services/auth';
+import {emailSignup, updateUserAlarm, withdraw} from '@/services/auth';
 import {TPostScheduleRequest} from '@/services/calendar/types';
 import {createSchedule} from '@/services/calendar';
 import {TEmailSigninRequest} from '@/services/auth/types';
@@ -332,5 +332,17 @@ export const emailSignupMutationKey = () => {
     mutationKey: ['emailSignup'],
     mutationSuccessKey: [],
     mutationFn: (request: TEmailSignupRequest) => emailSignup(request),
+  };
+};
+
+/**
+ * 회원 탈퇴 뮤테이션 키
+ * @author 홍규진
+ */
+export const withdrawMutationKey = () => {
+  return {
+    mutationKey: ['withdraw'],
+    mutationSuccessKey: [],
+    mutationFn: () => withdraw(),
   };
 };

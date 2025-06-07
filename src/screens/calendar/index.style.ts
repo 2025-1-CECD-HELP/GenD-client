@@ -1,5 +1,14 @@
 import styled from '@emotion/native';
 
+export const Root = styled.View`
+  flex: 1;
+  background-color: ${({theme}) => theme.colors.background};
+`;
+
+export const ScrollContainer = styled.ScrollView`
+  flex: 1;
+`;
+
 export const Container = styled.View`
   flex: 1;
   background-color: ${({theme}) => theme.colors.background};
@@ -99,4 +108,11 @@ export const Input = styled.TextInput`
   padding: 12px;
   ${({theme}) => theme.fonts.text2};
   color: ${({theme}) => theme.colors.textPrimary};
+`;
+
+export const FabWrapper = styled.View`
+  position: absolute;
+  bottom: 0;
+  align-self: flex-end;
+  z-index: 10;
 `;

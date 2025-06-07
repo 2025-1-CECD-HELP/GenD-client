@@ -59,11 +59,11 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>이 앱은 음성 인식을 위해 마이크를 사용합니다.</string>
+	<string>이 앱은 음성 인식을 통해 녹음한 자료를 바탕으로 자동으로 회의록을 작성하기 위해 마이크를 사용합니다.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>사진 라이브러리에 접근하여 사용자가 선택한 이미지를 앱에서 사용하기 위해 권한이 필요합니다.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>이 앱은 음성 인식을 위해 사용자의 음성을 처리합니다.</string>
+	<string>이 앱은 음성 인식을 통해 녹음한 자료를 바탕으로 자동으로 회의록을 작성하기 위해 사용자의 음성을 처리합니다.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

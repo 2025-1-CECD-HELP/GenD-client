@@ -6,6 +6,7 @@ import {useModal} from '@/contexts/modal/ModalContext';
 import {CommonModal} from '@/components/CommonModal';
 import {Linking} from 'react-native';
 import {useQueryClient} from '@tanstack/react-query';
+import {useWithdrawMutation} from './useMypageMutation';
 
 /**
  * 마이페이지 내에서 사용하는 custom-hook입니다.
@@ -18,6 +19,7 @@ export const useMypage = () => {
   const {setModalContent, setIsOpen} = useModal();
   const [, signOut] = useAtom(signOutAtom);
   const userAtomState = useAtomValue(userState);
+  const {mutateAsync: withdraw} = useWithdrawMutation();
   const handleSignOut = async () => {
     // 모든 쿼리 캐시 초기화
     queryClient.clear();
@@ -35,7 +37,11 @@ export const useMypage = () => {
         content={
           '정말로 회원 탈퇴를 하시겠습니까? \n기존의 모든 데이터가 삭제됩니다!'
         }
-        onConfirm={() => handleSignOut()}
+        onConfirm={() => {
+          withdraw().then(() => {
+            handleSignOut();
+          });
+        }}
         onCancel={() => setIsOpen(false)}
       />,
     );

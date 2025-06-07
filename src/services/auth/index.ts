@@ -180,3 +180,14 @@ export const updateUserAlarm = async (request: TUpdateUserAlarmRequest) => {
   );
   return true;
 };
+
+/**
+ * 회원 탈퇴
+ * @author 홍규진
+ */
+export const withdraw = async () => {
+  const response = await privateServerInstance.delete<TGetResponse<void>>(
+    '/api/v1/users',
+  );
+  return response.data.success;
+};

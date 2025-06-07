@@ -11,6 +11,9 @@ import {
   ScheduleItemTime,
   NoScheduleText,
   ScheduleMemo,
+  FabWrapper,
+  Root,
+  ScrollContainer,
 } from './index.style';
 import {AddScheduleButton} from './components/AddScheduleButton';
 import {formatDateTime, getModeIcon} from './utils/formatDate';
@@ -40,47 +43,57 @@ export const CalendarScreen = () => {
   } = useCalendar();
 
   return (
-    <Container>
-      <CalendarContainer>
-        <Calendar
-          key={calendarKey}
-          onDayPress={handleDayPress}
-          onMonthChange={handleMonthChange}
-          enableSwipeMonths={true}
-          markingType="multi-dot"
-          markedDates={currentMarkedDates}
-          monthFormat="yyyy년 MM월"
-          theme={calendarTheme}
-        />
-      </CalendarContainer>
-      <ScheduleTitle>
-        {getModeIcon(focusedDate ? 'day' : 'month')}
-        {focusedDate ? '이 날의 일정' : '이 달의 일정'}
-      </ScheduleTitle>
-      <ScheduleContainer>
-        {filteredSchedules.length > 0 ? (
-          filteredSchedules.map(schedule => (
-            <ScheduleItemContainer
-              key={schedule.scheduleId}
-              type={schedule.type || ''}>
-              <ScheduleItemTime>
-                {formatDateTime(schedule.startSchedule)} ~{' '}
-                {formatDateTime(schedule.endSchedule)}
-              </ScheduleItemTime>
-              <ScheduleItemTitle>{schedule.scheduleTitle}</ScheduleItemTitle>
-              {/* <ScheduleItemMaker>{schedule.maker}</ScheduleItemMaker> */}
-              {schedule.scheduleDescription && (
-                <ScheduleMemo>{schedule.scheduleDescription}</ScheduleMemo>
-              )}
-            </ScheduleItemContainer>
-          ))
-        ) : (
-          <NoScheduleText>등록된 일정이 없습니다.</NoScheduleText>
-        )}
-      </ScheduleContainer>
+    <Root>
+      <ScrollContainer
+        contentContainerStyle={{flexGrow: 1}}
+        showsVerticalScrollIndicator={false}>
+        <Container>
+          <CalendarContainer>
+            <Calendar
+              key={calendarKey}
+              onDayPress={handleDayPress}
+              onMonthChange={handleMonthChange}
+              enableSwipeMonths={true}
+              markingType="multi-dot"
+              markedDates={currentMarkedDates}
+              monthFormat="yyyy년 MM월"
+              theme={calendarTheme}
+            />
+          </CalendarContainer>
+          <ScheduleTitle>
+            {getModeIcon(focusedDate ? 'day' : 'month')}
+            {focusedDate ? '이 날의 일정' : '이 달의 일정'}
+          </ScheduleTitle>
+          <ScheduleContainer>
+            {filteredSchedules.length > 0 ? (
+              filteredSchedules.map(schedule => (
+                <ScheduleItemContainer
+                  key={schedule.scheduleId}
+                  type={schedule.type || ''}>
+                  <ScheduleItemTime>
+                    {formatDateTime(schedule.startSchedule)} ~{' '}
+                    {formatDateTime(schedule.endSchedule)}
+                  </ScheduleItemTime>
+                  <ScheduleItemTitle>
+                    {schedule.scheduleTitle}
+                  </ScheduleItemTitle>
+                  {/* <ScheduleItemMaker>{schedule.maker}</ScheduleItemMaker> */}
+                  {schedule.scheduleDescription && (
+                    <ScheduleMemo>{schedule.scheduleDescription}</ScheduleMemo>
+                  )}
+                </ScheduleItemContainer>
+              ))
+            ) : (
+              <NoScheduleText>등록된 일정이 없습니다.</NoScheduleText>
+            )}
+          </ScheduleContainer>
+        </Container>
+      </ScrollContainer>
       {workspace.isAdmin && (
-        <AddScheduleButton handleOpenAddSchedule={handleOpenAddSchedule} />
+        <FabWrapper>
+          <AddScheduleButton handleOpenAddSchedule={handleOpenAddSchedule} />
+        </FabWrapper>
       )}
-    </Container>
+    </Root>
   );
 };
