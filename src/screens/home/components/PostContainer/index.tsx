@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Container,
   PostList,
@@ -76,13 +76,17 @@ export const PostContainer = ({
     screenHeight - profileHeight - HEADER_HEIGHT - POSTCONTAINER_PADDING;
   const containerMinHeight = screenHeight - HEADER_HEIGHT - BOTTOMTAB_HEIGHT;
   const {data: postList} = usePostQuery();
+  const setUser = useSetAtom(userState);
   const {data: user} = useUserQuery();
   const [newCategoryName, setNewCategoryName] = useState('');
-  const setUser = useSetAtom(userState);
   const [workspace] = useAtom(workspaceState);
   let filteredData: Post[] = [];
 
-  setUser(user);
+  useEffect(() => {
+    if (user) {
+      setUser(user);
+    }
+  }, [user, setUser]);
 
   if (postList) {
     // 카테고리로 1차적인 필터링

@@ -1,11 +1,10 @@
 import React from 'react';
-import LogoutIcon from '@/assets/images/svg/my-page/logout.svg';
+import {LogoutIcon, WithdrawIcon} from '@/assets/images/svg/my-page/index';
 import {FlatList} from 'react-native';
 
 import {
   Container,
   SectionTitle,
-  WithdrawText,
   Divider,
   SettingSection,
   WorkspaceSection,
@@ -87,9 +86,14 @@ export const MypageScreen = () => {
           text="이용약관"
           onPress={handleShowTerms}
         />
+        <IconButton
+          icon={
+            <WithdrawIcon color={theme.colors.red} width={24} height={24} />
+          }
+          text="회원 탈퇴"
+          onPress={handleWithdraw}
+        />
       </SettingSection>
-
-      <WithdrawText onPress={handleWithdraw}>회원 탈퇴</WithdrawText>
     </Container>
   );
 };
